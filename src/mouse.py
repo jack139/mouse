@@ -68,7 +68,7 @@ class Login:
 
             result = 0
 
-            if logged(helper.PRIV_USER|helper.PRIV_MCH):
+            if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN):
                 # 提醒改密码
                 db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
                 if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
@@ -141,7 +141,7 @@ class SettingsUser:
         return db_user
     
     def GET(self):
-        if not logged(helper.PRIV_USER|helper.PRIV_MCH):
+        if not logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN):
             raise web.seeother('/')
 
         render = create_render()
@@ -152,7 +152,7 @@ class SettingsUser:
             
 
     def POST(self):
-        if not logged(helper.PRIV_USER|helper.PRIV_MCH):
+        if not logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN):
             raise web.seeother('/')
 
         render = create_render()
@@ -253,7 +253,7 @@ class AdminUserSetting:
         if user_data['user_type']=='plat':
             privilege = helper.PRIV_USER
         else:
-            privilege = helper.PRIV_MCH
+            privilege = helper.PRIV_GRP_ADMIN
             if user_data['mch_id']=='':
                 return render.info('商家用户需设置所属商家！')
 

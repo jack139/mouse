@@ -41,98 +41,59 @@ def validateEmail(email):
 ##############################################
 
 # 用户等级
-PRIV_USER     = 0b01000000  # 64
-PRIV_MCH      = 0b00010000  # 16 
-PRIV_ADMIN    = 0b00001000  # 8
-PRIV_WX       = 0b00000100  # 4
-PRIV_VISITOR  = 0b00000000  # 0
+PRIV_USER       = 0b01000000  # 64 实验员
+PRIV_GRP_ADMIN  = 0b00010000  # 16  组管理员 
+PRIV_ADMIN      = 0b00001000  # 8  系统管理员
+PRIV_TUTOR      = 0b00000100  # 4  教师
+PRIV_VISITOR    = 0b00000000  # 0
 
 # 菜单权限
 MENU_LEVEL = {
-    'OBJ_STORE'   : 0,   # 对象管理
-    'MERCHANT'    : 1,   # 商家管理
-    'TOPIC_STORE' : 2,   # 专辑管理
-    'CRM'         : 3,  # 订单查询
-    'REPORT'      : 4,  # 报表
-    'CATEGORY'    : 5,  # 类目管理
-    'BANNER'      : 6,  # 轮播图管理
-    'CHECK_OBJ'   : 7,  # 课程／专辑审核
-    'CHECK_EMPLOYER' : 8,  # 审核店主
+    'BUILD_MAN'   : 0,   # 笼架管理
+    'HOUSE_MAN'   : 1,   # 鼠笼管理
+    'MOUSR_MAN'   : 2,   # 小鼠管理
+    'GROUP_ADMIN' : 3,  # 课题组管理
+    'QUERY'       : 4,  # 数据检索
 }
 
 user_level = {
     PRIV_VISITOR  : '访客',
     PRIV_ADMIN    : '管理员',
-    PRIV_USER     : '平台管理', 
-    PRIV_MCH     : '商家用户', 
+    PRIV_USER     : '组用户', 
+    PRIV_GRP_ADMIN : '组管理员', 
+    PRIV_TUTOR    : '教师',
 }
 
 #################
 
+# 笼架设置：应存储于db
+MAX_REGION = 10
+MAX_BUILD = 10
+MAX_LOAD = 10
+MAX_LINE = 6
+MAX_COLUMN = 9
 
-
-MERCHANT_TYPE = {
-    0 : "自营",
-    8 : "商家",
-    9 : "DSV",
+# 鼠笼类型
+HOUSE_TYPE = {
+    'breed'   : '繁殖',
+    'test'    : '实验',
+    'inuse'   : '使用',
 }
 
-
-
-
-SHOP_TYPE = {
-    'chain'   : '直营店',
-    'store'   : '加盟店',
-    'dark'    : '暗店',
-    'house'   : '仓库',
-    'pt_house': '发货仓库',
-    'virtual' : '虚拟仓',
-    'dsv'     : 'DSV商家仓',
+# 小鼠状态
+MOUSE_STATUS = {
+    'new'     : '新生', # 没有耳标
+    'live'    : '正常',
+    'killed'  : '杀死',
+    'dead'    : '死亡',
 }
 
-
-ORDER_STATUS = {
-    # 线上订单
-    'name'     : '线上订单',
-    'DUE'      : '待支付',
-    'PREPAID'  : '付款确认中',
-    'PAID'     : '已付款',
-    'DISPATCH' : '待配送',
-    'ONROAD'   : '配送中',
-    'COMPLETE' : '配送完成',
-    'FINISH'   : '已完成',
-    'CANCEL'   : '已取消',
-    'TIMEOUT'  : '已过付款期限',
-    'FAIL'     : '配送失败',
-    'CANCEL_TO_REFUND' : '等待退款',
-    'REFUND'   : '已操作退款',
+# 品系状态
+BLOODLINE_STATUS = {
+    'prepare' : '准备中',
+    'plan'    : '计划中',
+    'ready'   : '已有',
 }
-
-OBJ_STATUS = {
-    'SAVED' : '已修改未提交',
-    'WAIT'  : '提交等待审核',
-    'PASSED'  : '审核通过',
-    'DENY'  : '审核拒绝',
-}
-
-# 退款原因
-_REFUND_REASON = {
-    '第三方快递责任': 'A',
-    '自营配送责任': 'B',
-    '仓库责任': 'C',
-    '商品部责任':'D',
-    '系统责任': 'E',
-    '顾客责任': 'F',
-    '财务责任': 'G',
-    '客服责任': 'H',
-    '发货前取消': 'I',
-    'APP取消订单': 'J',
-    '整单取消全额退款': 'K',
-    '其他责任': 'X'
-}
-
-# 对字典按照value排序
-REFUND_REASON = sorted(_REFUND_REASON.iteritems(), key=lambda d: d[1])
 
 
 # 为子文件传递session ---------------------
@@ -159,7 +120,7 @@ def get_privilege_name(privilege=None, menu_level=None):
     p = int(privilege)
     if p==PRIV_ADMIN:
         return user_level[PRIV_ADMIN]
-    if p&(PRIV_USER|PRIV_MCH):
+    if p&(PRIV_USER|PRIV_GRP_ADMIN):
         if menu_level==None:
             menu_level = web_session.menu_level  # '----X--X----XXX---'
         for k in MENU_LEVEL.keys():
@@ -210,7 +171,7 @@ def create_render(plain=False, globals={}):
             render = web.template.render('templates/wx', base=layout, globals=globals)
         elif privilege == PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
-        elif privilege&(PRIV_USER|PRIV_MCH):
+        elif privilege&(PRIV_USER|PRIV_GRP_ADMIN):
             render = web.template.render('templates/user', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor%s' % is_mobi, base=layout, globals=globals)

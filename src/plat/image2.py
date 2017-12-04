@@ -55,7 +55,7 @@ def count_tmp(filename):
 
 class handler: # 
     def POST(self):
-        if helper.logged(helper.PRIV_USER|helper.PRIV_MCH):
+        if helper.logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN):
             user_data=web.input()
 
             #print user_data
