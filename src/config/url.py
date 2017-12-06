@@ -17,6 +17,8 @@ urls = [
 	'/admin/sys_setting',  'AdminSysSetting',
 	'/admin/status',       'AdminStatus',
 	'/admin/data',         'AdminData',
+	'/admin/group',        'AdminGroup',
+	'/admin/group_edit',   'AdminGroupEdit',
 ]
 
 ## ---- 分布式部署---------------------------------

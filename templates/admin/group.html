@@ -1,0 +1,37 @@
+$def with (name, str1, skus, pages)
+
+$var title: 课题组管理
+$var css:
+$var js:
+$var name: $str1 $name
+
+<div class="caption"><h2>课题组管理</h2></div>
+
+<p><a class="abtn" href="/admin/group_edit">新建课题组</a></p>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="15%">编号</th>
+    <th>课题组名</th>
+    <th>状态</th>
+    <th width="15%">备注</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/admin/group_edit?group_id=$u['group_id']">$u['group_id']</a></td>
+  <td>$u.get('name','')</td>
+  <td>$('在使用' if u['status']==1 else '停用')</td>
+  <td>$u.get('note','')</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/admin/group?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

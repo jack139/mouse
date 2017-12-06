@@ -42,6 +42,7 @@ def validateEmail(email):
 
 # 用户等级
 PRIV_USER       = 0b01000000  # 64 实验员
+PRIV_WX         = 0b00100000  # 32
 PRIV_GRP_ADMIN  = 0b00010000  # 16  组管理员 
 PRIV_ADMIN      = 0b00001000  # 8  系统管理员
 PRIV_TUTOR      = 0b00000100  # 4  教师
@@ -54,6 +55,8 @@ MENU_LEVEL = {
     'MOUSR_MAN'   : 2,   # 小鼠管理
     'GROUP_ADMIN' : 3,  # 课题组管理
     'QUERY'       : 4,  # 数据检索
+    'TUTOR'       : 5,  # 指导教师
+    'GROUP_USER'  : 6,  # 实验员
 }
 
 user_level = {

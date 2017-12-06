@@ -225,7 +225,7 @@ class AdminUserSetting:
         render = create_render()
         user_data=web.input(uid='')
 
-        r3 = db.merchant.find({'available':1})
+        r3 = db.groups.find({'status':1})
 
         db_user={ '_id':'n/a', 'menu_level':60*'-', 'time':int(time.time())}
 
@@ -248,18 +248,22 @@ class AdminUserSetting:
 
         render = create_render()
         user_data=web.input(uid='', uname='', full_name='', passwd='', 
-            user_type='', mch_id='', priv=[])
+            user_type='', group_id=[], priv=[])
 
-        if user_data['user_type']=='plat':
-            privilege = helper.PRIV_USER
-        else:
+        if user_data['user_type']=='grp_admin':
             privilege = helper.PRIV_GRP_ADMIN
-            if user_data['mch_id']=='':
-                return render.info('商家用户需设置所属商家！')
+            priv = ['GROUP_ADMIN']
+        else:
+            privilege = helper.PRIV_TUTOR
+            priv = ['TUTOR']
+
+        if user_data['group_id']=='':
+            return render.info('需设置所属课题组！')
 
         # 设置权限标记
         menu_level = 60*'-'
-        for p in user_data.priv:
+        #for p in user_data.priv: 
+        for p in priv:
             pos = helper.MENU_LEVEL[p]
             menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
 
@@ -270,7 +274,7 @@ class AdminUserSetting:
             'menu_level' : menu_level,
             'full_name'  : user_data['full_name'],
             'user_type'  : user_data['user_type'],
-            'mch_id'     : user_data['mch_id'],
+            'group_list'     : user_data['group_id'],
         }
 
         # 如需要，更新密码
@@ -433,7 +437,97 @@ class AdminData:
               'lock'         :  db_lock,
               'idle_time'   :  idle_time,
             })
-            
+
+
+PAGE_SIZE = 50            
+
+class AdminGroup: 
+    def GET(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data=web.input(page='0')
+
+        if not user_data['page'].isdigit():
+            return render.info('参数错误！')  
+
+        # 分页获取数据
+        db_sku = db.groups.find(
+            sort=[('status', -1), ('group_id', -1)],
+            limit=PAGE_SIZE,
+            skip=int(user_data['page'])*PAGE_SIZE
+        )
+
+        num = db_sku.count()
+        if num%PAGE_SIZE>0:
+            num = num / PAGE_SIZE + 1
+        else:
+            num = num / PAGE_SIZE
+        
+        return render.group(session.uname, user_level[session.privilege], db_sku, range(0, num))
+
+
+class AdminGroupEdit: 
+    def GET(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data = web.input(group_id='')
+
+        group_data = { 'group_id' : 'n/a'}
+
+        if user_data.group_id != '': 
+            db_obj=db.groups.find_one({'group_id':user_data.group_id})
+            if db_obj!=None:
+                # 已存在的obj
+                group_data = db_obj
+
+        return render.group_edit(session.uname, user_level[session.privilege], group_data)
+
+
+    def POST(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data=web.input(group_id='',group_name='')
+
+        if user_data.group_name.strip()=='':
+            return render.info('课题组名不能为空！')
+
+        if user_data['group_id']=='n/a': # 新建
+            db_pk = db.user.find_one_and_update(
+                {'uname'    : 'settings'},
+                {'$inc'     : {'pk_count' : 1}},
+                {'pk_count' : 1}
+            )
+            group_id = '0%07d' % db_pk['pk_count']
+            message = '新建'
+        else:
+            group_id = user_data['group_id']
+            message = '修改'
+
+        try:
+            update_set={
+                'group_id'    : group_id,
+                'name'        : user_data['group_name'],
+                'note'        : user_data['note'],
+                'status'      : int(user_data['status']),
+                'last_tick'   : int(time.time()),  # 更新时间戳
+            }
+        except ValueError:
+            return render.info('请在相应字段输入数字！')
+
+        db.groups.update_one({'group_id':group_id}, {
+            '$set'  : update_set,
+            '$push' : {
+                'history' : (helper.time_str(), helper.get_session_uname(), message), 
+            }  # 纪录操作历史
+        }, upsert=True)
+
+        return render.info('成功保存！', '/admin/group')
 
 
 #if __name__ == "__main__":

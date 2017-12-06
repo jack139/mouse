@@ -1,10 +1,11 @@
 ﻿user  后台用户表：系统管理员(admin)、课题组管理员、实验员、老师
 
-group 课题组
+groups 课题组
 {
     name : 组名
-    grp_id : 组id
+    group_id : 组id
     status : 状态： 1 正常 0 停用
+    note : 备注
 }
 
 house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
