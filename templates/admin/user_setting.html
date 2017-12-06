@@ -39,9 +39,9 @@ $else:
         <span><select id="group_id" name="group_id" multiple="multiple" size="5" style="width:159px">
         $for k in group_list:
             <option value="$k['group_id']"
-            $if settings.get('group_id')==k['group_id']:
+            $if k['group_id'] in settings.get('group_list'):
                 selected="selected"
-            >$k['group_name']</option>
+            >$k['name']</option>
         </select></span>
     </div>
 </td></tr>

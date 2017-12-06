@@ -25,9 +25,9 @@ $for u in users:
     <tr>
     <td><a href="/admin/user_setting?uid=$u[1]">$u[0]</a></td>
     <td>$u[3]</td>
-    <td>$('平台用户' if u[5]=='plat' else '商家用户')</td>
+    <td>$('课题组管理员' if u[5]=='group_admin' else '指导老师')</td>
     <td>$u[2]</td>
-    <td>$('使用' if u[4]==1 else '停用')</td>
+    <td>$('在使用' if u[4]==1 else '停用')</td>
     </tr>
 
 </tbody>

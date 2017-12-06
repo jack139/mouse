@@ -274,7 +274,7 @@ class AdminUserSetting:
             'menu_level' : menu_level,
             'full_name'  : user_data['full_name'],
             'user_type'  : user_data['user_type'],
-            'group_list'     : user_data['group_id'],
+            'group_list' : user_data['group_id'],
         }
 
         # 如需要，更新密码
@@ -284,7 +284,9 @@ class AdminUserSetting:
 
         if user_data['uid']=='n/a':
             # 新增
-            update_set['uname']=user_data['uname'].lower()
+            update_set['uname']=user_data['uname'].lower().strip()
+            if len(update_set['uname'])==0:
+                return render.info('用户名不能为空！')
             r2=db.user.find_one({'uname': update_set['uname']})
             if r2:
                 return render.info('用户名已存在！请修改后重新添加。')
