@@ -123,7 +123,7 @@ def get_privilege_name(privilege=None, menu_level=None):
     p = int(privilege)
     if p==PRIV_ADMIN:
         return user_level[PRIV_ADMIN]
-    if p&(PRIV_USER|PRIV_GRP_ADMIN):
+    if p&(PRIV_USER|PRIV_GRP_ADMIN|PRIV_TUTOR):
         if menu_level==None:
             menu_level = web_session.menu_level  # '----X--X----XXX---'
         for k in MENU_LEVEL.keys():
@@ -174,7 +174,7 @@ def create_render(plain=False, globals={}):
             render = web.template.render('templates/wx', base=layout, globals=globals)
         elif privilege == PRIV_ADMIN:
             render = web.template.render('templates/admin', base=layout, globals=globals)
-        elif privilege&(PRIV_USER|PRIV_GRP_ADMIN):
+        elif privilege&(PRIV_USER|PRIV_GRP_ADMIN|PRIV_TUTOR):
             render = web.template.render('templates/user', base=layout, globals=globals)
         else:
             render = web.template.render('templates/visitor%s' % is_mobi, base=layout, globals=globals)

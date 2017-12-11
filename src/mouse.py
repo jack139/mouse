@@ -68,10 +68,11 @@ class Login:
 
             result = 0
 
-            if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN):
+            if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN|helper.PRIV_TUTOR):
                 # 提醒改密码
                 db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
                 if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
+                    db.user.update_one({'uname':session.uname},{'$set' :{'pwd_update':int(time.time())}}) # 只提示一次， 2017-12-11
                     raise web.seeother('/settings_user?set_pwd=1')
                 else:
                     return render.portal(session.uname, get_privilege_name(), [result])
@@ -113,7 +114,7 @@ class Login:
             if session.uid != rand.upper():
                 session.menu_level += 1
                 return render.login_error('验证码错误，请重新登录！')
-            if db_user['passwd']!=app_helper.my_crypt(passwd):
+            if db_user.get('passwd')!=app_helper.my_crypt(passwd): # passwd 有可能不存在，如果新建用户未设置密码， 2017-12-11
                 return render.login_error('密码错误，请重新登录！')
 
             session.login = 1
@@ -251,10 +252,10 @@ class AdminUserSetting:
             user_type='', group_id=[], priv=[])
 
         if user_data['user_type']=='grp_admin':
-            privilege = helper.PRIV_GRP_ADMIN
+            privilege = helper.PRIV_GRP_ADMIN   # 课题组管理员
             priv = ['GROUP_ADMIN']
         else:
-            privilege = helper.PRIV_TUTOR
+            privilege = helper.PRIV_TUTOR   # 指导教师
             priv = ['TUTOR']
 
         if user_data['group_id']=='':
