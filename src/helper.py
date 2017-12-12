@@ -108,8 +108,8 @@ def set_session(s):
 def get_session_uname():
     return web_session.uname
 
-def get_session_mch_id():
-    return web_session.mch_id
+def get_session_group_list():
+    return web_session.group_list
 
 #----------------------------------------
 

@@ -1,0 +1,50 @@
+$def with (name, str1, settings, reg_time, level, group_name)
+
+$var title: 用户设置
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #grup1
+
+<div class="caption"><h2>用户设置</h2></div>
+
+<form name="settings" method="post" action="/grp_admin/user_edit">
+<input type="hidden" name="uid" value="$settings['_id']" />
+<input type="hidden" name="group_id" value="$group_name[1]" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th width=100>项目</th>
+                <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+$if settings['_id']=='n/a':
+    <tr><td>用户名</td><td class="t_l"><input type="text" name="uname" value=""/></td></tr>
+$else:
+    <tr><td>用户名</td><td class="t_l">$settings.get('uname','')</td></tr>
+<tr><td>全名</td><td class="t_l"><input type="text" name="full_name" value="$settings.get('full_name','')"/></td></tr>
+<tr><td>密码</td><td class="t_l"><input type="text" name="passwd" value=""/></td></tr>
+<tr><td>注册时间</td><td class="t_l">$reg_time</td></tr>
+
+<tr><td>用户类型</td><td class="t_l">课题组管理员  -- 所属课题组：$group_name[0]</td></tr>
+
+<tr><td>用户状态</td><td class="t_l"><input type="radio" name="login" value="1" 
+        $if settings.get('login',0)==1: 
+            checked="checked"
+    /> 正常 <input type="radio" name="login" value="0"
+        $if settings.get('login',0)==0: 
+            checked="checked"
+    /> 停用
+</td></tr>
+
+</tbody>
+</table>
+
+<p><input type="submit" name="button" id="button" value="保存" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+
+</form>

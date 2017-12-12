@@ -32,12 +32,12 @@ web.config.session_parameters['ignore_expiry'] = True
 if setting.debug_mode==False:
     ### for production
     session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
-        initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'mch_id':''})
+        initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'group_list':''})
 else:
     ### for staging,
     if web.config.get('_session') is None:
         session = web.session.Session(app, MongoStore(db_primary, 'sessions'), 
-            initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'mch_id':''})
+            initializer={'login': 0, 'privilege': 0, 'uname':'', 'uid':'', 'menu_level':'', 'group_list':''})
         web.config._session = session
     else:
         session = web.config._session
@@ -121,7 +121,7 @@ class Login:
             session.uname = name
             session.uid = db_user['_id']
             session.privilege = int(db_user['privilege'])
-            session.mch_id = db_user.get('mch_id','')
+            session.group_list = db_user.get('group_list',[])
 
             # 若是老用户则将session的权限位数增加至60
             session.menu_level = db_user['menu_level'] if len(db_user['menu_level']) == 60 else db_user['menu_level']+30*'-'
@@ -208,7 +208,7 @@ class AdminUser:
         render = create_render()
 
         users=[]            
-        db_user=db.user.find({'privilege': {'$nin': [helper.PRIV_ADMIN]}}).sort([('_id',1)])
+        db_user=db.user.find({'privilege': {'$nin': [helper.PRIV_ADMIN,helper.PRIV_USER]}}).sort([('_id',1)])
         if db_user.count()>0:
             for u in db_user:
                 if u['uname']=='settings':

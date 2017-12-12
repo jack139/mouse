@@ -27,16 +27,19 @@ $else:
 <tr><td>密码</td><td class="t_l"><input type="text" name="passwd" value=""/></td></tr>
 <tr><td>注册时间</td><td class="t_l">$reg_time</td></tr>
 
-<tr><td>用户类型</td><td class="t_l"><input type="radio" name="user_type" value="grp_admin"
+<tr><td>用户类型</td><td class="t_l"><input type="radio" name="user_type" value="grp_admin" onchange="$$('#group_id').removeAttr('multiple');"
         $if settings.get('user_type','grp_admin')=='grp_admin': 
             checked="checked"
-    /> 课题组管理员 <input type="radio" name="user_type" value="tutor"
+    /> 课题组管理员 <input type="radio" name="user_type" value="tutor" onchange="$$('#group_id').attr('multiple','multiple');"
         $if settings.get('user_type','grp_admin')=='tutor': 
             checked="checked"
     /> 指导老师
     <div><span id='group_list' style="float:left" 
-    >  所属课题组（可多选）:</span>
-        <span><select id="group_id" name="group_id" multiple="multiple" size="5" style="width:159px">
+    >  所属课题组（老师可多选）：</span>
+        <span><select id="group_id" name="group_id" 
+            $if settings.get('user_type','grp_admin')=='tutor': 
+                multiple="multiple" 
+            size="5" style="width:159px">
         $for k in group_list:
             <option value="$k['group_id']"
             $if k['group_id'] in settings.get('group_list',[]):
