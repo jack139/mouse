@@ -78,7 +78,7 @@ class handler:
             'menu_level' : menu_level,
             'full_name'  : user_data['full_name'],
             'user_type'  : 'grp_user',  # 实验员
-            'group_list' : user_data['group_id'],
+            'group_list' : [user_data['group_id']], # 只有一个元素list, 2017-12-14
         }
 
         # 如需要，更新密码
