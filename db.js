@@ -2,8 +2,8 @@
 {
     uname
     passwd
-    user_type
-    group_list
+    user_type : grp_user, grp_admin, tutor
+    group_list : 所属课题组，tutor可以有多个值，grp_admin和grp_user只能有一个
 }
 
 groups 课题组
@@ -12,27 +12,34 @@ groups 课题组
     group_id : 组id
     status : 状态： 1 正常 0 停用
     note : 备注
+    last_tick: 最后修改时间
 }
 
 shelf 笼架管理
 {
-    shelf_id
+    shelf_id : 笼架id，格式： 区-房-架
+    group_id : 所属课题组id, 应该确认无在使用的鼠笼时才能修改所属课题组
+    expired_d : 到期日期， yyyymm
+    history : [], 课题组使用记录
+    last_tick: 最后修改时间
     
 }
 
 house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
 {
-    house_id : 鼠笼id
-    pos : 鼠笼位置， 格式： 区|房|架|排|列
+    house_id : 鼠笼id，格式： 区-房-架-排-列
     type :  鼠笼类型： 繁殖／实验／使用
-    grp_id : 所属课题组id
+    group_id : 所属课题组id，应该确认没有小鼠时才能修改所属课题组
     uid : 实验员id
+    expired_d : 到期日期， yyyymm
+    history : [], 使用记录
+    last_tick: 最后修改时间
 }
 
 mouse 小鼠：数据只增不删，保留历史数据
 {
-    mouse_id : 小鼠id
-    tag : 耳标
+    mouse_id : 小鼠id, 格式 出生日期 myyyymmddCCCCC, CCCCC是5位字母随机组合
+    tag : 耳标, 新生小鼠可能没有耳标值
     sex : 性别
     status : 状态 ：新生／正常／杀死／死亡
     birth_d : 出生日期 yyyymmdd
@@ -44,17 +51,19 @@ mouse 小鼠：数据只增不删，保留历史数据
     house_id : 当前所在笼id
     test_record : [], 实验记录
     house_history : [], 居住鼠笼记录，记录鼠笼位置信息
-    grp_id : 所属课题组id
+    group_id : 所属课题组id
     uid : 实验员id
+    last_tick: 最后修改时间
 }
 
 bloodline 小鼠品系
 {
-    blood_id : 品系id
+    blood_id : 品系id，人工输入
     name : 品系名称
     status : 状态 ： 准备中／计划中／已有
     owner_uid : 建立的课题组管理员id
     status_history : [], 状态变更记录
+    last_tick: 最后修改时间
 }
 
 /* -------------- Indexes ---------------*/

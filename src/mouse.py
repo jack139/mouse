@@ -533,6 +533,103 @@ class AdminGroupEdit:
         return render.info('成功保存！', '/admin/group')
 
 
+
+class AdminShelf: 
+    def GET(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data=web.input(page='0')
+
+        if not user_data['page'].isdigit():
+            return render.info('参数错误！')  
+
+        # 获取课题组名字对照
+        r3 = db.groups.find({'status':1})
+        group_name = {'n/a':'n/a'}
+        for i in r3:
+            group_name[i['group_id']]=i['name']
+
+        # 分页获取数据
+        db_sku = db.shelf.find(
+            sort=[('shelf_id', -1)],
+            limit=PAGE_SIZE,
+            skip=int(user_data['page'])*PAGE_SIZE
+        )
+
+        num = db_sku.count()
+        if num%PAGE_SIZE>0:
+            num = num / PAGE_SIZE + 1
+        else:
+            num = num / PAGE_SIZE
+        
+        return render.shelf(session.uname, user_level[session.privilege], db_sku, range(0, num), group_name)
+
+
+class AdminShelfEdit: 
+    def GET(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data = web.input(shelf_id='')
+
+        r3 = db.groups.find({'status':1})
+
+        shelf_data = { 'shelf_id' : 'n/a'}
+
+        if user_data.shelf_id != '': 
+            db_obj=db.shelf.find_one({'shelf_id':user_data.shelf_id})
+            if db_obj!=None:
+                # 已存在的obj
+                shelf_data = db_obj
+
+        return render.shelf_edit(session.uname, user_level[session.privilege], shelf_data, r3)
+
+
+    def POST(self):
+        if not logged(helper.PRIV_ADMIN):
+            raise web.seeother('/')
+
+        render = create_render()
+        user_data=web.input(shelf_id='',area='',room='',shelf='')
+
+        expired_d= user_data.expired_d.strip()
+        if len(expired_d)!=6 or (not expired_d.isdigit()):
+            return render.info('过期日期格式不对')
+
+        if user_data['shelf_id']=='n/a': # 新建
+            shelf_id = '%s-%s-%s' % (user_data['area'].strip(),user_data['room'].strip(),user_data['shelf'].strip())
+            r2=db.shelf.find_one({'shelf_id':shelf_id})
+            if r2:
+                return render.info('此笼架已存在')
+            message = '新建'
+        else:
+            shelf_id = user_data['shelf_id']
+            message = '修改'
+
+        try:
+            update_set={
+                'shelf_id'    : shelf_id,
+                'group_id'    : user_data['group_id'],
+                'expired_d'   : expired_d,
+                'note'        : user_data['note'],
+                'last_tick'   : int(time.time()),  # 更新时间戳
+            }
+        except ValueError:
+            return render.info('请在相应字段输入数字！')
+
+        db.shelf.update_one({'shelf_id':shelf_id}, {
+            '$set'  : update_set,
+            '$push' : {
+                'history' : (helper.time_str(), helper.get_session_uname(), message), 
+            }  # 纪录操作历史
+        }, upsert=True)
+
+        return render.info('成功保存！', '/admin/shelf')
+
+
 #if __name__ == "__main__":
 #   web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
 #   app.run()

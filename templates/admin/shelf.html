@@ -1,0 +1,39 @@
+$def with (name, str1, skus, pages, group_name)
+
+$var title: 笼架管理
+$var css:
+$var js:
+$var name: $str1 $name
+
+<div class="caption"><h2>笼架管理</h2></div>
+
+<p><a class="abtn" href="/admin/shelf_edit">新建笼架</a></p>
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="15%">编号</th>
+    <th>笼架位置(区，房，架)</th>
+    <th>所属课题组名</th>
+    <th>到期日期</th>
+    <th width="15%">备注</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/admin/shelf_edit?shelf_id=$u['shelf_id']">$u['shelf_id']</a></td>
+  <td>$(u'，'.join(u['shelf_id'].split('-')))</td>
+  <td>$group_name.get(u.get('group_id','n/a'),'课题组不可用')</td>
+  <td>$u.get('expired_d','n/a')</td>
+  <td>$u.get('note','')</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/admin/shelf?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>
