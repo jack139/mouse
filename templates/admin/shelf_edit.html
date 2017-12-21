@@ -36,6 +36,11 @@ $else:
         $(sku['shelf_id'].split('-')[2]) 架    
     </td><td></td></tr>
 
+<tr><td>笼架设置</td><td>
+    <input type="text" name="row" value="$sku.get('row',6)" size="5" />行
+    <input type="text" name="col" value="$sku.get('col',9)" size="5" />列
+    </td><td></td></tr>
+
 <tr><td>所属课题组</td><td>
         <span><select id="group_id" name="group_id" style="width:159px">
             <option value="n/a">n/a</option>

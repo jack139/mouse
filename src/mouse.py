@@ -593,11 +593,14 @@ class AdminShelfEdit:
             raise web.seeother('/')
 
         render = create_render()
-        user_data=web.input(shelf_id='',area='',room='',shelf='')
+        user_data=web.input(shelf_id='',area='',room='',shelf='',row='6',col='9')
 
         expired_d= user_data.expired_d.strip()
         if len(expired_d)!=6 or (not expired_d.isdigit()):
             return render.info('过期日期格式不对')
+
+        if (not user_data['row'].isdigit()) or (not user_data['col'].isdigit()):
+            return render.info('笼架行列设置格式不对')
 
         if user_data['shelf_id']=='n/a': # 新建
             shelf_id = '%s-%s-%s' % (user_data['area'].strip(),user_data['room'].strip(),user_data['shelf'].strip())
@@ -611,11 +614,13 @@ class AdminShelfEdit:
 
         try:
             update_set={
-                'shelf_id'    : shelf_id,
-                'group_id'    : user_data['group_id'],
-                'expired_d'   : expired_d,
-                'note'        : user_data['note'],
-                'last_tick'   : int(time.time()),  # 更新时间戳
+                'shelf_id'  : shelf_id,
+                'group_id'  : user_data['group_id'],
+                'row'       : int(user_data['row']),
+                'col'       : int(user_data['col']),
+                'expired_d' : expired_d,
+                'note'      : user_data['note'],
+                'last_tick' : int(time.time()),  # 更新时间戳
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')

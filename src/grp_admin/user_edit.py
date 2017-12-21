@@ -44,7 +44,7 @@ class handler:
             if db_grp:
                 group_name = [db_grp['name'], group_list[0]]
 
-        return render.user_setting(helper.get_session_uname(), helper.get_privilege_name(), 
+        return render.grpad_user_setting(helper.get_session_uname(), helper.get_privilege_name(), 
             db_user, helper.time_str(db_user['time']), user_level_name, group_name)
 
 

@@ -33,5 +33,5 @@ class handler:
                     continue
                 users.append([u['uname'],u['_id'],int(u['privilege']),u['full_name'],u['login'],u['user_type']])
         
-        return render.user(helper.get_session_uname(), helper.get_privilege_name(), users)
+        return render.grpad_user(helper.get_session_uname(), helper.get_privilege_name(), users)
 

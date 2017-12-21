@@ -18,6 +18,8 @@ groups 课题组
 shelf 笼架管理
 {
     shelf_id : 笼架id，格式： 区-房-架
+    row : 行数
+    col : 列数
     group_id : 所属课题组id, 应该确认无在使用的鼠笼时才能修改所属课题组
     expired_d : 到期日期， yyyymm
     history : [], 课题组使用记录
