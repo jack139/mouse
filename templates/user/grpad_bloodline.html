@@ -1,0 +1,39 @@
+$def with (name, str1, skus, pages, group_name)
+
+$var title: 品系管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #grup3
+
+
+<div class="caption"><h2>品系管理</h2></div>
+
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="15%">品系编号</th>
+    <th>品系名</th>
+    <th>状态</th>
+    <th width="15%">备注</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/grp_admin/bloodline_edit?bloodline_id=$u['bloodline_id']">$u['shelf_id']</a></td>
+  <td>$u.get('name','n/a')</td>
+  <td>$u.get('status','n/a')</td>
+  <td>$u.get('note','')</td></tr>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/grp_admin/bloodline_edit?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>
