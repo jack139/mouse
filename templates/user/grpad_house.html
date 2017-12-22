@@ -1,0 +1,73 @@
+$def with (name, str1, houses, shelf)
+
+$var title: 鼠笼管理
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #grup2
+
+
+<div class="caption"><h2>鼠笼管理 - 笼架 $shelf['shelf_id']</h2></div>
+
+<div class="article_box">
+  <span>笼架号：$shelf['shelf_id'] ；</span>
+  <span>规格：$shelf['row'] 行 * $shelf['col'] 列</span>
+</div>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th><span>　</span></th>
+        $for c in xrange(1, shelf['col']+1):
+            <th>第 $c 列</th>
+    </tr>
+</thead>
+<tbody>
+
+$for r in xrange(1,shelf['row']+1):
+    <tr>
+        <td><span>第 $r 行</span></td>
+        $for c in xrange(1,shelf['col']+1):
+            $if houses[(r-1)*shelf['col']+(c-1)].has_key('house_id'):
+                <td
+                    $if houses[(r-1)*shelf['col']+(c-1)]['status']==1:
+                        $if houses[(r-1)*shelf['col']+(c-1)]['type']=='test':
+                            class='test'
+                        $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='breed':
+                            class='breed'
+                        $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='inuse':
+                            class='inuse'
+                >
+                    <div><a href="/grp_admin/house_edit?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
+                    <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
+                    <div>$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
+                </td>
+            $else:
+                <td><a href="/grp_admin/house_edit?house_id=$shelf['shelf_id']-$r-$c">$r-$c</a></td>
+    </tr>   
+
+</tbody>
+</table>
+
+<br/>
+
+<p><input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+
+<br/>
+
+<div class="article_box">颜色示例：</div>
+<table class="props_tb" style="width: 320px;">
+<thead>
+    <tr>
+        <th class='breed' style="width: 80px;">繁殖</th>
+        <th class='test' style="width: 80px;">实验</th>
+        <th class='inuse' style="width: 80px;">在使用</th>
+        <th style="width: 80px;">停用</th>
+    </tr>
+</thead>
+</table>
+
+
+
+

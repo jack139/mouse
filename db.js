@@ -30,9 +30,11 @@ shelf 笼架管理
 house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
 {
     house_id : 鼠笼id，格式： 区-房-架-排-列
+    shelf_id : 笼架id，格式： 区-房-架
+    status : 鼠笼状态：0 停用 1 在使用
     type :  鼠笼类型： 繁殖／实验／使用
     group_id : 所属课题组id，应该确认没有小鼠时才能修改所属课题组
-    uid : 实验员id
+    uname : 实验员id
     expired_d : 到期日期， yyyymm
     history : [], 使用记录
     last_tick: 最后修改时间
@@ -54,7 +56,7 @@ mouse 小鼠：数据只增不删，保留历史数据
     test_record : [], 实验记录
     house_history : [], 居住鼠笼记录，记录鼠笼位置信息
     group_id : 所属课题组id
-    uid : 实验员id
+    uname : 实验员id
     last_tick: 最后修改时间
 }
 

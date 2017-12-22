@@ -1,9 +1,16 @@
 $def with (name, str1, sku, group_list)
 
 $var title: 笼架管理
-$var css:
-$var js:
+$var css: /static/css/jquery.datetimepicker.css
+$var js: /static/js/jquery.datetimepicker.js
 $var name: $str1 $name
+
+<script type="text/javascript">
+/*初始化时间控件*/
+$$(function () {
+    $$('#expired_d').datetimepicker({format: 'Ymd', timepicker:false});
+});
+</script>
 
 $if sku['shelf_id']=='n/a':
     <div class="caption"><h2>新增笼架信息</h2></div>
@@ -43,7 +50,7 @@ $else:
 
 <tr><td>所属课题组</td><td>
         <span><select id="group_id" name="group_id" style="width:159px">
-            <option value="n/a">n/a</option>
+            <option value="">- 未设置 -</option>
         $for k in group_list:
             <option value="$k['group_id']"
             $if k['group_id'] in sku.get('group_id',''):
@@ -53,8 +60,8 @@ $else:
     </td><td></td></tr>
 
 <tr><td>到期日期</td><td>
-    <input type="text" name="expired_d" value="$sku.get('expired_d','')"/> (格式：yyyymm)
-    </td><td></td></tr>
+    <input type="text" id="expired_d" name="expired_d" readonly="readonly" value="$sku.get('expired_d','')"/> 
+    </td><td>格式：yyyymmdd</td></tr>
 
 <tr><td>备注</td><td>
     <textarea rows="3" name="note">$sku.get('note','')</textarea>

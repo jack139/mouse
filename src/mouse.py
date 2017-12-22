@@ -547,7 +547,7 @@ class AdminShelf:
 
         # 获取课题组名字对照
         r3 = db.groups.find({'status':1})
-        group_name = {'n/a':'n/a'}
+        group_name = {}
         for i in r3:
             group_name[i['group_id']]=i['name']
 
@@ -593,11 +593,10 @@ class AdminShelfEdit:
             raise web.seeother('/')
 
         render = create_render()
-        user_data=web.input(shelf_id='',area='',room='',shelf='',row='6',col='9')
+        user_data=web.input(shelf_id='',area='',room='',shelf='',row='6',col='9',expired_d='')
 
-        expired_d= user_data.expired_d.strip()
-        if len(expired_d)!=6 or (not expired_d.isdigit()):
-            return render.info('过期日期格式不对')
+        if user_data.expired_d=='':
+            return render.info('请设置鼠笼到期日期！')
 
         if (not user_data['row'].isdigit()) or (not user_data['col'].isdigit()):
             return render.info('笼架行列设置格式不对')
@@ -618,7 +617,7 @@ class AdminShelfEdit:
                 'group_id'  : user_data['group_id'],
                 'row'       : int(user_data['row']),
                 'col'       : int(user_data['col']),
-                'expired_d' : expired_d,
+                'expired_d' : user_data['expired_d'],
                 'note'      : user_data['note'],
                 'last_tick' : int(time.time()),  # 更新时间戳
             }

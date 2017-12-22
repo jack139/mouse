@@ -1,0 +1,85 @@
+$def with (name, str1, sku, uid_list, type_list)
+
+$var title: 鼠笼管理
+$var css: /static/css/jquery.datetimepicker.css
+$var name: $'|'.join(str1) $name
+$var js: /static/js/jquery.datetimepicker.js
+$var load: date_init();
+$var menu: #grup2
+
+<script type="text/javascript">
+/*初始化时间控件*/
+function date_init(){
+    $$('#expired_d').datetimepicker({format: 'Ymd', timepicker:false});
+}
+</script>
+
+<div class="caption"><h2>鼠笼管理 - 鼠笼 $sku['house_id']</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/grp_admin/house_edit">
+<input type="hidden" name="house_id" value="$sku['house_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>鼠笼编号</td><td>$sku['house_id']</td><td></td></tr>
+
+<tr><td>所属实验员</td><td>
+        <span><select id="uname" name="uname" style="width:159px">
+        <option value=''>- 未设置 -</option>
+        $for k in uid_list:
+            <option value="$k['uname']"
+            $if k['uname'] in sku.get('uname',''):
+                selected="selected"
+            >$k['uname'] ($k['full_name'])</option>
+        </select></span>
+</td><td></td></tr>
+
+<tr><td>类型</td><td>
+    $for x in type_list.keys():
+        <input type="radio" name="type" value="$x"
+        $if sku.get('type','')==x:
+            checked="checked"
+        /> $type_list[x]
+</td><td></td></tr>
+
+<tr><td>到期时间</td><td>
+    <input type="text"  value="$:sku.get('expired_d','')" id="expired_d" name="expired_d" readonly="readonly">
+</td><td>格式：yyyymmdd</td></tr>
+
+<tr><td>状态</td><td>
+    <input type="radio" name="status" value="1"
+    $if int(sku.get('status','0'))==1:
+        checked="checked"
+    /> 在使用
+    <input type="radio" name="status" value="0"
+    $if int(sku.get('status','0'))==0:
+        checked="checked"
+    /> 停用
+    </td><td></td></tr>
+
+
+</tbody></table>
+
+
+<p><input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>
+
