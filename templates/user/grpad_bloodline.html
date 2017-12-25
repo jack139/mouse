@@ -1,4 +1,4 @@
-$def with (name, str1, skus, pages, group_name)
+$def with (name, str1, skus, pages, STATUS)
 
 $var title: 品系管理
 $var css:
@@ -10,6 +10,7 @@ $var menu: #grup3
 
 <div class="caption"><h2>品系管理</h2></div>
 
+<p><a class="abtn" href="/grp_admin/bloodline_edit">添加新品系</a></p>
 
 <table class="props_tb">
 <thead>
@@ -23,9 +24,14 @@ $var menu: #grup3
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_admin/bloodline_edit?bloodline_id=$u['bloodline_id']">$u['shelf_id']</a></td>
+  <tr><td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']">$u['blood_code']</a></td>
   <td>$u.get('name','n/a')</td>
-  <td>$u.get('status','n/a')</td>
+  <td>
+    $if u.has_key('status'):
+      $STATUS[u['status']]
+    $else:
+      n/a
+  </td>
   <td>$u.get('note','')</td></tr>
 
 </tbody>

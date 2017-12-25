@@ -11,6 +11,7 @@ db = setting.db_web
 
 url = ('/grp_admin/bloodline')
 
+PAGE_SIZE = 50   
 
 #  -------------------
 class handler:  
@@ -19,9 +20,24 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input()
+        user_data=web.input(page='0')
 
-        # 获取品系数据
-        db_sku = db.bloodline.find()
-        
-        return render.grpad_bloodline(helper.get_session_uname(), helper.get_privilege_name(), db_sku)
+        if not user_data['page'].isdigit():
+            return render.info('参数错误！')  
+
+
+        # 分页获取数据
+        db_sku = db.bloodline.find(
+            sort=[('_id', -1)],
+            limit=PAGE_SIZE,
+            skip=int(user_data['page'])*PAGE_SIZE
+        )
+
+        num = db_sku.count()
+        if num%PAGE_SIZE>0:
+            num = num / PAGE_SIZE + 1
+        else:
+            num = num / PAGE_SIZE
+
+        return render.grpad_bloodline(helper.get_session_uname(), helper.get_privilege_name(), 
+            db_sku, range(0, num), helper.BLOODLINE_STATUS)

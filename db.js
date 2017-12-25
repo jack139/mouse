@@ -62,7 +62,7 @@ mouse 小鼠：数据只增不删，保留历史数据
 
 bloodline 小鼠品系
 {
-    blood_id : 品系id，人工输入
+    blood_code : 品系id，人工输入
     name : 品系名称
     status : 状态 ： 准备中／计划中／已有
     owner_uid : 建立的课题组管理员id

@@ -1,0 +1,73 @@
+$def with (name, str1, sku)
+
+$var title: 品系管理
+$var css: 
+$var name: $'|'.join(str1) $name
+$var js: 
+$var load: 
+$var menu: #grup3
+
+$if sku['blood_code']=='':
+    <div class="caption"><h2>新增品系信息</h2></div>
+$else:
+    <div class="caption"><h2>修改品系信息</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/grp_admin/bloodline_edit">
+<input type="hidden" name="blood_id" value="$sku['_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>品系编号</td><td>$sku['blood_code']
+    <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')"/>
+    </td><td></td></tr>
+
+
+<tr><td>品系名称</td><td>
+    <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
+    </td><td></td></tr>
+
+<tr><td>备注</td><td>
+    <textarea rows="3" name="note">$sku.get('note','')</textarea>
+    </td><td></td></tr>
+
+<tr><td>状态</td><td>
+    <input type="radio" name="status" value="prepare"
+    $if sku.get('status','prepare')=='prepare':
+        checked="checked"
+    /> 准备中
+    <input type="radio" name="status" value="plan"
+    $if sku.get('status','prepare')=='plan':
+        checked="checked"
+    /> 计划中
+    <input type="radio" name="status" value="ready"
+    $if sku.get('status','prepare')=='ready':
+        checked="checked"
+    /> 已有
+    </td><td></td></tr>
+
+
+</tbody></table>
+
+
+<p><input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>
+
