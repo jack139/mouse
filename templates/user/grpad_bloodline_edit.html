@@ -1,4 +1,4 @@
-$def with (name, str1, sku)
+$def with (name, str1, sku, users)
 
 $var title: 品系管理
 $var css: 
@@ -31,6 +31,16 @@ $else:
 
 <tr><td>品系名称</td><td>
     <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
+    </td><td></td></tr>
+
+<tr><td>可使用的用户（可多选）</td><td>
+        <span><select id="user_list" name="user_list" multiple="multiple" size="5" style="width:159px">
+        $for k in users:
+            <option value="$k['uname']"
+            $if k['uname'] in sku.get('user_list',[]):
+                selected="selected"
+            >$k['uname'] ($k['full_name'])</option>
+        </select></span>
     </td><td></td></tr>
 
 <tr><td>备注</td><td>

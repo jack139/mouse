@@ -33,6 +33,7 @@ house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
     shelf_id : 笼架id，格式： 区-房-架
     status : 鼠笼状态：0 停用 1 在使用
     type :  鼠笼类型： 繁殖／实验／使用
+    type_list :  鼠笼可用类型： 繁殖／实验／使用（管理员修改）
     group_id : 所属课题组id，应该确认没有小鼠时才能修改所属课题组
     uname : 实验员id
     expired_d : 到期日期， yyyymm
@@ -65,9 +66,10 @@ bloodline 小鼠品系
     blood_code : 品系id，人工输入
     name : 品系名称
     status : 状态 ： 准备中／计划中／已有
-    owner_uid : 建立的课题组管理员id
+    owner_uname : 建立的课题组管理员id
     status_history : [], 状态变更记录
     last_tick: 最后修改时间
+    user_list : 可使用的用户
 }
 
 /* -------------- Indexes ---------------*/

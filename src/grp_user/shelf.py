@@ -7,16 +7,16 @@ import helper
 
 db = setting.db_web
 
-# 笼架列表
+# 实验员笼架列表
 
-url = ('/grp_admin/shelf')
+url = ('/grp_user/shelf')
 
 PAGE_SIZE = 50   
 
 #  -------------------
 class handler:  
     def GET(self):
-        if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
+        if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
 
         render = helper.create_render()
@@ -31,10 +31,11 @@ class handler:
         for i in r3:
             group_name[i['group_id']]=i['name']
 
-        group_list = helper.get_session_group_list()
+        # 当前实验员可用的笼架
+        r2 = db.house.distinct("shelf_id", {'uname':helper.get_session_uname()})
 
         # 分页获取数据
-        db_sku = db.shelf.find({'group_id' : '' if len(group_list)==0 else group_list[0]},
+        db_sku = db.shelf.find({'shelf_id' : {'$in':r2}},
             sort=[('shelf_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
@@ -46,5 +47,5 @@ class handler:
         else:
             num = num / PAGE_SIZE
         
-        return render.grpad_shelf(helper.get_session_uname(), helper.get_privilege_name(), 
+        return render.user_shelf(helper.get_session_uname(), helper.get_privilege_name(), 
             db_sku, range(0, num), group_name)

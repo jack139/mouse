@@ -9,14 +9,14 @@ import helper
 
 db = setting.db_web
 
-# 组管理员鼠笼设置
+# 实验员员鼠笼设置
 
-url = ('/grp_admin/house_edit')
+url = ('/grp_user/house_edit')
 
 class handler:
 
     def GET(self):
-        if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
+        if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
 
         render = helper.create_render()
@@ -37,33 +37,30 @@ class handler:
             'status':0
         }
 
-        db_obj=db.house.find_one({'house_id':user_data.house_id})
+        db_obj=db.house.find_one({
+            'house_id': user_data.house_id,
+            'uname'   : helper.get_session_uname(),
+        })
         if db_obj!=None:
             # 已存在的鼠笼
             house_data = db_obj
 
-        return render.grpad_house_edit(helper.get_session_uname(), helper.get_privilege_name(), 
+        return render.user_house_edit(helper.get_session_uname(), helper.get_privilege_name(), 
             house_data, db_user, helper.HOUSE_TYPE)
 
 
     def POST(self):
-        if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
+        if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(house_id='',uname='',expired_d='',status='',type=[])
+        user_data=web.input(house_id='',status='',type='')
 
         if user_data.house_id.strip()=='':
             return render.info('参数错误！')
 
         if int(user_data.status)==1:
-            if user_data.uname=='':
-                return render.info('请设置实验员！')
-
-            if user_data.type==[]:
-                return render.info('请设置鼠笼可用类型！')
-
-            if user_data.expired_d=='':
-                return render.info('请设置鼠笼到期日期！')
+            if user_data.type=='':
+                return render.info('请设置鼠笼类型！')
 
         shelf_id = u'-'.join(user_data['house_id'].split('-')[:3])
 
@@ -71,13 +68,8 @@ class handler:
 
         try:
             update_set={
-                'house_id'  : user_data['house_id'],
-                'shelf_id'  : shelf_id,
-                'type_list' : user_data['type'],
+                'type'      : user_data['type'],
                 'status'    : int(user_data['status']),
-                'uname'     : user_data['uname'],
-                'group_id'  : group_id,
-                'expired_d' : user_data['expired_d'],
                 'last_tick' : int(time.time()),  # 更新时间戳
             }
         except ValueError:
@@ -88,6 +80,6 @@ class handler:
             '$push' : {
                 'history' : (helper.time_str(), helper.get_session_uname(), '修改'), 
             }  # 纪录操作历史
-        }, upsert=True)
+        })
 
-        return render.info('成功保存！', '/grp_admin/house?shelf_id=%s' % shelf_id)
+        return render.info('成功保存！', '/grp_user/house?shelf_id=%s' % shelf_id)

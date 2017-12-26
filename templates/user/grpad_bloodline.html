@@ -18,6 +18,7 @@ $var menu: #grup3
     <th width="15%">品系编号</th>
     <th>品系名</th>
     <th>状态</th>
+    <th>创建者</th>
     <th width="15%">备注</th>
   </tr>
 </thead>
@@ -32,6 +33,7 @@ $for u in skus:
     $else:
       n/a
   </td>
+  <td>$u.get('owner_uname','n/a')</td>
   <td>$u.get('note','')</td></tr>
 
 </tbody>

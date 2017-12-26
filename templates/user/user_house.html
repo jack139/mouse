@@ -5,7 +5,7 @@ $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #grup2
+$var menu: #user1
 
 
 <div class="caption"><h2>鼠笼管理 - 笼架 $shelf['shelf_id']</h2></div>
@@ -39,12 +39,12 @@ $for r in xrange(1,shelf['row']+1):
                         $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='inuse':
                             class='inuse'
                 >
-                    <div><a href="/grp_admin/house_edit?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
+                    <div><a href="/grp_user/house_edit?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
                 </td>
             $else:
-                <td><a href="/grp_admin/house_edit?house_id=$shelf['shelf_id']-$r-$c">$r-$c</a></td>
+                <td>$r-$c</td>
     </tr>   
 
 </tbody>
@@ -52,7 +52,7 @@ $for r in xrange(1,shelf['row']+1):
 
 <br/>
 
-<p><input type="button" name="cancel" value="返回" onclick="location='/grp_admin/shelf'" /><p>
+<p><input type="button" name="cancel" value="返回" onclick="location='/grp_user/shelf'" /><p>
 
 <br/>
 

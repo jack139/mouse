@@ -23,6 +23,7 @@ class handler:
         render = helper.create_render()
         user_data = web.input(blood_id='')
 
+        # 品系数据
         blood_data = { 'blood_code' : '', '_id':'n/a'}
 
         if user_data.blood_id != '': 
@@ -31,15 +32,24 @@ class handler:
                 # 已存在的obj
                 blood_data = db_obj
 
+        # 本组用户数据
+        group_list = helper.get_session_group_list()
+
+        users=[]            
+        db_user=db.user.find({
+            'privilege'  : helper.PRIV_USER, 
+            'group_list' : '' if len(group_list)==0 else group_list[0],
+        }).sort([('_id',1)])
+
         return render.grpad_bloodline_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            blood_data)
+            blood_data, db_user)
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(blood_id='',blood_code='',name='')
+        user_data=web.input(blood_id='',blood_code='',name='',user_list=[])
 
         if user_data.name.strip()=='':
             return render.info('品系名不能为空！')  
@@ -52,6 +62,7 @@ class handler:
                 'name'        : user_data['name'],
                 'status'      : user_data['status'],
                 'note'        : user_data['note'],
+                'user_list'   : user_data['user_list'],
                 'last_tick'   : int(time.time()),  # 更新时间戳
             }
         except ValueError:
@@ -62,6 +73,7 @@ class handler:
             if r1.count()>0:
                 return render.info('品系编码不能重复！')
 
+            update_set['owner_uname'] = helper.get_session_uname()
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
             db.bloodline.insert_one(update_set)
         else:
