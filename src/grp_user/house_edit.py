@@ -45,22 +45,31 @@ class handler:
             # 已存在的鼠笼
             house_data = db_obj
 
+        mice = []
+        db_mice = db.mouse.find({
+            'house_id' : user_data['house_id'], 
+            'status'   : {'$nin' : ['killed', 'dead']}
+        }).sort([('_id',1)])
+
+        db_blood = db.bloodline.find({
+            'user_list' : helper.get_session_uname(),
+        })
+
         return render.user_house_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE)
+            house_data, db_user, helper.HOUSE_TYPE, db_blood, mice)
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(house_id='',status='',type='')
+        user_data=web.input(house_id='',type='')
 
         if user_data.house_id.strip()=='':
             return render.info('参数错误！')
 
-        if int(user_data.status)==1:
-            if user_data.type=='':
-                return render.info('请设置鼠笼类型！')
+        if user_data.type=='':
+            return render.info('请设置鼠笼类型！')
 
         shelf_id = u'-'.join(user_data['house_id'].split('-')[:3])
 
@@ -69,7 +78,6 @@ class handler:
         try:
             update_set={
                 'type'      : user_data['type'],
-                'status'    : int(user_data['status']),
                 'last_tick' : int(time.time()),  # 更新时间戳
             }
         except ValueError:

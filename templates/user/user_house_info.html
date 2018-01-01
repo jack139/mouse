@@ -1,4 +1,4 @@
-$def with (name, str1, sku, uid_list, type_list, blood_list, mice)
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status)
 
 $var title: 鼠笼管理
 $var css: 
@@ -7,9 +7,9 @@ $var js:
 $var load: 
 $var menu: #user1
 
-<div class="caption"><h2>鼠笼编辑 - 鼠笼 $sku['house_id']</h2></div>
+<div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
-<form name="new_sku" id="new_sku" method="post" action="/grp_user/house_edit">
+
 <input type="hidden" name="house_id" value="$sku['house_id']"/>
 
 <table class="props_tb">
@@ -31,14 +31,10 @@ $var menu: #user1
 
 <tr><td>鼠笼类型</td><td>
     $for x in sku.get('type_list', []):
-        <input type="radio" name="type" value="$x"
         $if x in sku.get('type', ''):
-            checked="checked"
-        /> $type_list[x]
+            $type_list[x]
 </td><td></td></tr>
 
-
-<!-- 实验笼属性 -->
 $if sku.get('type', '')=='test':
     <tr><td>实验开始日期</td><td>
         $(sku.get('test_start_d','n/a'))
@@ -48,16 +44,13 @@ $if sku.get('type', '')=='test':
         $(sku.get('test_end_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 
-<!-- 共有属性 -->
 <tr><td>小鼠品系</td><td>
-    <select name='blood_code'>
-        <option value=''>--请选择--</option>
-        $for i in blood_list:
-            <option value="$i['blood_code']"
-                $if len(mice)>0 and mice[0]['blood_code']==i['blood_code']:
-                    selected="selected"
-            >$i['blood_code'] -- $i['status']</option>
-    </select>
+    $if len(mice)>0:
+        $mice[0]['blood_code']
+    </td><td></td></tr>
+
+<tr><td>小鼠数量</td><td>
+    $len(mice)
     </td><td></td></tr>
 
 <tr><td>小鼠列表</td><td>
@@ -70,7 +63,7 @@ $if sku.get('type', '')=='test':
         <br/>
     </td><td></td></tr>
 
-<tr><td>到期时间</td><td>
+<tr><td>鼠笼到期时间</td><td>
     $:sku.get('expired_d','')
 </td><td>格式：yyyymmdd</td></tr>
 
@@ -81,13 +74,24 @@ $if sku.get('type', '')=='test':
         停用
     </td><td>由管理员设置</td></tr>
 
-
 </tbody></table>
 
 
-<p><input type="submit" name="submit" id="submit" value="保存"/>
-<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
-</form>
+<p>
+    <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
+    $if sku.get('type', '')=='inuse':
+        <input type="button" id="move" value="移动"/>
+        <input type="button" id="abandon" value="淘汰"/>
+    $if sku.get('type', '')=='test':
+        <input type="button" id="move" value="移动"/>
+        <input type="button" id="finish" value="结束"/>
+    $if sku.get('type', '')=='breed':
+        <input type="button" id="newborn" value="新生小鼠"/>
+        <input type="button" id="move" value="移动"/>
+        <input type="button" id="abandon" value="淘汰"/>
+
+    <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
+<p>
 
 
 <div class="article_box">

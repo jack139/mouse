@@ -39,7 +39,7 @@ $for r in xrange(1,shelf['row']+1):
                         $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='inuse':
                             class='inuse'
                 >
-                    <div><a href="/grp_user/house_edit?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
+                    <div><a href="/grp_user/house_info?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
                 </td>

@@ -39,26 +39,31 @@ house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
     expired_d : 到期日期， yyyymm
     history : [], 使用记录
     last_tick: 最后修改时间
+
+    create_d : 创立日期
+    test_start_d : 实验开始日期
+    test_end_d : 实验预计完成日期
 }
 
 mouse 小鼠：数据只增不删，保留历史数据
 {
-    mouse_id : 小鼠id, 格式 出生日期 myyyymmddCCCCC, CCCCC是5位字母随机组合
+    _id : 小鼠id
     tag : 耳标, 新生小鼠可能没有耳标值
-    sex : 性别
+    sex : 性别 F M 
     status : 状态 ：新生／正常／杀死／死亡
     birth_d : 出生日期 yyyymmdd
     divide_d : 分笼日期 yyyymmdd
     death_d : 死亡日期 yyyymmdd
-    father_id : 父小鼠id
-    mother_id : 母小鼠id
-    blood_id : 品系id
+    father_tag : 父小鼠耳标
+    mother_tag : 母小鼠耳标
+    blood_code : 品系id
     house_id : 当前所在笼id
     test_record : [], 实验记录
     house_history : [], 居住鼠笼记录，记录鼠笼位置信息
     group_id : 所属课题组id
     uname : 实验员id
     last_tick: 最后修改时间
+    gene_code : 基因型结果
 }
 
 bloodline 小鼠品系
