@@ -32,11 +32,11 @@ $for r in xrange(1,shelf['row']+1):
             $if houses[(r-1)*shelf['col']+(c-1)].has_key('house_id'):
                 <td
                     $if houses[(r-1)*shelf['col']+(c-1)]['status']==1:
-                        $if houses[(r-1)*shelf['col']+(c-1)]['type']=='test':
+                        $if houses[(r-1)*shelf['col']+(c-1)].get('type')=='test':
                             class='test'
-                        $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='breed':
+                        $elif houses[(r-1)*shelf['col']+(c-1)].get('type')=='breed':
                             class='breed'
-                        $elif houses[(r-1)*shelf['col']+(c-1)]['type']=='inuse':
+                        $elif houses[(r-1)*shelf['col']+(c-1)].get('type')=='inuse':
                             class='inuse'
                 >
                     <div><a href="/grp_user/house_info?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>

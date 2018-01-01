@@ -27,7 +27,7 @@ $var menu: #user2
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_user/mice_edit?mouse_id=$u['_id']">$(str(u['_id'])[-8:])</a></td>
+  <tr><td><a href="/grp_user/mice_edit?mouse_id=$u['_id']">$u['_id']</a></td>
   <td>$u.get('tag','n/a')</td>
   <td>$u.get('house_id','n/a')</td>
   <td>$u.get('blood_code','n/a')</td>

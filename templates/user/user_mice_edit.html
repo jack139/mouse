@@ -18,7 +18,7 @@ function date_init(){
 </script>
 
 
-$if sku['mouse_id']=='':
+$if sku['_id']=='n/a':
     <div class="caption"><h2>新增小鼠信息</h2></div>
 $else:
     <div class="caption"><h2>修改小鼠信息</h2></div>
@@ -37,7 +37,11 @@ $else:
 <tbody>
 
 <tr><td>系统编号</td><td>
-    $(str(sku['_id'])[-8:])
+    $sku['_id']
+    </td><td></td></tr>
+
+<tr><td>耳标</td><td>
+    <input type="text" name="tag" id="tag" value="$sku.get('tag', '')"/>
     </td><td></td></tr>
 
 <tr><td>亲本耳标</td><td>
@@ -64,13 +68,24 @@ $else:
     <input type="text"  value="$:sku.get('divide_d','')" id="divide_d" name="divide_d" readonly="readonly">
 </td><td>格式：yyyymmdd</td></tr>
 
+<tr><td>鼠笼位置</td><td>
+    <select name='house_id'>
+        <option value=''>--请选择--</option>
+        $for i in house:
+            <option value="$i"
+                $if sku.get('house_id')==i:
+                    selected="selected"
+            >$i</option>
+    </select>
+    </td><td></td></tr>
+
 
 <tr><td>小鼠品系</td><td>
     <select name='blood_code'>
         <option value=''>--请选择--</option>
         $for i in blood_list:
             <option value="$i['blood_code']"
-                $if len(mice)>0 and mice[0]['blood_code']==i['blood_code']:
+                $if sku.get('blood_code')==i['blood_code']:
                     selected="selected"
             >$i['blood_code'] -- $i['status']</option>
     </select>

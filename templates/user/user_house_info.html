@@ -55,7 +55,7 @@ $if sku.get('type', '')=='test':
 
 <tr><td>小鼠列表</td><td>
     $for i in mice:
-        $i['tag'] ---- $i['sex'] ---- 
+        $i.get('tag','无耳标') ---- $i['sex'] ---- 
         $if mouse_status.has_key(i['status']):
             $mouse_status[i['status']]
         $else:

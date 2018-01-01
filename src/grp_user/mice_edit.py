@@ -39,7 +39,8 @@ class handler:
             # 要增加条件，现在过期的鼠笼
         }).sort([('house_id',1)])
         for i in db_sku:
-            houses.append(i['house_id'])
+            # 需要检查鼠笼类型的限制
+            house.append(i['house_id'])
 
         # 品系信息
         db_blood = db.bloodline.find({
@@ -54,43 +55,43 @@ class handler:
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(blood_id='',blood_code='',name='',user_list=[])
+        user_data=web.input(mouse_id='',tag='',mother_tag='',birth_d='',divide_d='',
+            sex='',blood_code='',gene_code='',house_id='')
 
-        if user_data.name.strip()=='':
-            return render.info('品系名不能为空！')  
+        if user_data.mother_tag.strip()=='':
+            return render.info('亲本耳标不能为空！')  
 
-        blood_code = user_data['blood_code'].strip()
+        if '' in (user_data.birth_d,user_data.divide_d,user_data.sex,\
+            user_data.blood_code,user_data.gene_code.strip()):
+            return render.info('请填写不能为空小鼠信息！')  
 
         try:
             update_set={
-                'blood_code'  : blood_code,
-                'name'        : user_data['name'],
-                'status'      : user_data['status'],
-                'note'        : user_data['note'],
-                'user_list'   : user_data['user_list'],
-                'last_tick'   : int(time.time()),  # 更新时间戳
+                'tag'        : user_data['tag'].strip(),
+                'mother_tag' : user_data['mother_tag'].strip(),
+                'birth_d'    : user_data['birth_d'],
+                'divide_d'   : user_data['divide_d'],
+                'blood_code' : user_data['blood_code'],
+                'gene_code'  : user_data['gene_code'].strip(),
+                'note'       : user_data['note'],
+                'house_id'   : user_data['house_id'],
+                'sex'        : user_data['sex'],
+                'status'     : 'live', # 正常
+                'last_tick'  : int(time.time()),  # 更新时间戳
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
 
-        if user_data['blood_id']=='n/a': # 新建
-            r1 = db.bloodline.find({'blood_code':blood_code})
-            if r1.count()>0:
-                return render.info('品系编码不能重复！')
-
+        if user_data['mouse_id']=='n/a': # 新建
             update_set['owner_uname'] = helper.get_session_uname()
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
-            db.bloodline.insert_one(update_set)
+            db.mouse.insert_one(update_set)
         else:
-            r1 = db.bloodline.find({'_id': {'$ne':ObjectId(user_data['blood_id'])}, 'blood_code':blood_code})
-            if r1.count()>0:
-                return render.info('品系编码不能重复！')
-
-            db.bloodline.update_one({'_id':ObjectId(user_data['blood_id'])}, {
+            db.mouse.update_one({'_id':ObjectId(user_data['mouse_id'])}, {
                 '$set'  : update_set,
                 '$push' : {
                     'history' : (helper.time_str(), helper.get_session_uname(), '修改'), 
                 }  # 纪录操作历史
             })
 
-        return render.info('成功保存！', '/grp_admin/bloodline')
+        return render.info('成功保存！', '/grp_user/mice')
