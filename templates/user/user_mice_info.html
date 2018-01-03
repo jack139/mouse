@@ -1,0 +1,88 @@
+$def with (name, str1, sku, house, blood_list)
+
+$var title: 鼠笼管理
+$var css:
+$var name: $'|'.join(str1) $name
+$var js:
+$var load:
+$var menu: #user1
+
+<div class="caption"><h2>小鼠信息</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/grp_user/mice_edit">
+<input type="hidden" name="mouse_id" value="$sku['_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th>项目</th>
+        <th width="40%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+
+<tr><td>系统编号</td><td>
+    $sku['_id']
+    </td><td></td></tr>
+
+<tr><td>耳标</td><td>
+    $sku.get('tag', '')
+    </td><td></td></tr>
+
+<tr><td>亲本耳标</td><td>
+    $sku.get('mother_tag', '')
+    </td><td></td></tr>
+
+<tr><td>出生日期</td><td>
+    $:sku.get('birth_d','')
+</td><td>格式：yyyymmdd</td></tr>
+
+
+<tr><td>性别</td><td>
+    $sku.get('sex',''):
+    </td><td></td></tr>
+
+<tr><td>分笼日期</td><td>
+    $:sku.get('divide_d','')
+</td><td>格式：yyyymmdd</td></tr>
+
+<tr><td>鼠笼位置</td><td>
+    $sku.get('house_id','n/a')
+    </select>
+    </td><td></td></tr>
+
+
+<tr><td>小鼠品系</td><td>
+    $sku.get('blood_code','n/a')
+    </td><td></td></tr>
+
+
+<tr><td>基因型结果</td><td>
+    $sku.get('gene_code', '')
+    </td><td></td></tr>
+
+
+<tr><td>备注</td><td>
+    <textarea rows="3" name="note" readonly="readonly">$sku.get('note','')</textarea>
+    </td><td></td></tr>
+
+
+</tbody></table>
+
+
+<p>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>
+

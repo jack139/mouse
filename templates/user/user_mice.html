@@ -15,7 +15,7 @@ $var menu: #user2
 <table class="props_tb">
 <thead>
   <tr class="even">
-    <th width="15%">系统编号</th>
+    <th width="20%">系统编号</th>
     <th>耳标</th>
     <th>鼠笼位置</th>
     <th>品系</th>
@@ -29,7 +29,10 @@ $var menu: #user2
 $for u in skus:
   <tr><td><a href="/grp_user/mice_edit?mouse_id=$u['_id']">$u['_id']</a></td>
   <td>$u.get('tag','n/a')</td>
-  <td>$u.get('house_id','n/a')</td>
+  $if u.get('house_id','n/a')!='n/a':
+    <td><a href="/grp_user/house_info?house_id=$u['house_id']">$u.get('house_id','n/a')</a></td>
+  $else:
+    <td>$u.get('house_id','n/a')</td>
   <td>$u.get('blood_code','n/a')</td>
   <td>$u.get('birth_d','n/a')</td>
   <td>$u.get('status','n/a')</td>

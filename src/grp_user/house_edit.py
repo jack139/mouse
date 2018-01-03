@@ -45,18 +45,21 @@ class handler:
             # 已存在的鼠笼
             house_data = db_obj
 
-        mice = []
+        # 此笼的小鼠信息
         db_mice = db.mouse.find({
             'house_id' : user_data['house_id'], 
             'status'   : {'$nin' : ['killed', 'dead']}
         }).sort([('_id',1)])
 
+        mice = [i for i in db_mice]
+
+        # 小鼠品系数据
         db_blood = db.bloodline.find({
             'user_list' : helper.get_session_uname(),
         })
 
         return render.user_house_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, db_blood, mice)
+            house_data, db_user, helper.HOUSE_TYPE, db_blood, mice, helper.MOUSE_STATUS)
 
 
     def POST(self):

@@ -62,7 +62,7 @@ class handler:
             return render.info('亲本耳标不能为空！')  
 
         if '' in (user_data.birth_d,user_data.divide_d,user_data.sex,\
-            user_data.blood_code,user_data.gene_code.strip()):
+            user_data.blood_code):
             return render.info('请填写不能为空小鼠信息！')  
 
         try:
