@@ -1,16 +1,16 @@
-$def with (name, str1, sku, uid_list, type_list, mice, mouse_status)
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house)
 
 $var title: 鼠笼管理
 $var css: 
 $var name: $'|'.join(str1) $name
-$var js: 
+$var js: /static/js/user_house_info.js
 $var load: 
 $var menu: #user1
 
 <div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
 
-<input type="hidden" name="house_id" value="$sku['house_id']"/>
+<input type="hidden" id="house_id" name="house_id" value="$sku['house_id']"/>
 
 <table class="props_tb">
 <thead>
@@ -55,11 +55,8 @@ $if sku.get('type', '')=='test':
 
 <tr><td>小鼠列表</td><td>
     $for i in mice:
-        $i.get('tag','无耳标') ---- $i['sex'] ---- 
-        $if mouse_status.has_key(i['status']):
-            $mouse_status[i['status']]
-        $else:
-            未知状态
+        <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
+        $i.get('tag','无耳标') ---- $i['sex']
         <a class="abtn" href="/grp_user/mice_info?mouse_id=$i['_id']">查看</a>
         <br/>
     </td><td></td></tr>
@@ -77,21 +74,27 @@ $if sku.get('type', '')=='test':
 
 </tbody></table>
 
-
+$if int(sku.get('status','0'))==1:
+    <p>
+        <input type="button" id="move" value="移动到"/>
+        <select id='target_house_id' name='target_house_id'>
+            <option value='' selected="selected">--请选择--</option>
+            $for i in house:
+                <option value="$i">$i</option>
+        </select>
+    </p>
 <p>
-    <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
-    $if sku.get('type', '')=='inuse':
-        <input type="button" id="move" value="移动"/>
-        <input type="button" id="abandon" value="淘汰"/>
-    $if sku.get('type', '')=='test':
-        <input type="button" id="move" value="移动"/>
-        <input type="button" id="finish" value="结束"/>
-    $if sku.get('type', '')=='breed':
-        <input type="button" id="newborn" value="新生小鼠"/>
-        <input type="button" id="move" value="移动"/>
-        <input type="button" id="abandon" value="淘汰"/>
+    $if int(sku.get('status','0'))==1:
+        <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
+        $if sku.get('type', '')=='inuse':
+            <input type="button" id="abandon" value="淘汰"/>
+        $if sku.get('type', '')=='test':
+            <input type="button" id="finish" value="结束"/>
+        $if sku.get('type', '')=='breed':
+            <input type="button" id="newborn" value="新生小鼠"/>
+            <input type="button" id="abandon" value="淘汰"/>
 
-    <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
+    <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
 <p>
 
 

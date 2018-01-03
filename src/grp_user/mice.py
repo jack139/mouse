@@ -28,7 +28,7 @@ class handler:
         # 当前实验员可查看的小鼠
         # 分页获取数据
         db_sku = db.mouse.find({'owner_uname' : helper.get_session_uname()},
-            sort=[('_id', 1),('status',-1)],
+            sort=[('status',-1),('_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
         )

@@ -53,7 +53,18 @@ class handler:
 
         mice = [i for i in db_mice]
 
+        # 获取鼠笼数据
+        house = []
+        db_sku = db.house.find({
+            'uname'    : helper.get_session_uname(), # 只显示当前用户管理的鼠笼
+            # 要增加条件，现在过期的鼠笼
+        }).sort([('house_id',1)])
+        for i in db_sku:
+            # 需要检查鼠笼类型的限制
+            if i['house_id']!=user_data['house_id']:
+                house.append(i['house_id'])
+
         return render.user_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS)
+            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house)
 
 
