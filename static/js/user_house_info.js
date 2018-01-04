@@ -4,7 +4,33 @@ $(function(){
             alertify.confirm('请确认', '真的要淘汰所有的小鼠吗？', 
                 function(){ 
                     var house_id = $("#house_id").val();
-                    location="/grp_user/abandon?house_id="+house_id;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/grp_user/abandon",
+                        async: true,
+                        timeout: 15000,
+                        data: {house_id:house_id},
+                        dataType: "json",
+                        complete: function(xhr, textStatus)
+                        {
+                            if(xhr.status==200){
+                                var retJson = JSON.parse(xhr.responseText);
+                                if (retJson["ret"]==0){
+                                    alertify.alert('请确认','此笼的小鼠已全部淘汰！',function(){
+                                        location="/grp_user/house_info?house_id="+house_id;
+                                    }); 
+                                }
+                                else{
+                                    alertify.error('淘汰小鼠失败!'); 
+                                }
+                            }
+                            else{
+                                alertify.error('网络异常!'); 
+                            }
+                        }
+                    });
+
                 }, function(){ });
         }
         else {
@@ -64,5 +90,43 @@ $(function(){
         else{
             alertify.warning('请选择要移动的小鼠!'); 
         }
+    });
+});
+
+
+$(function(){
+    $('#finish').click(function(){
+        
+        var house_id = $("#house_id").val();
+
+        alertify.confirm('请确认', '确定结束当前鼠笼的实验吗？', 
+            function(){ 
+                $.ajax({
+                    type: "POST",
+                    url: "/grp_user/finish",
+                    async: true,
+                    timeout: 15000,
+                    data: {house_id:house_id},
+                    dataType: "json",
+                    complete: function(xhr, textStatus)
+                    {
+                        if(xhr.status==200){
+                            var retJson = JSON.parse(xhr.responseText);
+                            if (retJson["ret"]==0){
+                                alertify.alert('请确认','当前鼠笼实验已结束！鼠笼类型修改为：使用笼',function(){
+                                    location="/grp_user/house_info?house_id="+house_id;
+                                }); 
+                            }
+                            else{
+                                alertify.error('结束实验失败!'); 
+                            }
+                        }
+                        else{
+                            alertify.error('网络异常!'); 
+                        }
+                    }
+                });
+
+            }, function(){ } ); 
     });
 });

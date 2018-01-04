@@ -35,12 +35,16 @@ $var menu: #user1
             $type_list[x]
 </td><td></td></tr>
 
-$if sku.get('type', '')=='test':
+$if sku.get('type', '') in ['test', 'inuse']:
     <tr><td>实验开始日期</td><td>
         $(sku.get('test_start_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 
-    <tr><td>预计结束日期</td><td>
+    <tr><td>实验预计结束日期</td><td>
+        $(sku.get('test_will_end_d','n/a'))
+        </td><td>格式：yyyymmdd</td></tr>
+
+    <tr><td>实验实际结束日期</td><td>
         $(sku.get('test_end_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 

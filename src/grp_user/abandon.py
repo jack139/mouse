@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # 
 import web
-import time
+import time, json
 from bson.objectid import ObjectId
 from config import setting
 import helper
@@ -15,15 +15,15 @@ url = ('/grp_user/abandon')
 
 class handler:
 
-    def GET(self):
+    def POST(self):
+        web.header("Content-Type", "application/json")
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
 
-        render = helper.create_render()
         user_data = web.input(house_id='')
 
         if user_data['house_id']=='':
-            return render.info('参数错误！')  
+            return json.dumps({'ret':-1, 'msg':'参数错误'})
 
         # 检查house_id
         db_obj=db.house.find_one({
@@ -32,7 +32,7 @@ class handler:
         })
         if db_obj==None:
             # 不存在的鼠笼
-            return render.info('鼠笼参数错误！')
+            return json.dumps({'ret':-2, 'msg':'鼠笼参数错误！'})
 
         # 此笼的小鼠杀死
         db_mice = db.mouse.update_many({
@@ -40,6 +40,6 @@ class handler:
             'status'   : {'$nin' : ['killed', 'dead']}
         }, {'$set':{'status':'dead'}})
 
-        return render.info('此笼的小鼠已全部淘汰！', '/grp_user/house_info?house_id=%s'%user_data['house_id'])
+        return json.dumps({'ret':0,'msg':'此笼的小鼠已全部淘汰！'})
 
 

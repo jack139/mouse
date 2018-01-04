@@ -42,7 +42,8 @@ house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
 
     create_d : 创立日期
     test_start_d : 实验开始日期
-    test_end_d : 实验预计完成日期
+    test_will_end_d : 实验预计完成日期
+    test_end_d : 实验实际完成日期
 }
 
 mouse 小鼠：数据只增不删，保留历史数据

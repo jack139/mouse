@@ -1,11 +1,19 @@
 $def with (name, str1, sku, uid_list, type_list, blood_list, mice, mouse_status)
 
 $var title: 鼠笼管理
-$var css: 
+$var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
-$var js: 
-$var load: 
+$var js: /static/js/jquery.datetimepicker.js
+$var load: date_init();
 $var menu: #user1
+
+<script type="text/javascript">
+/*初始化时间控件*/
+function date_init(){
+    $$('#test_will_end_d').datetimepicker({format: 'Ymd', timepicker:false});
+}
+</script>
+
 
 <div class="caption"><h2>鼠笼编辑 - 鼠笼 $sku['house_id']</h2></div>
 
@@ -15,7 +23,7 @@ $var menu: #user1
 <table class="props_tb">
 <thead>
     <tr class="even">
-        <th>项目</th>
+        <th width="20%">项目</th>
         <th width="40%">内容</th>
         <th>说明</th>
     </tr>
@@ -34,7 +42,12 @@ $var menu: #user1
         <input type="radio" name="type" value="$x"
         $if x in sku.get('type', ''):
             checked="checked"
+        $if x=='test':
+            onclick="$$('#test_will_end_row').show();" 
+        $else:
+            onclick="$$('#test_will_end_row').hide();" 
         /> $type_list[x]
+
 </td><td></td></tr>
 
 
@@ -44,9 +57,12 @@ $if sku.get('type', '')=='test':
         $(sku.get('test_start_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 
-    <tr><td>预计结束日期</td><td>
-        $(sku.get('test_end_d','n/a'))
-        </td><td>格式：yyyymmdd</td></tr>
+<tr id="test_will_end_row"
+$if sku.get('type', '')!='test':
+    style="display: none;"
+><td>预计结束日期</td><td>
+    <input type="text"  value="$:sku.get('test_will_end_d','')" id="test_will_end_d" name="test_will_end_d" readonly="readonly">
+    </td><td>格式：yyyymmdd</td></tr>
 
 <!-- 共有属性 -->
 <tr><td>小鼠品系</td><td>
@@ -62,11 +78,7 @@ $if sku.get('type', '')=='test':
 
 <tr><td>小鼠列表</td><td>
     $for i in mice:
-        $i['tag'] ---- $i['sex'] ---- 
-        $if mouse_status.has_key(i['status']):
-            $mouse_status[i['status']]
-        $else:
-            未知状态
+        $i['tag'] ---- $i['sex']
         <br/>
     </td><td></td></tr>
 
