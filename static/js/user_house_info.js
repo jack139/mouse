@@ -1,7 +1,12 @@
 $(function(){
     $('#abandon').click(function(){
-        if ($(':checkbox').length>0){
-            alertify.confirm('请确认', '真的要淘汰所有的小鼠吗？', 
+        var val = [];
+        $(':checkbox:checked').each(function(i){
+            val[i] = $(this).val();
+        });
+
+        if (val.length>0){
+            alertify.confirm('请确认', '确定要淘汰所选择的小鼠吗？', 
                 function(){ 
                     var house_id = $("#house_id").val();
 
@@ -10,14 +15,14 @@ $(function(){
                         url: "/grp_user/abandon",
                         async: true,
                         timeout: 15000,
-                        data: {house_id:house_id},
+                        data: {house_id:house_id,mice:JSON.stringify(val)},
                         dataType: "json",
                         complete: function(xhr, textStatus)
                         {
                             if(xhr.status==200){
                                 var retJson = JSON.parse(xhr.responseText);
                                 if (retJson["ret"]==0){
-                                    alertify.alert('请确认','此笼的小鼠已全部淘汰！',function(){
+                                    alertify.alert('请确认','小鼠淘汰完成！',function(){
                                         location="/grp_user/house_info?house_id="+house_id;
                                     }); 
                                 }
@@ -34,7 +39,7 @@ $(function(){
                 }, function(){ });
         }
         else {
-            alertify.warning('当前鼠笼里没有小鼠!'); 
+            alertify.warning('请选择要淘汰的小鼠!'); 
         }
     });
 });

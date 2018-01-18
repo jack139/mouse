@@ -28,7 +28,7 @@ class handler:
         # 检查house_id
         db_obj=db.house.find_one({
             'house_id': param.target_house_id,
-            'uname'   : helper.get_session_uname(),  # 只能淘汰自己的鼠笼
+            'uname'   : helper.get_session_uname(),  # 只能移动自己的鼠笼
         })
         if db_obj==None:
             # 不存在的鼠笼

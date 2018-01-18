@@ -15,8 +15,8 @@ $var menu: #user1
 <table class="props_tb">
 <thead>
     <tr class="even">
-        <th>项目</th>
-        <th width="40%">内容</th>
+        <th width="15%">项目</th>
+        <th width="50%">内容</th>
         <th>说明</th>
     </tr>
 </thead>
@@ -48,21 +48,17 @@ $if sku.get('type', '') in ['test', 'inuse']:
         $(sku.get('test_end_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 
-<tr><td>小鼠品系</td><td>
-    $if len(mice)>0:
-        $mice[0]['blood_code']
-    </td><td></td></tr>
-
-<tr><td>小鼠数量</td><td>
-    $len(mice)
-    </td><td></td></tr>
 
 <tr><td>小鼠列表</td><td>
     $for i in mice:
         <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
-        $i.get('tag','无耳标') ---- $i['sex']
+        $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
         <a class="abtn" href="/grp_user/mice_info?mouse_id=$i['_id']">查看</a>
         <br/>
+    </td><td></td></tr>
+
+<tr><td>小鼠数量</td><td>
+    $len(mice)
     </td><td></td></tr>
 
 <tr><td>鼠笼到期时间</td><td>

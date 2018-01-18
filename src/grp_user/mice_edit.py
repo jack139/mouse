@@ -44,6 +44,7 @@ class handler:
 
         # 品系信息
         db_blood = db.bloodline.find({
+            'status'    : 'ready',
             'user_list' : helper.get_session_uname(),
         })
 

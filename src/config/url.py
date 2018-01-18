@@ -24,7 +24,7 @@ urls = [
 ]
 
 ## ---- 分布式部署---------------------------------
-app_dir = ['plat', 'grp_admin', 'grp_user', 'grp_tutor']
+app_dir = ['query', 'grp_admin', 'grp_user', 'grp_tutor']
 app_list = []
 for i in app_dir:
     tmp_list = ['%s.%s' % (i,x[:-4])  for x in os.listdir(i) if x[:2]!='__' and x.endswith('.pyc')]

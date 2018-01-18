@@ -9,7 +9,7 @@ import helper
 
 db = setting.db_web
 
-#  淘汰鼠笼所有小鼠
+#  淘汰鼠笼指定的小鼠
 
 url = ('/grp_user/abandon')
 
@@ -18,11 +18,11 @@ class handler:
     def POST(self):
         web.header("Content-Type", "application/json")
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
-            raise web.seeother('/')
+            return json.dumps({'ret':-1,'msg':'无访问权限'})
 
-        user_data = web.input(house_id='')
+        user_data = web.input(house_id='', mice='')
 
-        if user_data['house_id']=='':
+        if user_data['house_id']=='' and user_data.mice=='':
             return json.dumps({'ret':-1, 'msg':'参数错误'})
 
         # 检查house_id
@@ -34,12 +34,17 @@ class handler:
             # 不存在的鼠笼
             return json.dumps({'ret':-2, 'msg':'鼠笼参数错误！'})
 
+
         # 此笼的小鼠杀死
+        mice=json.loads(user_data.mice)
+        mice_id = [ObjectId(i) for i in mice]
+
         db_mice = db.mouse.update_many({
+            '_id'      : {'$in' : mice_id},
             'house_id' : user_data['house_id'], 
             'status'   : {'$nin' : ['killed', 'dead']}
         }, {'$set':{'status':'dead'}})
 
-        return json.dumps({'ret':0,'msg':'此笼的小鼠已全部淘汰！'})
+        return json.dumps({'ret':0,'msg':'小鼠已淘汰！'})
 
 

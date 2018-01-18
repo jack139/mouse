@@ -74,8 +74,19 @@ bloodline 小鼠品系
     status : 状态 ： 准备中／计划中／已有
     owner_uname : 建立的课题组管理员id
     status_history : [], 状态变更记录
-    last_tick: 最后修改时间
+    last_tick : 最后修改时间
     user_list : 可使用的用户
+    group_id : 所属课题组id
+}
+
+
+credit 信用评分
+{
+    uname : 用户uname
+    group_id : 所属课题组id
+    credit : 此次信用分记录
+    comment : 此次信用分说明
+    date_t : 评分时间
 }
 
 /* -------------- Indexes ---------------*/

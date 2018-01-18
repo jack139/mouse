@@ -1,16 +1,15 @@
 $def with (name, str1, skus, pages, STATUS)
 
-$var title: 品系管理
+$var title: 品系列表
 $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #grup3
+$var menu: #qury2
 
 
-<div class="caption"><h2>品系管理</h2></div>
+<div class="caption"><h2>品系列表</h2></div>
 
-<p><a class="abtn" href="/grp_admin/bloodline_edit">添加新品系</a></p>
 
 <table class="props_tb">
 <thead>
@@ -18,14 +17,14 @@ $var menu: #grup3
     <th width="30%">品系编号</th>
     <th>品系名</th>
     <th>状态</th>
-    <th>创建者</th>
+    <th>实验组</th>
     <th width="15%">备注</th>
   </tr>
 </thead>
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']">$u['blood_code']</a></td>
+  <tr><td>$u['blood_code']</td>
   <td>$u.get('name','n/a')</td>
   <td>
     $if u.has_key('status'):
@@ -33,7 +32,7 @@ $for u in skus:
     $else:
       n/a
   </td>
-  <td>$u.get('owner_uname','n/a')</td>
+  <td>$u.get('group_id','n/a')</td>
   <td>$u.get('note','')</td></tr>
 
 </tbody>
@@ -43,5 +42,5 @@ $for u in skus:
 <div class="article_box">
     页码：
     $for x in pages:
-        <a href="/grp_admin/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        <a href="/query/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

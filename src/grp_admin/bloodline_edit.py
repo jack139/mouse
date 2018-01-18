@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # 
 import web
-import time
+import time, re
 from bson.objectid import ObjectId
 from config import setting
 #from libs import pos_func
@@ -51,10 +51,22 @@ class handler:
         render = helper.create_render()
         user_data=web.input(blood_id='',blood_code='',name='',user_list=[])
 
-        if user_data.name.strip()=='':
-            return render.info('品系名不能为空！')  
+        #if user_data.name.strip()=='':
+        #    return render.info('品系名不能为空！')  
 
         blood_code = user_data['blood_code'].strip()
+
+        b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
+        if not b_list[0].isalnum():
+            return render.info('品系编码只能为字母和数字的组合！')  
+
+        for x in b_list[1:]:
+            if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
+                return render.info('品系编码中基因型格式错误！')  
+
+        # 本组用户数据
+        group_list = helper.get_session_group_list()
+        group_id = '' if len(group_list)==0 else group_list[0]
 
         try:
             update_set={
@@ -63,6 +75,7 @@ class handler:
                 'status'      : user_data['status'],
                 'note'        : user_data['note'],
                 'user_list'   : user_data['user_list'],
+                'group_id'    : group_id,
                 'last_tick'   : int(time.time()),  # 更新时间戳
             }
         except ValueError:

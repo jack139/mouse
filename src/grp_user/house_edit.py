@@ -55,6 +55,7 @@ class handler:
 
         # 小鼠品系数据
         db_blood = db.bloodline.find({
+            'status'    : 'ready',
             'user_list' : helper.get_session_uname(),
         })
 
@@ -66,7 +67,7 @@ class handler:
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(house_id='',type='',blood_code='',test_will_end_d='')
+        user_data=web.input(house_id='',type='',test_will_end_d='')
 
         if user_data.house_id.strip()=='':
             return render.info('参数错误！')
@@ -74,8 +75,8 @@ class handler:
         if user_data.type=='':
             return render.info('请设置鼠笼类型！')
 
-        if user_data.blood_code=='':
-            return render.info('请设置小鼠品系！')
+        #if user_data.blood_code=='':
+        #    return render.info('请设置小鼠品系！')
 
         #shelf_id = u'-'.join(user_data['house_id'].split('-')[:3])
         #group_id = helper.get_session_group_list()[0]
@@ -89,18 +90,17 @@ class handler:
 
         message = '修改'
 
-        r3 = db.mouse.find({
-            'house_id' : user_data['house_id'], 
-            'status'   : {'$nin' : ['killed', 'dead']}
-        })
-        if r3.count()>0 and r3[0]['blood_code']!=user_data['blood_code']:
-            # 修改所有小鼠的品系
-            db.mouse.update_many({
-                'house_id' : user_data['house_id'], 
-                'status'   : {'$nin' : ['killed', 'dead']}
-            }, {'$set':{'blood_code':user_data['blood_code']}})
-
-            message += ':品系'
+        #r3 = db.mouse.find({
+        #    'house_id' : user_data['house_id'], 
+        #    'status'   : {'$nin' : ['killed', 'dead']}
+        #})
+        #if r3.count()>0 and r3[0]['blood_code']!=user_data['blood_code']:
+        #    # 修改所有小鼠的品系
+        #    db.mouse.update_many({
+        #        'house_id' : user_data['house_id'], 
+        #        'status'   : {'$nin' : ['killed', 'dead']}
+        #    }, {'$set':{'blood_code':user_data['blood_code']}})
+        #    message += ':品系'
 
         # 准备要更新的字段
         update_set={

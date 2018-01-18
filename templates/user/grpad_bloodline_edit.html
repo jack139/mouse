@@ -24,14 +24,17 @@ $else:
     </tr>
 </thead>
 <tbody>
-<tr><td>品系编号</td><td>$sku['blood_code']
-    <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')"/>
-    </td><td></td></tr>
+<tr><td>品系编码</td><td>
+    $if sku['blood_code']=='':
+        <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')" size="30"/>
+    $else:
+        $sku.get('blood_code', '')
+    </td><td>格式：品系编码,基因型1(+/+),基因型2(+/-),...</td></tr>
 
 
 <tr><td>品系名称</td><td>
     <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
-    </td><td>格式：品系名,基因1(+/+),基因2(+/-),...</td></tr>
+    </td><td></td></tr>
 
 <tr><td>可使用的用户（可多选）</td><td>
         <span><select id="user_list" name="user_list" multiple="multiple" size="5" style="width:159px">

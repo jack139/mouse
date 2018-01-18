@@ -26,8 +26,12 @@ class handler:
             return render.info('参数错误！')  
 
 
+        # 本组用户数据
+        group_list = helper.get_session_group_list()
+        group_id = '' if len(group_list)==0 else group_list[0]
+
         # 分页获取数据
-        db_sku = db.bloodline.find(
+        db_sku = db.bloodline.find({'group_id' : group_id},
             sort=[('_id', -1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE

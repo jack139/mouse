@@ -58,7 +58,7 @@ class handler:
             user_type='', group_id='', priv=[])
 
         privilege = helper.PRIV_USER   # 课题组实验员
-        priv = ['GROUP_USER']
+        priv = ['GROUP_USER', 'QUERY']
 
         # 课题组id取自session, 2017-12-12
         if user_data['group_id']=='':

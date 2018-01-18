@@ -256,7 +256,7 @@ class AdminUserSetting:
             priv = ['GROUP_ADMIN']
         else:
             privilege = helper.PRIV_TUTOR   # 指导教师
-            priv = ['TUTOR']
+            priv = ['TUTOR', 'QUERY']
 
         if user_data['group_id']=='':
             return render.info('需设置所属课题组！')
