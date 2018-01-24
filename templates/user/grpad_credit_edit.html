@@ -1,0 +1,45 @@
+$def with (name, str1, user, credit_list)
+
+$var title: 用户设置
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #grup1
+
+<div class="caption"><h2>信用评分</h2></div>
+
+<form name="settings" method="post" action="/grp_admin/credit_edit">
+<input type="hidden" name="uid" value="$user['_id']" />
+
+<table class="props_tb">
+<thead>
+        <tr class="even">
+            <th width="15%">项目</th>
+            <th>内容</th>
+        </tr>
+</thead>
+<tbody>
+
+<tr><td>用户名</td><td class="t_l">$user.get('uname','')</td></tr>
+<tr><td>全名</td><td class="t_l"><input type="text" name="full_name" value="$user.get('full_name','')"/></td></tr>
+
+<tr><td>评分</td><td class="t_l">
+    <select name="credit" id="credit" onchange="$$('#comment').val($$('#credit option:selected').text().split('（')[0]);">
+        <option value="">--请选择--</option>
+        $for i in credit_list:
+            <option value="$i[0]">$i[1]（$i[0]）</option>
+    </select>
+</td></tr>
+
+<tr><td>评分说明</td><td class="t_l">
+    <input type="text" id="comment" name="comment" value="" size=50/>
+</td></tr>
+
+</tbody>
+</table>
+
+<p><input type="submit" name="button" id="button" value="保存" />
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+
+</form>
