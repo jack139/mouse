@@ -22,7 +22,7 @@ $var menu: #grup1
 <tbody>
 
 <tr><td>用户名</td><td class="t_l">$user.get('uname','')</td></tr>
-<tr><td>全名</td><td class="t_l"><input type="text" name="full_name" value="$user.get('full_name','')"/></td></tr>
+<tr><td>全名</td><td class="t_l">$user.get('full_name','')</td></tr>
 
 <tr><td>评分</td><td class="t_l">
     <select name="credit" id="credit" onchange="$$('#comment').val($$('#credit option:selected').text().split('（')[0]);">
