@@ -135,3 +135,41 @@ $(function(){
             }, function(){ } ); 
     });
 });
+
+
+$(function(){
+    $('#newborn').click(function(){
+        
+        var house_id = $("#house_id").val();
+
+        alertify.prompt('请输入', '请输入新生小鼠数量', '',
+            function(evt, value){ 
+                $.ajax({
+                    type: "POST",
+                    url: "/grp_user/newborn",
+                    async: true,
+                    timeout: 15000,
+                    data: {house_id:house_id, num:value},
+                    dataType: "json",
+                    complete: function(xhr, textStatus)
+                    {
+                        if(xhr.status==200){
+                            var retJson = JSON.parse(xhr.responseText);
+                            if (retJson["ret"]==0){
+                                alertify.alert('请确认','新生小鼠已添加！',function(){
+                                    location="/grp_user/house_info?house_id="+house_id;
+                                }); 
+                            }
+                            else{
+                                alertify.error('添加新生小鼠失败!（'+retJson['msg']+'）'); 
+                            }
+                        }
+                        else{
+                            alertify.error('网络异常!'); 
+                        }
+                    }
+                });
+
+            }, function(){ } ); 
+    });
+});

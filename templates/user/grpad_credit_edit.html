@@ -1,4 +1,4 @@
-$def with (name, str1, user, credit_list)
+$def with (name, str1, user, credit_list, credit_history)
 
 $var title: 用户设置
 $var css:
@@ -10,7 +10,7 @@ $var menu: #grup1
 <div class="caption"><h2>信用评分</h2></div>
 
 <form name="settings" method="post" action="/grp_admin/credit_edit">
-<input type="hidden" name="uid" value="$user['_id']" />
+<input type="hidden" name="uname" value="$user['uname']" />
 
 <table class="props_tb">
 <thead>
@@ -43,3 +43,11 @@ $var menu: #grup1
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 
 </form>
+
+<div class="article_box">
+  <div>评分记录：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in credit_history:
+      $h['date_t']，（$h['credit']）：$h['comment']；
+  </textarea>
+</div>

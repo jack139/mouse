@@ -28,12 +28,14 @@ class handler:
         if user_data['uid']=='':
             return render.info('参数错误！')  
 
-        r2=db.user.find_one({'_id':ObjectId(user_data.uid)})
+        r2 = db.user.find_one({'_id':ObjectId(user_data.uid)})
         if r2 is None:
             return render.info('uid参数错误！')  
 
+        r3 = db.credit.find({'uname' : r2['uname']}, sort=[('date_t', -1)])
+
         return render.grpad_credit_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            r2, helper.CREDIT_LIST)
+            r2, helper.CREDIT_LIST, r3)
 
 
     def POST(self):
@@ -42,50 +44,21 @@ class handler:
 
         render = helper.create_render()
 
-        user_data=web.input(uid='', uname='', full_name='', passwd='', 
-            user_type='', group_id='', priv=[])
+        user_data=web.input(uname='', credit='', comment='')
 
-        privilege = helper.PRIV_USER   # 课题组实验员
-        priv = ['GROUP_USER', 'QUERY']
+        if '' in (user_data['uname'], user_data['credit']):
+            return render.info('请设置评分！')  
 
         # 课题组id取自session, 2017-12-12
-        if user_data['group_id']=='':
-            return render.info('需设置所属课题组！')
+        group_list = helper.get_session_group_list()
+        group_id = '' if len(group_list)==0 else group_list[0]
 
-        # 设置权限标记
-        menu_level = 60*'-'
-        #for p in user_data.priv: 
-        for p in priv:
-            pos = helper.MENU_LEVEL[p]
-            menu_level = menu_level[:pos]+'X'+menu_level[pos+1:]
-
-        # 更新数据
-        update_set = {
-            'login'      : int(user_data['login']), 
-            'privilege'  : privilege, 
-            'menu_level' : menu_level,
-            'full_name'  : user_data['full_name'],
-            'user_type'  : 'grp_user',  # 实验员
-            'group_list' : [user_data['group_id']], # 只有一个元素list, 2017-12-14
-        }
-
-        # 如需要，更新密码
-        if len(user_data['passwd'])>0:
-            update_set['passwd']=app_helper.my_crypt(user_data['passwd'])
-            update_set['pwd_update']=0
-
-        if user_data['uid']=='n/a':
-            # 新增
-            update_set['uname']=user_data['uname'].lower().strip()
-            if len(update_set['uname'])==0:
-                return render.info('用户名不能为空！')
-            r2=db.user.find_one({'uname': update_set['uname']})
-            if r2:
-                return render.info('用户名已存在！请修改后重新添加。')
-            update_set['time']=int(time.time())
-            db.user.insert(update_set)
-        else:
-            # 修改
-            db.user.update_one({'_id':ObjectId(user_data['uid'])}, {'$set' : update_set })
+        db.credit.insert_one({
+            'uname' : user_data['uname'],
+            'group_id' : group_id,
+            'credit' : int(user_data['credit']),
+            'comment' : user_data['comment'],
+            'date_t' : helper.time_str(),
+        })
 
         return render.info('成功保存！','/grp_admin/user')

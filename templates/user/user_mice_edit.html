@@ -1,4 +1,4 @@
-$def with (name, str1, sku, house, blood_list)
+$def with (name, str1, sku, house, blood_list, from_house)
 
 $var title: 小鼠管理
 $var css: /static/css/jquery.datetimepicker.css
@@ -25,6 +25,7 @@ $else:
 
 <form name="new_sku" id="new_sku" method="post" action="/grp_user/mice_edit">
 <input type="hidden" name="mouse_id" value="$sku['_id']"/>
+<input type="hidden" name="from_house" value="$from_house"/>
 
 <table class="props_tb">
 <thead>
@@ -44,14 +45,13 @@ $else:
     <input type="text" name="tag" id="tag" value="$sku.get('tag', '')"/>
     </td><td></td></tr>
 
-<tr><td>亲本耳标</td><td>
+<tr><td>母本耳标</td><td>
     <input type="text" name="mother_tag" id="mother_tag" value="$sku.get('mother_tag', '')"/>
     </td><td></td></tr>
 
-<tr><td>出生日期</td><td>
-    <input type="text"  value="$:sku.get('birth_d','')" id="birth_d" name="birth_d" readonly="readonly">
-</td><td>格式：yyyymmdd</td></tr>
-
+<tr><td>父本耳标</td><td>
+    <input type="text" name="father_tag" id="father_tag" value="$sku.get('father_tag', '')"/>
+    </td><td></td></tr>
 
 <tr><td>性别</td><td>
     <input type="radio" name="sex" value="M"
@@ -62,22 +62,30 @@ $else:
     $if sku.get('sex','')=='F':
         checked="checked"
     /> F
-    </td><td></td></tr>
+    </td><td>必填</td></tr>
+
+<tr><td>出生日期</td><td>
+    <input type="text"  value="$:sku.get('birth_d','')" id="birth_d" name="birth_d" readonly="readonly">
+</td><td>格式：yyyymmdd，必填</td></tr>
 
 <tr><td>分笼日期</td><td>
     <input type="text"  value="$:sku.get('divide_d','')" id="divide_d" name="divide_d" readonly="readonly">
-</td><td>格式：yyyymmdd</td></tr>
+</td><td>格式：yyyymmdd，必填</td></tr>
 
 <tr><td>鼠笼位置</td><td>
-    <select name='house_id'>
-        <option value=''>--请选择--</option>
-        $for i in house:
-            <option value="$i"
-                $if sku.get('house_id')==i:
-                    selected="selected"
-            >$i</option>
-    </select>
-    </td><td></td></tr>
+    $if sku['_id']=='n/a' or sku.get('house_id') in ['', None]:
+        <select name='house_id'>
+            <option value=''>--请选择--</option>
+            $for i in house:
+                <option value="$i"
+                    $if sku.get('house_id')==i:
+                        selected="selected"
+                >$i</option>
+        </select>
+    $else:
+        $sku.get('house_id', '')
+        <input type="hidden" name='house_id' value="$sku.get('house_id', '')" />
+    </td><td>只能保存一次</td></tr>
 
 
 <tr><td>小鼠品系</td><td>
@@ -92,9 +100,9 @@ $else:
     </td><td></td></tr>
 
 
-<tr><td>基因型结果</td><td>
+<!--tr><td>基因型结果</td><td>
     <input type="text" name="gene_code" id="gene_code" value="$sku.get('gene_code', '')"/>
-    </td><td></td></tr>
+    </td><td></td></tr-->
 
 
 <tr><td>备注</td><td>
@@ -106,7 +114,9 @@ $else:
 
 
 <p><input type="submit" name="submit" id="submit" value="保存"/>
-<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
+<p>
+
 </form>
 
 

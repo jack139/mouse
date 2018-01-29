@@ -61,7 +61,7 @@ mouse 小鼠：数据只增不删，保留历史数据
     house_id : 当前所在笼id
     test_record : [], 实验记录
     house_history : [], 居住鼠笼记录，记录鼠笼位置信息
-    group_id : 所属课题组id ---------- 需增加
+    group_id : 所属课题组id ---------- 需增加, 已增加 2018-01-29
     owner_uname : 实验员id
     last_tick: 最后修改时间
     gene_code : 基因型结果

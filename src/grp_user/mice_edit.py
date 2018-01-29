@@ -21,7 +21,7 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data = web.input(mouse_id='')
+        user_data = web.input(mouse_id='',from_house='')
 
         # 小鼠数据
         mouse_data = {'_id':'n/a'}
@@ -49,7 +49,7 @@ class handler:
         })
 
         return render.user_mice_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            mouse_data, house, db_blood)
+            mouse_data, house, db_blood, user_data['from_house'])
 
 
     def POST(self):
@@ -57,19 +57,19 @@ class handler:
             raise web.seeother('/')
         render = helper.create_render()
         user_data=web.input(mouse_id='',tag='',mother_tag='',birth_d='',divide_d='',
-            sex='',blood_code='',gene_code='',house_id='')
+            sex='',blood_code='',gene_code='',house_id='',father_tag='',from_house='')
 
-        if user_data.mother_tag.strip()=='':
-            return render.info('亲本耳标不能为空！')  
+        #if user_data.mother_tag.strip()=='':
+        #    return render.info('亲本耳标不能为空！')  
 
-        if '' in (user_data.birth_d,user_data.divide_d,user_data.sex,\
-            user_data.blood_code):
+        if '' in (user_data.birth_d,user_data.divide_d,user_data.sex):
             return render.info('请填写不能为空小鼠信息！')  
 
         try:
             update_set={
                 'tag'        : user_data['tag'].strip(),
                 'mother_tag' : user_data['mother_tag'].strip(),
+                'father_tag' : user_data['father_tag'].strip(),
                 'birth_d'    : user_data['birth_d'],
                 'divide_d'   : user_data['divide_d'],
                 'blood_code' : user_data['blood_code'],
@@ -85,6 +85,7 @@ class handler:
 
         if user_data['mouse_id']=='n/a': # 新建
             update_set['owner_uname'] = helper.get_session_uname()
+            update_set['group_id'] = helper.get_session_group_list()[0]
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
             db.mouse.insert_one(update_set)
         else:
@@ -95,4 +96,7 @@ class handler:
                 }  # 纪录操作历史
             })
 
-        return render.info('成功保存！', '/grp_user/mice')
+        if user_data['from_house']=='1' and user_data['mouse_id']!='n/a':
+            return render.info('成功保存！', '/grp_user/mice_info?mouse_id=%s'%user_data['mouse_id'])
+        else:
+            return render.info('成功保存！', '/grp_user/mice')
