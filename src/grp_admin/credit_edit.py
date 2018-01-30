@@ -5,7 +5,7 @@ import web
 import time
 from bson.objectid import ObjectId
 from config import setting
-import helper, app_helper
+import helper
 
 db = setting.db_web
 

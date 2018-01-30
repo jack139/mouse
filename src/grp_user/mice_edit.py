@@ -5,7 +5,7 @@ import web
 import time
 from bson.objectid import ObjectId
 from config import setting
-#from libs import pos_func
+from libs import gene
 import helper
 
 db = setting.db_web
@@ -48,8 +48,17 @@ class handler:
             'user_list' : helper.get_session_uname(),
         })
 
+        # 生成父系和母系的基因系列
+        parent_gene = []
+        if user_data.mouse_id != '':
+            if mouse_data.get('mother_tag', '')!='' and mouse_data.get('father_tag', '')!='':
+                r3 = db.mouse.find({'tag' : {'$in':[mouse_data['mother_tag'], mouse_data['father_tag']]}})
+                if r3.count()==2:
+                    parent_gene = gene.genetic(r3[0]['blood_code'], r3[1]['blood_code'])
+                    print parent_gene
+
         return render.user_mice_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            mouse_data, house, db_blood, user_data['from_house'])
+            mouse_data, house, db_blood, user_data['from_house'], parent_gene)
 
 
     def POST(self):

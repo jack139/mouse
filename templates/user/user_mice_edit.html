@@ -1,11 +1,14 @@
-$def with (name, str1, sku, house, blood_list, from_house)
+$def with (name, str1, sku, house, blood_list, from_house, parent_gene)
 
 $var title: 小鼠管理
 $var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
 $var js: /static/js/jquery.datetimepicker.js
 $var load: date_init();
-$var menu: #user2
+$if from_house=='1':
+    $var menu: #user1
+$else:
+    $var menu: #user2
 
 
 <script type="text/javascript">
@@ -66,11 +69,11 @@ $else:
 
 <tr><td>出生日期</td><td>
     <input type="text"  value="$:sku.get('birth_d','')" id="birth_d" name="birth_d" readonly="readonly">
-</td><td>格式：yyyymmdd，必填</td></tr>
+</td><td>必填</td></tr>
 
 <tr><td>分笼日期</td><td>
     <input type="text"  value="$:sku.get('divide_d','')" id="divide_d" name="divide_d" readonly="readonly">
-</td><td>格式：yyyymmdd，必填</td></tr>
+</td><td>必填</td></tr>
 
 <tr><td>鼠笼位置</td><td>
     $if sku['_id']=='n/a' or sku.get('house_id') in ['', None]:
@@ -96,6 +99,13 @@ $else:
                 $if sku.get('blood_code')==i['blood_code']:
                     selected="selected"
             >$i['blood_code'] -- $i['status']</option>
+        $if parent_gene is not []:
+            <option value=''>--------</option>
+            $for i in parent_gene:
+                <option value="$i"
+                    $if sku.get('blood_code')==i:
+                        selected="selected"
+                >$i</option>            
     </select>
     </td><td></td></tr>
 
