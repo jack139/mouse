@@ -99,8 +99,8 @@ $else:
                 $if sku.get('blood_code')==i['blood_code']:
                     selected="selected"
             >$i['blood_code'] -- $i['status']</option>
-        $if parent_gene is not []:
-            <option value=''>--------</option>
+        $if len(parent_gene)>0:
+            <option value=''>--亲本遗传品系--</option>
             $for i in parent_gene:
                 <option value="$i"
                     $if sku.get('blood_code')==i:

@@ -29,6 +29,7 @@ $else:
         <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')" size="30"/>
     $else:
         $sku.get('blood_code', '')
+        <input type="hidden" name="blood_code" value="$sku.get('blood_code', '')" />
     </td><td>格式：品系编码,基因型1(+/+),基因型2(+/-),...</td></tr>
 
 

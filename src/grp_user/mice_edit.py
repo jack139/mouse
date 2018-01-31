@@ -54,7 +54,7 @@ class handler:
             if mouse_data.get('mother_tag', '')!='' and mouse_data.get('father_tag', '')!='':
                 r3 = db.mouse.find({'tag' : {'$in':[mouse_data['mother_tag'], mouse_data['father_tag']]}})
                 if r3.count()==2:
-                    parent_gene = gene.genetic(r3[0]['blood_code'], r3[1]['blood_code'])
+                    parent_gene = gene.genetic2(r3[0]['blood_code'], r3[1]['blood_code'])
                     print parent_gene
 
         return render.user_mice_edit(helper.get_session_uname(), helper.get_privilege_name(), 
@@ -73,6 +73,13 @@ class handler:
 
         if '' in (user_data.birth_d,user_data.divide_d,user_data.sex):
             return render.info('请填写不能为空小鼠信息！')  
+
+        group_id = helper.get_session_group_list()[0]
+
+        # 同一实验组内，耳标不能重复
+        r2 = db.mouse.find_one({'group_id' : group_id, 'tag' : user_data['tag'].strip(), })
+        if r2 is not None:
+            return render.info('耳标已存在，请重新输入！')  
 
         try:
             update_set={
@@ -94,7 +101,7 @@ class handler:
 
         if user_data['mouse_id']=='n/a': # 新建
             update_set['owner_uname'] = helper.get_session_uname()
-            update_set['group_id'] = helper.get_session_group_list()[0]
+            update_set['group_id'] = group_id
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
             db.mouse.insert_one(update_set)
         else:
