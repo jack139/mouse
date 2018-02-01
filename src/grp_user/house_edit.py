@@ -44,6 +44,9 @@ class handler:
         if db_obj!=None:
             # 已存在的鼠笼
             house_data = db_obj
+            now_day = helper.time_str(format=2)
+            if house_data['expired_d']<now_day:
+                return render.info('鼠笼已过期，不能修改！')  
 
         # 此笼的小鼠信息
         db_mice = db.mouse.find({
@@ -115,7 +118,7 @@ class handler:
             update_set['test_will_end_d'] = user_data['test_will_end_d']
 
             if r2['type']!='test': # 鼠笼类型修改为实验笼，记录实验开始时间
-                update_set['test_start_d'] = time.strftime("%Y%m%d", time.localtime()) # 格式 yyyymmdd
+                update_set['test_start_d'] = helper.time_str(format=2) # 格式 yyyymmdd
                 message += ':设置实验笼'
 
 

@@ -43,7 +43,10 @@ class handler:
             '_id'      : {'$in' : mice_id},
             'house_id' : user_data['house_id'], 
             'status'   : {'$nin' : ['killed', 'dead']}
-        }, {'$set':{'status':'dead'}})
+        }, {'$set':{
+            'status'    : 'dead',
+            'last_tick' : int(time.time()),  # 更新时间戳
+        }})
 
         return json.dumps({'ret':0,'msg':'小鼠已淘汰！'})
 

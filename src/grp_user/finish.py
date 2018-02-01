@@ -40,7 +40,7 @@ class handler:
         db.house.update_one({'house_id': param.house_id},
             {'$set':{
                 'type'       : 'inuse',
-                'test_end_d' : time.strftime("%Y%m%d", time.localtime()), # 格式 yyyymmdd
+                'test_end_d' : helper.time_str(format=2), # 格式 yyyymmdd
             }}
         )
 

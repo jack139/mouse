@@ -9,14 +9,14 @@ import helper
 
 db = setting.db_web
 
-# 实验员员鼠笼信息
+# 管理员鼠笼信息
 
-url = ('/grp_user/house_info')
+url = ('/grp_admin/house_info')
 
 class handler:
 
     def GET(self):
-        if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
+        if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
 
         render = helper.create_render()
@@ -32,18 +32,13 @@ class handler:
             'group_list' : '' if len(group_list)==0 else group_list[0],
         }).sort([('_id',1)])
 
-        house_data = { 
-            'house_id' : user_data['house_id'], 
-            'status':0
-        }
-
-        db_obj=db.house.find_one({
+        house_data=db.house.find_one({
             'house_id': user_data.house_id,
-            'uname'   : helper.get_session_uname(),
+            #'uname'   : helper.get_session_uname(),
         })
-        if db_obj!=None:
-            # 已存在的鼠笼
-            house_data = db_obj
+        if house_data is None:
+            # 不存在的鼠笼
+            return render.info('不存在的鼠笼！')  
 
         # 此笼的小鼠信息
         db_mice = db.mouse.find({
@@ -56,7 +51,7 @@ class handler:
         # 获取鼠笼数据
         house = []
         db_sku = db.house.find({
-            'uname'    : helper.get_session_uname(), # 只显示当前用户管理的鼠笼
+            'group_id'    : helper.get_session_group_list()[0], # 只显示当前实验组的鼠笼
             # 要增加条件，现在过期的鼠笼
         }).sort([('house_id',1)])
         for i in db_sku:
@@ -64,9 +59,7 @@ class handler:
             if i['house_id']!=user_data['house_id']:
                 house.append(i['house_id'])
 
-        now_day = helper.time_str(format=2)
-
-        return render.user_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, now_day)
+        return render.grpad_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
+            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house)
 
 

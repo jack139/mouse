@@ -69,11 +69,15 @@ user_level = {
 #################
 
 # 笼架设置：应存储于db
-MAX_REGION = 10
-MAX_BUILD = 10
-MAX_LOAD = 10
-MAX_LINE = 6
-MAX_COLUMN = 9
+MAX_ROW = 6
+MAX_COL = 9
+
+# 新生小鼠分笼时间
+DIVIDE_DAYS = 8
+
+# 每笼最大数量
+MAX_MOUSE_NUM = 6
+
 
 # 鼠笼类型
 HOUSE_TYPE = {
@@ -106,6 +110,8 @@ CREDIT_LIST = (
     (1, 'IVF登记表未填写'),
     (2, 'IVF问题为及时反馈'),
 )
+
+
 
 # 为子文件传递session ---------------------
 

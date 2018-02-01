@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # 
 import web
-import time
+import time, re
 from bson.objectid import ObjectId
 from config import setting
 from libs import gene
@@ -77,9 +77,32 @@ class handler:
         group_id = helper.get_session_group_list()[0]
 
         # 同一实验组内，耳标不能重复
-        r2 = db.mouse.find_one({'group_id' : group_id, 'tag' : user_data['tag'].strip(), })
-        if r2 is not None:
-            return render.info('耳标已存在，请重新输入！')  
+        if len(user_data['tag'].strip())>0:
+            r2 = db.mouse.find_one({'group_id' : group_id, 'tag' : user_data['tag'].strip(), })
+            if r2 is not None:
+                if str(r2['_id'])!=user_data['mouse_id']:
+                    return render.info('耳标已存在，请重新输入！')  
+
+        # 检查品系编码格式
+        blood_code = user_data['blood_code'].strip()
+
+        if len(blood_code)>0:
+            b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
+            if not b_list[0].replace('_','').isalnum():
+                return render.info('品系编码只能为字母和数字的组合！')  
+
+            for x in b_list[1:]:
+                if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
+                    return render.info('品系编码中基因型格式错误！')  
+
+        # 检查鼠笼是否超出最大数量
+        r4=db.mouse.find({
+            'house_id' : user_data['house_id'],
+            '_id'      : {'$ne' : ObjectId(user_data['mouse_id'])},
+        })
+
+        if r4.count()+1>helper.MAX_MOUSE_NUM:
+            return render.info('目标鼠笼容纳不下！')  
 
         try:
             update_set={
@@ -88,7 +111,7 @@ class handler:
                 'father_tag' : user_data['father_tag'].strip(),
                 'birth_d'    : user_data['birth_d'],
                 'divide_d'   : user_data['divide_d'],
-                'blood_code' : user_data['blood_code'],
+                'blood_code' : blood_code,
                 'gene_code'  : user_data['gene_code'].strip(),
                 'note'       : user_data['note'],
                 'house_id'   : user_data['house_id'],

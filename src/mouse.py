@@ -585,7 +585,8 @@ class AdminShelfEdit:
                 # 已存在的obj
                 shelf_data = db_obj
 
-        return render.shelf_edit(session.uname, user_level[session.privilege], shelf_data, r3)
+        return render.shelf_edit(session.uname, user_level[session.privilege], 
+            shelf_data, r3, helper.MAX_ROW, helper.MAX_COL)
 
 
     def POST(self):
@@ -600,6 +601,9 @@ class AdminShelfEdit:
 
         if (not user_data['row'].isdigit()) or (not user_data['col'].isdigit()):
             return render.info('笼架行列设置格式不对')
+
+        if int(user_data['row'])>helper.MAX_ROW or int(user_data['col'])>helper.MAX_COL:
+            return render.info('笼架行列设置超过最大值！')
 
         if user_data['shelf_id']=='n/a': # 新建
             shelf_id = '%s-%s-%s' % (user_data['area'].strip(),user_data['room'].strip(),user_data['shelf'].strip())

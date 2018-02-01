@@ -27,7 +27,7 @@ $(function(){
                                     }); 
                                 }
                                 else{
-                                    alertify.error('淘汰小鼠失败!'); 
+                                    alertify.error('淘汰小鼠失败：'+retJson["msg"]); 
                                 }
                             }
                             else{
@@ -80,7 +80,7 @@ $(function(){
                                         }); 
                                     }
                                     else{
-                                        alertify.error('移动失败!'); 
+                                        alertify.error('移动失败：'+retJson["msg"]); 
                                     }
                                 }
                                 else{
@@ -123,7 +123,7 @@ $(function(){
                                 }); 
                             }
                             else{
-                                alertify.error('结束实验失败!'); 
+                                alertify.error('结束实验失败：'+retJson["msg"]); 
                             }
                         }
                         else{
@@ -161,7 +161,7 @@ $(function(){
                                 }); 
                             }
                             else{
-                                alertify.error('添加新生小鼠失败!（'+retJson['msg']+'）'); 
+                                alertify.error('添加新生小鼠失败：'+retJson['msg']); 
                             }
                         }
                         else{

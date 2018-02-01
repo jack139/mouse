@@ -1,11 +1,11 @@
-$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house, now_day)
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house)
 
 $var title: 鼠笼管理
 $var css: 
 $var name: $'|'.join(str1) $name
-$var js: /static/js/user_house_info.js
+$var js: /static/js/admin_house_info.js
 $var load: 
-$var menu: #user1
+$var menu: #grup2
 
 <div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
@@ -53,7 +53,6 @@ $if sku.get('type', '') in ['test', 'inuse']:
     $for i in mice:
         <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
         $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
-        <a class="abtn" href="/grp_user/mice_info?mouse_id=$i['_id']">查看</a>
         <br/>
     </td><td>耳标 -- 性别 -- 品系</td></tr>
 
@@ -61,10 +60,7 @@ $if sku.get('type', '') in ['test', 'inuse']:
     $len(mice)
     </td><td></td></tr>
 
-<tr><td>鼠笼到期时间</td><td
-    $if sku.get('expired_d','')<now_day:
-        style="color:#FF2300;"
-    >
+<tr><td>鼠笼到期时间</td><td>
     $:sku.get('expired_d','')
 </td><td>格式：yyyymmdd</td></tr>
 
@@ -78,25 +74,17 @@ $if sku.get('type', '') in ['test', 'inuse']:
 </tbody></table>
 
 <p>
-    $if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
-            <input type="button" id="move" value="移动到"/>
-            <select id='target_house_id' name='target_house_id'>
-                <option value='' selected="selected">--请选择--</option>
-                $for i in house:
-                    <option value="$i">$i</option>
-            </select>
-        </p>
-        <p>
-            <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
-            $if sku.get('type', '')=='inuse':
-                <input type="button" id="abandon" value="淘汰"/>
-            $if sku.get('type', '')=='test':
-                <input type="button" id="finish" value="结束"/>
-            $if sku.get('type', '')=='breed':
-                <input type="button" id="newborn" value="新生小鼠"/>
-                <input type="button" id="abandon" value="淘汰"/>
+    <input type="button" id="move" value="移动到"/>
+    <select id='target_house_id' name='target_house_id'>
+        <option value='' selected="selected">--请选择--</option>
+        $for i in house:
+            <option value="$i">$i</option>
+    </select>
+</p>
+<p>
+    <input type="button" id="edit" value="设置" onclick="location='/grp_admin/house_edit?house_id=$sku['house_id']'"/>
 
-    <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
+    <input type="button" name="cancel" value="返回" onclick="location='/grp_admin/house?shelf_id=$sku['shelf_id']'" />
 <p>
 
 

@@ -1,4 +1,4 @@
-$def with (name, str1, houses, shelf)
+$def with (name, str1, houses, shelf,now_day)
 
 $var title: 鼠笼管理
 $var css:
@@ -41,7 +41,10 @@ $for r in xrange(1,shelf['row']+1):
                 >
                     <div><a href="/grp_user/house_info?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
-                    <div>$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
+                    <div
+                        $if houses[(r-1)*shelf['col']+(c-1)]['expired_d']<now_day:
+                            style="color:#FF2300;"
+                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
                 </td>
             $else:
                 <td>$r-$c</td>

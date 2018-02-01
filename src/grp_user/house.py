@@ -39,5 +39,7 @@ class handler:
             _,_,_,r,c = i['house_id'].split('-') # 获取鼠笼位置
             houses[(int(r)-1)*db_shelf['col']+(int(c)-1)] = i
         
+        now_day = helper.time_str(format=2)
+
         return render.user_house(helper.get_session_uname(), helper.get_privilege_name(), 
-            houses, db_shelf)
+            houses, db_shelf, now_day)

@@ -1,4 +1,4 @@
-$def with (name, str1, sku, group_list)
+$def with (name, str1, sku, group_list, max_row, max_col)
 
 $var title: 笼架管理
 $var css: /static/css/jquery.datetimepicker.css
@@ -44,9 +44,9 @@ $else:
     </td><td></td></tr>
 
 <tr><td>笼架设置</td><td>
-    <input type="text" name="row" value="$sku.get('row',6)" size="5" />行
-    <input type="text" name="col" value="$sku.get('col',9)" size="5" />列
-    </td><td></td></tr>
+    <input type="text" name="row" value="$sku.get('row', max_row)" size="5" />行
+    <input type="text" name="col" value="$sku.get('col', max_col)" size="5" />列
+    </td><td>行数不大于$max_row，列数不大于$max_col</td></tr>
 
 <tr><td>所属课题组</td><td>
         <span><select id="group_id" name="group_id" style="width:159px">

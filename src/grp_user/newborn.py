@@ -59,8 +59,8 @@ class handler:
 
 
         # 假设添加日期为出生日期， 应该需要可以输入
-        birth_d = time.strftime("%Y%m%d", time.localtime()) # 格式 yyyymmdd
-        divide_d = time.strftime("%Y%m%d", time.localtime(time.time()+3600*24*8)) # 格式 yyyymmdd,, 8天分笼
+        birth_d = helper.time_str(format=2) # 格式 yyyymmdd
+        divide_d = helper.time_str(time.time()+3600*24*helper.DIVIDE_DAYS, format=2) # 格式 yyyymmdd,, 8天分笼
 
         for i in xrange(int(param.num)):
             update_set={

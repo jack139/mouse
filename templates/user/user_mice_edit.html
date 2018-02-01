@@ -34,8 +34,8 @@ $else:
 <thead>
     <tr class="even">
         <th>项目</th>
-        <th width="40%">内容</th>
-        <th>说明</th>
+        <th width="50%">内容</th>
+        <th width="30%">说明</th>
     </tr>
 </thead>
 <tbody>
@@ -92,13 +92,14 @@ $else:
 
 
 <tr><td>小鼠品系</td><td>
-    <select name='blood_code'>
+    <div><input type="text" id="blood_code" name="blood_code" value="$sku.get('blood_code')" size=30/></div>
+    <div>快捷选择：<select id='blood_code_select' onchange="$$('#blood_code').val($$('#blood_code_select option:selected').text());" >
         <option value=''>--请选择--</option>
         $for i in blood_list:
             <option value="$i['blood_code']"
                 $if sku.get('blood_code')==i['blood_code']:
                     selected="selected"
-            >$i['blood_code'] -- $i['status']</option>
+            >$i['blood_code']</option>
         $if len(parent_gene)>0:
             <option value=''>--亲本遗传品系--</option>
             $for i in parent_gene:
@@ -106,8 +107,8 @@ $else:
                     $if sku.get('blood_code')==i:
                         selected="selected"
                 >$i</option>            
-    </select>
-    </td><td></td></tr>
+    </select></div>
+    </td><td>格式：品系编码,基因型1(+/+),基因型2(+/-),...</td></tr>
 
 
 <!--tr><td>基因型结果</td><td>

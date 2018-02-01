@@ -21,7 +21,7 @@ shelf 笼架管理
     row : 行数
     col : 列数
     group_id : 所属课题组id, 应该确认无在使用的鼠笼时才能修改所属课题组
-    expired_d : 到期日期， yyyymm
+    expired_d : 到期日期， yyyymmdd
     history : [], 课题组使用记录
     last_tick: 最后修改时间
     
@@ -36,7 +36,7 @@ house 鼠笼：只存储使用过的鼠笼，没用过的鼠笼不记录数据
     type_list :  鼠笼可用类型： 繁殖／实验／使用（管理员修改）
     group_id : 所属课题组id，应该确认没有小鼠时才能修改所属课题组
     uname : 实验员id
-    expired_d : 到期日期， yyyymm
+    expired_d : 到期日期， yyyymmdd
     history : [], 使用记录
     last_tick: 最后修改时间
 

@@ -1,4 +1,4 @@
-$def with (name, str1, houses, shelf)
+$def with (name, str1, houses, shelf, now_day)
 
 $var title: 鼠笼管理
 $var css:
@@ -12,7 +12,8 @@ $var menu: #grup2
 
 <div class="article_box">
   <span>笼架号：$shelf['shelf_id'] ；</span>
-  <span>规格：$shelf['row'] 行 * $shelf['col'] 列</span>
+  <span>规格：$shelf['row'] 行 * $shelf['col'] 列；</span>
+  <span>过期时间：<span style="color:#FF2300;">$shelf['expired_d']</span></span>
 </div>
 
 <table class="props_tb">
@@ -39,9 +40,12 @@ $for r in xrange(1,shelf['row']+1):
                         $elif houses[(r-1)*shelf['col']+(c-1)].get('type')=='inuse':
                             class='inuse'
                 >
-                    <div><a href="/grp_admin/house_edit?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
+                    <div><a href="/grp_admin/house_info?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
                     <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
-                    <div>$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
+                    <div
+                        $if houses[(r-1)*shelf['col']+(c-1)]['expired_d']<now_day:
+                            style="color:#FF2300;"
+                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
                 </td>
             $else:
                 <td><a href="/grp_admin/house_edit?house_id=$shelf['shelf_id']-$r-$c">$r-$c</a></td>

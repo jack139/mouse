@@ -42,8 +42,15 @@ class handler:
             # 已存在的鼠笼
             house_data = db_obj
 
+        # 此笼的小鼠信息
+        db_mice = db.mouse.find({
+            'house_id' : user_data['house_id'], 
+            'status'   : {'$nin' : ['killed', 'dead']}
+        }).sort([('_id',1)])
+
+
         return render.grpad_house_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE)
+            house_data, db_user, helper.HOUSE_TYPE, db_mice.count())
 
 
     def POST(self):
@@ -69,6 +76,12 @@ class handler:
 
         group_id = helper.get_session_group_list()[0]
 
+
+        # 检查鼠笼过期时间不能超过笼架过期时间
+        r2 = db.shelf.find_one({'shelf_id':shelf_id})
+        if r2['expired_d']<user_data['expired_d']:
+            return render.info('鼠笼过期时间不能超过所在笼架过期时间！')
+
         try:
             update_set={
                 'house_id'  : user_data['house_id'],
@@ -90,4 +103,4 @@ class handler:
             }  # 纪录操作历史
         }, upsert=True)
 
-        return render.info('成功保存！', '/grp_admin/house?shelf_id=%s' % shelf_id)
+        return render.info('成功保存！', '/grp_admin/house_info?house_id=%s' % user_data['house_id'])

@@ -57,7 +57,7 @@ class handler:
         blood_code = user_data['blood_code'].strip()
 
         b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
-        if not b_list[0].isalnum():
+        if not b_list[0].replace('_','').isalnum():
             return render.info('品系编码只能为字母和数字的组合！')  
 
         for x in b_list[1:]:

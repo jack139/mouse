@@ -1,4 +1,4 @@
-$def with (name, str1, sku, uid_list, type_list)
+$def with (name, str1, sku, uid_list, type_list, mouse_num)
 
 $var title: 鼠笼管理
 $var css: /static/css/jquery.datetimepicker.css
@@ -10,7 +10,10 @@ $var menu: #grup2
 <script type="text/javascript">
 /*初始化时间控件*/
 function date_init(){
-    $$('#expired_d').datetimepicker({format: 'Ymd', timepicker:false});
+    $$('#expired_d').datetimepicker({
+        format     : 'Ymd', 
+        timepicker : false,
+    });
 }
 </script>
 
@@ -31,6 +34,7 @@ function date_init(){
 <tr><td>鼠笼编号</td><td>$sku['house_id']</td><td></td></tr>
 
 <tr><td>所属实验员</td><td>
+    $if mouse_num==0:
         <span><select id="uname" name="uname" style="width:159px">
         <option value=''>- 未设置 -</option>
         $for k in uid_list:
@@ -39,7 +43,10 @@ function date_init(){
                 selected="selected"
             >$k['uname'] ($k['full_name'])</option>
         </select></span>
-</td><td></td></tr>
+    $else:
+        $sku.get('uname','n/a')
+        <input type="hidden" name="uname" value="$sku['uname']"/>
+</td><td>鼠笼无小鼠时，才可以修改实验员</td></tr>
 
 <tr><td>可用类型</td><td>
     $for x in type_list.keys():
