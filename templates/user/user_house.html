@@ -44,7 +44,7 @@ $for r in xrange(1,shelf['row']+1):
                     <div
                         $if houses[(r-1)*shelf['col']+(c-1)]['expired_d']<now_day:
                             style="color:#FF2300;"
-                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
+                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d'] 到期</div>
                 </td>
             $else:
                 <td>$r-$c</td>

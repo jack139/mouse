@@ -13,7 +13,7 @@ $var menu: #grup2
 <div class="article_box">
   <span>笼架号：$shelf['shelf_id'] ；</span>
   <span>规格：$shelf['row'] 行 * $shelf['col'] 列；</span>
-  <span>过期时间：<span style="color:#FF2300;">$shelf['expired_d']</span></span>
+  <span>到期时间：<span style="color:#FF2300;">$shelf['expired_d']</span></span>
 </div>
 
 <table class="props_tb">
@@ -45,7 +45,7 @@ $for r in xrange(1,shelf['row']+1):
                     <div
                         $if houses[(r-1)*shelf['col']+(c-1)]['expired_d']<now_day:
                             style="color:#FF2300;"
-                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d']</div>
+                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d'] 到期</div>
                 </td>
             $else:
                 <td><a href="/grp_admin/house_edit?house_id=$shelf['shelf_id']-$r-$c">$r-$c</a></td>
