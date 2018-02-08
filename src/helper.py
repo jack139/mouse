@@ -78,6 +78,8 @@ DIVIDE_DAYS = 8
 # 每笼最大数量
 MAX_MOUSE_NUM = 6
 
+# 列表页每页条目数量
+PAGE_SIZE = 50
 
 # 鼠笼类型
 HOUSE_TYPE = {

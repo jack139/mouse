@@ -11,7 +11,7 @@ db = setting.db_web
 
 url = ('/grp_user/mice')
 
-PAGE_SIZE = 50   
+PAGE_SIZE = helper.PAGE_SIZE
 
 #  -------------------
 class handler:  

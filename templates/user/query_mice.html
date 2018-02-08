@@ -1,0 +1,48 @@
+$def with (name, str1, skus, pages, group_name)
+
+$var title: 小鼠信息检索
+$var css:
+$var js:
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #qury1
+
+
+<div class="caption"><h2>小鼠信息检索</h2></div>
+
+
+<table class="props_tb">
+<thead>
+  <tr class="even">
+    <th width="15%">系统编号</th>
+    <th>耳标</th>
+    <th>鼠笼位置</th>
+    <th>品系</th>
+    <th>实验员</th>
+    <th>实验组</th>
+    <th>状态</th>
+  </tr>
+</thead>
+<tbody>
+
+$for u in skus:
+  <tr><td><a href="/query/mice_info?mouse_id=$u['_id']">...$(str(u['_id'])[-6:])</a></td>
+  <td>$u.get('tag','n/a')</td>
+  $if u.get('house_id','n/a')!='n/a':
+    <td><a href="/query/house_info?house_id=$u['house_id']">$u.get('house_id','n/a')</a></td>
+  $else:
+    <td>$u.get('house_id','n/a')</td>
+  <td>$u.get('blood_code','n/a')</td>
+  <td>$u.get('owner_uname','')</td>
+  <td>$group_name[u.get('group_id','')]</td>
+  <td>$u.get('status','')</td>
+
+</tbody>
+</table>
+
+<br/>
+<div class="article_box">
+    页码：
+    $for x in pages:
+        <a href="/grp_user/mice?page=$x">$(x+1)</a>&nbsp;&nbsp;
+</div>

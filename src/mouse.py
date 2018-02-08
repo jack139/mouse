@@ -442,7 +442,7 @@ class AdminData:
             })
 
 
-PAGE_SIZE = 50            
+PAGE_SIZE = helper.PAGE_SIZE
 
 class AdminGroup: 
     def GET(self):

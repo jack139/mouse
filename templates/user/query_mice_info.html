@@ -1,11 +1,11 @@
-$def with (name, str1, sku, house, blood_list)
+$def with (name, str1, sku, blood_list)
 
-$var title: 鼠笼管理
+$var title: 小鼠信息检索
 $var css:
 $var name: $'|'.join(str1) $name
 $var js:
 $var load:
-$var menu: #user1
+$var menu: #qury1
 
 <div class="caption"><h2>小鼠信息</h2></div>
 
@@ -23,6 +23,14 @@ $var menu: #user1
 
 <tr><td>系统编号</td><td>
     $sku['_id']
+    </td><td></td></tr>
+
+<tr><td>所属实验员</td><td>
+    $sku.get('owner_uname','')
+    </td><td></td></tr>
+
+<tr><td>课题组</td><td>
+    $sku.get('group_id','')
     </td><td></td></tr>
 
 <tr><td>耳标</td><td>
@@ -59,10 +67,9 @@ $var menu: #user1
     $sku.get('blood_code','n/a')
     </td><td></td></tr>
 
-
-<!--tr><td>基因型结果</td><td>
-    $sku.get('gene_code', '')
-    </td><td></td></tr-->
+<tr><td>状态</td><td>
+    $sku.get('status','n/a')
+    </td><td></td></tr>
 
 
 <tr><td>备注</td><td>
@@ -72,8 +79,8 @@ $var menu: #user1
 
 </tbody></table>
 
+
 <p>
-<input type="button" name="edit" value="编辑" onclick="location.href='/grp_user/mice_edit?mouse_id=$sku['_id']&from_house=1';" />
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
 <p>
 
