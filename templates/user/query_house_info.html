@@ -1,0 +1,98 @@
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house)
+
+$var title: 鼠笼管理
+$var css: 
+$var name: $'|'.join(str1) $name
+$var js: /static/js/admin_house_info.js
+$var load: 
+$var menu: #grup2
+
+<div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
+
+
+<input type="hidden" id="house_id" name="house_id" value="$sku['house_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="15%">项目</th>
+        <th width="50%">内容</th>
+        <th>说明</th>
+    </tr>
+</thead>
+<tbody>
+<tr><td>鼠笼编号</td><td>$sku['house_id']</td><td></td></tr>
+
+<tr><td>所属实验员</td><td>
+        $for k in uid_list:
+            $if k['uname'] in sku.get('uname',''):
+                $k['uname'] ($k['full_name'])
+</td><td></td></tr>
+
+<tr><td>鼠笼类型</td><td>
+    $for x in sku.get('type_list', []):
+        $if x in sku.get('type', ''):
+            $type_list[x]
+</td><td></td></tr>
+
+$if sku.get('type', '') in ['test', 'inuse']:
+    <tr><td>实验开始日期</td><td>
+        $(sku.get('test_start_d','n/a'))
+        </td><td>格式：yyyymmdd</td></tr>
+
+    <tr><td>实验预计结束日期</td><td>
+        $(sku.get('test_will_end_d','n/a'))
+        </td><td>格式：yyyymmdd</td></tr>
+
+    <tr><td>实验实际结束日期</td><td>
+        $(sku.get('test_end_d','n/a'))
+        </td><td>格式：yyyymmdd</td></tr>
+
+
+<tr><td>小鼠列表</td><td>
+    $for i in mice:
+        <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
+        $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
+        <br/>
+    </td><td>耳标 -- 性别 -- 品系</td></tr>
+
+<tr><td>小鼠数量</td><td>
+    $len(mice)
+    </td><td></td></tr>
+
+<tr><td>鼠笼到期时间</td><td>
+    $:sku.get('expired_d','')
+</td><td>格式：yyyymmdd</td></tr>
+
+<tr><td>状态</td><td>
+    $if int(sku.get('status','0'))==1:
+        在使用
+    $if int(sku.get('status','0'))==0:
+        停用
+    </td><td>由管理员设置</td></tr>
+
+</tbody></table>
+
+<p>
+    <input type="button" id="move" value="移动到"/>
+    <select id='target_house_id' name='target_house_id'>
+        <option value='' selected="selected">--请选择--</option>
+        $for i in house:
+            <option value="$i">$i</option>
+    </select>
+</p>
+<p>
+    <input type="button" name="cancel" value="返回" onclick="location='/query/house?shelf_id=$sku['shelf_id']'" />
+<p>
+
+
+<div class="article_box">
+  <div>操作日志：</div>
+  <textarea rows="8" cols="80" id="history">
+  $for h in sku.get('history',[]):
+      $h[0]，用户：$h[1]，操作：$h[2]；
+  </textarea>
+</div>
+
+<br/>
+
