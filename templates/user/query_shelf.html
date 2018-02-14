@@ -5,7 +5,7 @@ $var css:
 $var js:
 $var name: $'|'.join(str1) $name
 $var load: 
-$var menu: #grup2
+$var menu: #qury3
 
 
 <div class="caption"><h2>鼠笼管理</h2></div>
@@ -25,7 +25,7 @@ $var menu: #grup2
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_admin/house?shelf_id=$u['shelf_id']">$u['shelf_id']</a></td>
+  <tr><td><a href="/query/house?shelf_id=$u['shelf_id']">$u['shelf_id']</a></td>
   <td>$(u'，'.join(u['shelf_id'].split('-')))</td>
   <td>$group_name.get(u.get('group_id','n/a'),'课题组不可用')</td>
   <td>$u.get('expired_d','n/a')</td>
@@ -38,5 +38,5 @@ $for u in skus:
 <div class="article_box">
     页码：
     $for x in pages:
-        <a href="/grp_admin/shelf?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        <a href="/query/shelf?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

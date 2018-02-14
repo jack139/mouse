@@ -3,9 +3,9 @@ $def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house)
 $var title: 鼠笼管理
 $var css: 
 $var name: $'|'.join(str1) $name
-$var js: /static/js/admin_house_info.js
+$var js: 
 $var load: 
-$var menu: #grup2
+$var menu: #qury3
 
 <div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
@@ -51,8 +51,8 @@ $if sku.get('type', '') in ['test', 'inuse']:
 
 <tr><td>小鼠列表</td><td>
     $for i in mice:
-        <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
         $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
+        <a class="abtn" href="/query/mice_info?mouse_id=$i['_id']">查看</a>
         <br/>
     </td><td>耳标 -- 性别 -- 品系</td></tr>
 
@@ -73,14 +73,6 @@ $if sku.get('type', '') in ['test', 'inuse']:
 
 </tbody></table>
 
-<p>
-    <input type="button" id="move" value="移动到"/>
-    <select id='target_house_id' name='target_house_id'>
-        <option value='' selected="selected">--请选择--</option>
-        $for i in house:
-            <option value="$i">$i</option>
-    </select>
-</p>
 <p>
     <input type="button" name="cancel" value="返回" onclick="location='/query/house?shelf_id=$sku['shelf_id']'" />
 <p>

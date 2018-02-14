@@ -1,4 +1,4 @@
-$def with (name, str1, skus, pages, group_name)
+$def with (name, str1, skus, pages, group_name, uname_list, house_list, blood_list)
 
 $var title: 小鼠信息检索
 $var css:
@@ -10,6 +10,25 @@ $var menu: #qury1
 
 <div class="caption"><h2>小鼠信息检索</h2></div>
 
+<div class="article_box">
+  耳标：<input type="text" id="v_tag" value="" />
+  品系：<select id='v_blood'>
+    <option value=''>--请选择--</option>
+    $for i in blood_list:
+      <option value="$i">$i</option>
+  </select>
+  实验员：<select id='v_uname'>
+    <option value=''>--请选择--</option>
+    $for i in uname_list:
+      <option value="$i">$i</option>
+  </select>
+  鼠笼：<select id='v_house'>
+    <option value=''>--请选择--</option>
+    $for i in house_list:
+      <option value="$i">$i</option>
+  </select>
+  <input type="button" name="cancel" value="检索" onclick="" />
+</div>
 
 <table class="props_tb">
 <thead>

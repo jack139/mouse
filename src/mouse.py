@@ -253,7 +253,7 @@ class AdminUserSetting:
 
         if user_data['user_type']=='grp_admin':
             privilege = helper.PRIV_GRP_ADMIN   # 课题组管理员
-            priv = ['GROUP_ADMIN']
+            priv = ['GROUP_ADMIN', 'QUERY']
         else:
             privilege = helper.PRIV_TUTOR   # 指导教师
             priv = ['TUTOR', 'QUERY']
