@@ -20,7 +20,7 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data = web.input(house_id='')
+        user_data = web.input(house_id='',return_last='')
 
         if user_data['house_id']=='':
             return render.info('参数错误！')  
@@ -60,6 +60,6 @@ class handler:
                 house.append(i['house_id'])
 
         return render.grpad_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house)
+            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, user_data['return_last'])
 
 

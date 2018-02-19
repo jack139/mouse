@@ -1,4 +1,4 @@
-$def with (name, str1, result=['-'])
+$def with (name, str1, expired=[], divided=[], today_d='', priv='')
 
 $var title: 首页
 $var css:
@@ -14,11 +14,41 @@ $var menu: #home
 </div>
     
 <dl class="feature">
-        <dt>最新消息</dt>
-        <dd>2017-11-27 开始</dd>
+	<dt>过期鼠笼</dt>
+	$for i in expired:
+		$if i.has_key('expired_d') and i['expired_d']!='':
+			<dd>
+				$if priv=='admin':
+					<a href="/grp_admin/house_info?house_id=$i['house_id']&return_last=y"/>$i['house_id']</a>
+				$else:
+					<a href="/query/house_info?house_id=$i['house_id']"/>$i['house_id']</a>
+				，过期时间：$i['expired_d']
+				$if i['expired_d']<today_d:
+					<span style="color:#FF2300;">已过期</span>
+				$else:
+					<span style="color:#229954;">即将到期</span>
+			</dd>
+</dl>
+
+
+<dl class="feature">
+	<dt>未分笼小鼠</dt>
+	$for i in divided:
+		$if i.has_key('divide_d') and i['divide_d']!='':
+			<dd>
+				$if priv=='admin':
+					<a href="/query/mice_info?mouse_id=$i['_id']"/>$i['_id']</a>
+				$else:
+					<a href="/grp_user/mice_info?mouse_id=$i['_id']"/>$i['_id']</a>
+				，分笼时间：$i['divide_d']
+				$if i['divide_d']<today_d:
+					<span style="color:#FF2300;">已过期</span>
+				$else:
+					<span style="color:#229954;">即将到期</span>
+			</dd>
 </dl>
 
 <!--div class="article_box">
-<div>$result[0]</div> 
+<div>???</div> 
 </div-->
 

@@ -66,18 +66,60 @@ class Login:
         if logged():
             render = create_render()
 
-            result = 0
+            #if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN|helper.PRIV_TUTOR):
 
-            if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN|helper.PRIV_TUTOR):
-                # 提醒改密码
-                db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
-                if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
-                    db.user.update_one({'uname':session.uname},{'$set' :{'pwd_update':int(time.time())}}) # 只提示一次， 2017-12-11
-                    raise web.seeother('/settings_user?set_pwd=1')
-                else:
-                    return render.portal(session.uname, get_privilege_name(), [result])
+            if logged(helper.PRIV_USER):
+                user_priv = 'user'
+            elif logged(helper.PRIV_GRP_ADMIN):
+                user_priv = 'admin'
+            elif logged(helper.PRIV_TUTOR):
+                user_priv = 'tutor'
             else:
-                return render.portal(session.uname, get_privilege_name(), [result])
+                return render.portal(session.uname, get_privilege_name())
+
+            # 提醒改密码
+            db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
+            if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
+                db.user.update_one({'uname':session.uname},{'$set' :{'pwd_update':int(time.time())}}) # 只提示一次， 2017-12-11
+                raise web.seeother('/settings_user?set_pwd=1')
+            else:
+                # 待办事项
+                today_d = helper.time_str(format=2)
+                days_before = helper.time_str(time.time()+3600*24*5, format=2) # 提前5天提醒
+
+                if user_priv =='admin': # 管理员：检索本组的
+                    group_list = helper.get_session_group_list()
+                    group_id = '' if len(group_list)==0 else group_list[0]
+
+                    # 过期的
+                    r2 = db.house.find({
+                        'group_id'  : group_id,
+                        'expired_d' : { '$lt' : days_before },
+                    }, sort=[('expired_d', 1)])
+
+                    # 分笼过期的
+                    r3 = db.mouse.find({
+                        'group_id'  : group_id,
+                        'divide_d' : { '$lt' : days_before },
+                    }, sort=[('divide_d', 1)])
+                elif user_priv == 'user': # 实验员：检索本人的
+                    # 过期的
+                    r2 = db.house.find({
+                        'uname'  : session.uname,
+                        'expired_d' : { '$lt' : days_before },
+                    }, sort=[('expired_d', 1)])
+
+                    # 分笼过期的
+                    r3 = db.mouse.find({
+                        'owner_uname'  : session.uname,
+                        'divide_d' : { '$lt' : days_before },
+                    }, sort=[('divide_d', 1)])
+                else:
+                    r2 = r3 = []
+
+                return render.portal(session.uname, get_privilege_name(), 
+                    [i for i in r2], [j for j in r3], today_d, user_priv)
+
         else:
             render = create_render()
 
