@@ -74,7 +74,7 @@ $if sku.get('type', '') in ['test', 'inuse']:
 </tbody></table>
 
 <p>
-    <input type="button" name="cancel" value="返回" onclick="location='/query/house?shelf_id=$sku['shelf_id']'" />
+    <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
 <p>
 
 

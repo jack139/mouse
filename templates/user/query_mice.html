@@ -2,7 +2,7 @@ $def with (name, str1, skus, pages, group_name, uname_list, house_list, blood_li
 
 $var title: 小鼠信息检索
 $var css:
-$var js:
+$var js: /static/js/query_mice.js?v=1.0
 $var name: $'|'.join(str1) $name
 $var load: 
 $var menu: #qury1
@@ -27,7 +27,7 @@ $var menu: #qury1
     $for i in house_list:
       <option value="$i">$i</option>
   </select>
-  <input type="button" name="cancel" value="检索" onclick="" />
+  <input type="button" id="search" value="检索" />
 </div>
 
 <table class="props_tb">

@@ -28,7 +28,9 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render(globals={ 'str': str })
-        user_data=web.input(page='0')
+        user_data=web.input(page='0', v_tag='', v_blood='', v_uname='', v_house='')
+
+        print user_data
 
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  
@@ -56,6 +58,7 @@ class handler:
             # 品系
             r4 = db.mouse.distinct("blood_code", {'group_id': group_id})
             blood_list = r4
+            blood_list.remove('')
         elif user_priv == 'tutor':
             # 实验员
             r2 = db.user.find({
@@ -76,8 +79,30 @@ class handler:
             house_list = []
             blood_list = []
 
+        # 检查参数合法性
+        v_tag = user_data.v_tag.strip()
+        v_house = '' if user_data.v_house not in house_list else user_data.v_house
+        v_uname = '' if user_data.v_uname not in uname_list else user_data.v_uname
+        v_blood = '' if user_data.v_blood not in blood_list else user_data.v_blood
+
+        # 生成查询条件
+        conditions = {'group_id' : { '$in':group_list }}
+        if v_tag!='':
+            conditions['tag'] = v_tag
+
+        if v_uname!='':
+            conditions['owner_uname'] = v_uname
+
+        if v_house!='':
+            conditions['house_id'] = v_house
+
+        if v_blood!='':
+            conditions['blood_code'] = v_blood
+
+        print 'conditions: ', conditions
+
         # 分页获取数据
-        db_sku = db.mouse.find({'group_id' : { '$in':group_list }},
+        db_sku = db.mouse.find(conditions,
             sort=[('status',-1),('_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE
