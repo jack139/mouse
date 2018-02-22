@@ -1,4 +1,4 @@
-$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house, now_day)
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house, now_day,return_last)
 
 $var title: 鼠笼管理
 $var css: 
@@ -96,7 +96,10 @@ $if sku.get('type', '') in ['test', 'inuse']:
                 <input type="button" id="newborn" value="新生小鼠"/>
                 <input type="button" id="abandon" value="淘汰"/>
 
-    <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
+    $if return_last=='y':
+        <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
+    $else:    
+        <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
 <p>
 
 

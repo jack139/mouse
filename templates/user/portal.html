@@ -21,7 +21,7 @@ $var menu: #home
 				$if priv=='admin':
 					<a href="/grp_admin/house_info?house_id=$i['house_id']&return_last=y"/>$i['house_id']</a>
 				$else:
-					<a href="/query/house_info?house_id=$i['house_id']"/>$i['house_id']</a>
+					<a href="/grp_user/house_info?house_id=$i['house_id']&return_last=y"/>$i['house_id']</a>
 				，过期时间：$i['expired_d']
 				$if i['expired_d']<today_d:
 					<span style="color:#FF2300;">已过期</span>
@@ -37,10 +37,12 @@ $var menu: #home
 		$if i.has_key('divide_d') and i['divide_d']!='':
 			<dd>
 				$if priv=='admin':
-					<a href="/query/mice_info?mouse_id=$i['_id']"/>$i['_id']</a>
+					<a href="/query/mice_info?mouse_id=$i['_id']"/>...$(str(i['_id'])[-6:])</a>
+					，鼠笼：<a href="/grp_admin/house_info?house_id=$i['house_id']&return_last=y"/>$i['house_id']</a>
 				$else:
-					<a href="/grp_user/mice_info?mouse_id=$i['_id']"/>$i['_id']</a>
-				，分笼时间：$i['divide_d']
+					<a href="/grp_user/mice_info?mouse_id=$i['_id']"/>...$(str(i['_id'])[-6:])</a>
+					，鼠笼：<a href="/grp_user/house_info?house_id=$i['house_id']&return_last=y"/>$i['house_id']</a>
+				，计划分笼时间：$i['divide_d']
 				$if i['divide_d']<today_d:
 					<span style="color:#FF2300;">已过期</span>
 				$else:

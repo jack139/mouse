@@ -27,10 +27,10 @@ $var menu: #user2
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_user/mice_edit?mouse_id=$u['_id']">$u['_id']</a></td>
+  <tr><td><a href="/grp_user/mice_edit?mouse_id=$u['_id']">...$(str(u['_id'])[-6:])</a></td>
   <td>$u.get('tag','n/a')</td>
   $if u.get('house_id','n/a')!='n/a':
-    <td><a href="/grp_user/house_info?house_id=$u['house_id']">$u.get('house_id','n/a')</a></td>
+    <td><a href="/grp_user/house_info?house_id=$u['house_id']&return_last=y">$u.get('house_id','n/a')</a></td>
   $else:
     <td>$u.get('house_id','n/a')</td>
   <td>$u.get('blood_code','n/a')</td>

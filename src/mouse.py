@@ -64,7 +64,7 @@ user_level = helper.user_level
 class Login:
     def GET(self):
         if logged():
-            render = create_render()
+            render = create_render(globals={ 'str': str })
 
             #if logged(helper.PRIV_USER|helper.PRIV_GRP_ADMIN|helper.PRIV_TUTOR):
 
@@ -100,7 +100,8 @@ class Login:
                     # 分笼过期的
                     r3 = db.mouse.find({
                         'group_id'  : group_id,
-                        'divide_d' : { '$lt' : days_before },
+                        'divide2_d' : { '$exists' : False },
+                        'divide_d'  : { '$lt' : days_before },
                     }, sort=[('divide_d', 1)])
                 elif user_priv == 'user': # 实验员：检索本人的
                     # 过期的
@@ -111,8 +112,9 @@ class Login:
 
                     # 分笼过期的
                     r3 = db.mouse.find({
-                        'owner_uname'  : session.uname,
-                        'divide_d' : { '$lt' : days_before },
+                        'owner_uname' : session.uname,
+                        'divide2_d'   : { '$exists' : False },
+                        'divide_d'    : { '$lt' : days_before },
                     }, sort=[('divide_d', 1)])
                 else:
                     r2 = r3 = []

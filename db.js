@@ -54,6 +54,7 @@ mouse 小鼠：数据只增不删，保留历史数据
     status : 状态 ：新生／正常／杀死／死亡
     birth_d : 出生日期 yyyymmdd
     divide_d : 分笼日期 yyyymmdd
+    divide2_d : 实际分笼日期 yyyymmdd
     death_d : 死亡日期 yyyymmdd
     father_tag : 父小鼠耳标
     mother_tag : 母小鼠耳标

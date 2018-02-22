@@ -19,7 +19,7 @@ class handler:
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
 
-        render = helper.create_render()
+        render = helper.create_render(globals={ 'str': str })
         user_data=web.input(page='0')
 
         if not user_data['page'].isdigit():

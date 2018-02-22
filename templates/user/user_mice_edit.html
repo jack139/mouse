@@ -71,9 +71,13 @@ $else:
     <input type="text"  value="$:sku.get('birth_d','')" id="birth_d" name="birth_d" readonly="readonly">
 </td><td>必填</td></tr>
 
-<tr><td>分笼日期</td><td>
+<tr><td>计划分笼日期</td><td>
     <input type="text"  value="$:sku.get('divide_d','')" id="divide_d" name="divide_d" readonly="readonly">
-</td><td>必填</td></tr>
+</td><td></td></tr>
+
+<tr><td>实际分笼日期</td><td>
+    $:sku.get('divide2_d','')
+</td><td>移动小鼠时自动生成</td></tr>
 
 <tr><td>鼠笼位置</td><td>
     $if sku['_id']=='n/a' or sku.get('house_id') in ['', None]:

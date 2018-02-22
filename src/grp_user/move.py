@@ -52,6 +52,13 @@ class handler:
             'last_tick' : int(time.time()),  # 更新时间戳
         }})
 
+        # 设置分笼时间
+        db.mouse.update_many({
+            '_id'       : { '$in' : mice2 },
+            'divide2_d' : { '$exists' : False } 
+        }, {'$set':{
+            'divide2_d'  : helper.time_str(format=2),
+        }})
         return json.dumps({'ret':0,'msg':'移动完成'})
 
 
