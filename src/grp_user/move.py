@@ -39,7 +39,10 @@ class handler:
         mice2 = [ObjectId(i) for i in mice]
 
         # 检查鼠笼是否超出最大数量
-        r2=db.mouse.find({'house_id': param.target_house_id})
+        r2=db.mouse.find({
+            'house_id' : param.target_house_id,
+            'status'   : {'$nin' : ['killed', 'dead']},
+        })
 
         if r2.count()+len(mice2)>helper.MAX_MOUSE_NUM:
             return json.dumps({'ret':-3, 'msg':'目标鼠笼容纳不下！'})
