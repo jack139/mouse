@@ -30,11 +30,23 @@ $else:
     $else:
         $sku.get('blood_code', '')
         <input type="hidden" name="blood_code" value="$sku.get('blood_code', '')" />
-    </td><td>格式：品系编码,基因型1(+/+),基因型2(+/-),...</td></tr>
+    </td><td>格式：品系名称,基因型1,基因型2,...</td></tr>
+
 
 
 <tr><td>品系说明</td><td>
     <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
+    </td><td></td></tr>
+
+<tr><td>责任人</td><td>
+        <span><select id="owner_user" name="owner_user" style="width:159px">
+        <option value="">--未设置--</option>
+        $for k in users:
+            <option value="$k['uname']"
+            $if k['uname'] == sku.get('owner_user',''):
+                selected="selected"
+            >$k['uname'] ($k['full_name'])</option>
+        </select></span>
     </td><td></td></tr>
 
 <tr><td>可使用的用户（可多选）</td><td>

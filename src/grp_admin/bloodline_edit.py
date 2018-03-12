@@ -42,27 +42,31 @@ class handler:
         }).sort([('_id',1)])
 
         return render.grpad_bloodline_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            blood_data, db_user)
+            blood_data, [x for x in db_user])
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(blood_id='',blood_code='',name='',user_list=[])
+        user_data=web.input(blood_id='',blood_code='',name='',user_list=[],owner_user='')
 
         #if user_data.name.strip()=='':
         #    return render.info('品系名不能为空！')  
 
         blood_code = user_data['blood_code'].strip()
 
-        b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
-        if not b_list[0].replace('_','').isalnum():
-            return render.info('品系编码只能为字母和数字的组合！')  
+        b_list = blood_code.split(',')  # 格式：品系名,基因型1,基因型2,...
+        #if not b_list[0].replace('_','').isalnum(): # 格式：品系名,基因型1(+/+),基因型2(+/-),...
+        #    return render.info('品系编码只能为字母和数字的组合！')  
 
-        for x in b_list[1:]:
-            if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
-                return render.info('品系编码中基因型格式错误！')  
+        #for x in b_list[1:]:
+        #    if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
+        #        return render.info('品系编码中基因型格式错误！')  
+
+        for x in b_list:
+            if not x.replace('_','').isalnum():
+                return render.info('品系编码只能为字母和数字的组合！')  
 
         # 本组用户数据
         group_list = helper.get_session_group_list()
@@ -75,6 +79,7 @@ class handler:
                 'status'      : user_data['status'],
                 'note'        : user_data['note'],
                 'user_list'   : user_data['user_list'],
+                'owner_user'  : user_data['owner_user'],
                 'group_id'    : group_id,
                 'last_tick'   : int(time.time()),  # 更新时间戳
             }

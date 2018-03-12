@@ -18,8 +18,9 @@ $var menu: #grup3
     <th width="30%">品系编号</th>
     <th>品系说明</th>
     <th>状态</th>
-    <th>创建者</th>
+    <th>责任人</th>
     <th width="15%">备注</th>
+    <th width="15%">实验说明</th>
   </tr>
 </thead>
 <tbody>
@@ -33,9 +34,9 @@ $for u in skus:
     $else:
       n/a
   </td>
-  <td>$u.get('owner_uname','n/a')</td>
-  <td>$u.get('note','')</td></tr>
-
+  <td>$u.get('owner_user','')</td>
+  <td>$u.get('note','')</td>
+  <td></td></tr>
 </tbody>
 </table>
 
