@@ -1,4 +1,4 @@
-$def with (name, str1, sku, users)
+$def with (name, str1, sku, users, field)
 
 $var title: 品系管理
 $var css: 
@@ -20,63 +20,83 @@ $else:
     <tr class="even">
         <th width="15%">项目</th>
         <th>内容</th>
-        <th>说明</th>
+        <th width="35%">说明</th>
     </tr>
 </thead>
 <tbody>
-<tr><td>品系编码</td><td>
-    $if sku['blood_code']=='':
-        <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')" size="30"/>
-    $else:
-        $sku.get('blood_code', '')
-        <input type="hidden" name="blood_code" value="$sku.get('blood_code', '')" />
-    </td><td>格式：品系名称,基因型1,基因型2,...</td></tr>
+
+$if field=='':
+    <tr><td>品系编码</td><td>
+        $if sku['blood_code']=='':
+            <input type="text" name="blood_code" id="blood_code" value="$sku.get('blood_code', '')" size="30"/>
+        $else:
+            $sku.get('blood_code', '')
+            <input type="hidden" name="blood_code" value="$sku.get('blood_code', '')" />
+        </td><td>格式：品系名称,基因型1,基因型2,...</td></tr>
+$else:
+    <input type="hidden" name="blood_code" value="$sku.get('blood_code', '')" />
 
 
+$if field in ('', 'name'):
+    <tr><td>品系说明</td><td>
+        <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
+        </td><td></td></tr>
+$else:
+    <input type="hidden" name="name" value="$sku.get('name', '')" />
 
-<tr><td>品系说明</td><td>
-    <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
-    </td><td></td></tr>
+$if field in ('', 'owner_user'):
+    <tr><td>责任人</td><td>
+            <span><select id="owner_user" name="owner_user" style="width:159px">
+            <option value="">--未设置--</option>
+            $for k in users:
+                <option value="$k['uname']"
+                $if k['uname'] == sku.get('owner_user',''):
+                    selected="selected"
+                >$k['uname'] ($k['full_name'])</option>
+            </select></span>
+        </td><td></td></tr>
+$else:
+    <input type="hidden" name="owner_user" value="$sku.get('owner_user', '')" />
 
-<tr><td>责任人</td><td>
-        <span><select id="owner_user" name="owner_user" style="width:159px">
-        <option value="">--未设置--</option>
-        $for k in users:
-            <option value="$k['uname']"
-            $if k['uname'] == sku.get('owner_user',''):
-                selected="selected"
-            >$k['uname'] ($k['full_name'])</option>
-        </select></span>
-    </td><td></td></tr>
+$if field=='':
+    <tr><td>可使用的用户（可多选）</td><td>
+            <span><select id="user_list" name="user_list" multiple="multiple" size="5" style="width:159px">
+            $for k in users:
+                <option value="$k['uname']"
+                $if k['uname'] in sku.get('user_list',[]):
+                    selected="selected"
+                >$k['uname'] ($k['full_name'])</option>
+            </select></span>
+        </td><td></td></tr>
+$else:
+    $for x in sku.get('user_list',[]):
+        <input type="hidden" name="user_list" value="$x" />
 
-<tr><td>可使用的用户（可多选）</td><td>
-        <span><select id="user_list" name="user_list" multiple="multiple" size="5" style="width:159px">
-        $for k in users:
-            <option value="$k['uname']"
-            $if k['uname'] in sku.get('user_list',[]):
-                selected="selected"
-            >$k['uname'] ($k['full_name'])</option>
-        </select></span>
-    </td><td></td></tr>
+$if field in ('', 'note'):
+    <tr><td>备注</td><td>
+        <textarea rows="3" name="note">$sku.get('note','')</textarea>
+        </td><td></td></tr>
+$else:
+    <input type="hidden" name="note" value="$sku.get('note', '')" />
 
-<tr><td>备注</td><td>
-    <textarea rows="3" name="note">$sku.get('note','')</textarea>
-    </td><td></td></tr>
 
-<tr><td>状态</td><td>
-    <input type="radio" name="status" value="prepare"
-    $if sku.get('status','prepare')=='prepare':
-        checked="checked"
-    /> 准备中
-    <input type="radio" name="status" value="plan"
-    $if sku.get('status','prepare')=='plan':
-        checked="checked"
-    /> 计划中
-    <input type="radio" name="status" value="ready"
-    $if sku.get('status','prepare')=='ready':
-        checked="checked"
-    /> 已有
-    </td><td></td></tr>
+$if field in ('', 'status'):
+    <tr><td>状态</td><td>
+        <input type="radio" name="status" value="prepare"
+        $if sku.get('status','prepare')=='prepare':
+            checked="checked"
+        /> 准备中
+        <input type="radio" name="status" value="plan"
+        $if sku.get('status','prepare')=='plan':
+            checked="checked"
+        /> 计划中
+        <input type="radio" name="status" value="ready"
+        $if sku.get('status','prepare')=='ready':
+            checked="checked"
+        /> 已有
+        </td><td></td></tr>
+$else:
+    <input type="hidden" name="status" value="$sku.get('status', 'prepare')" />
 
 
 </tbody></table>
@@ -86,14 +106,14 @@ $else:
 <input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
 </form>
 
-
-<div class="article_box">
-  <div>操作日志：</div>
-  <textarea rows="8" cols="80" id="history">
-  $for h in sku.get('history',[]):
-      $h[0]，用户：$h[1]，操作：$h[2]；
-  </textarea>
-</div>
+$if field=='':
+    <div class="article_box">
+      <div>操作日志：</div>
+      <textarea rows="8" cols="80" id="history">
+      $for h in sku.get('history',[]):
+          $h[0]，用户：$h[1]，操作：$h[2]；
+      </textarea>
+    </div>
 
 <br/>
 

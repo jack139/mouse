@@ -21,7 +21,7 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data = web.input(blood_id='')
+        user_data = web.input(blood_id='', field='')
 
         # 品系数据
         blood_data = { 'blood_code' : '', '_id':'n/a'}
@@ -42,7 +42,7 @@ class handler:
         }).sort([('_id',1)])
 
         return render.grpad_bloodline_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            blood_data, [x for x in db_user])
+            blood_data, [x for x in db_user], user_data['field'])
 
 
     def POST(self):
@@ -50,6 +50,8 @@ class handler:
             raise web.seeother('/')
         render = helper.create_render()
         user_data=web.input(blood_id='',blood_code='',name='',user_list=[],owner_user='')
+
+        #print user_data
 
         #if user_data.name.strip()=='':
         #    return render.info('品系名不能为空！')  

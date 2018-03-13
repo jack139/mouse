@@ -11,9 +11,13 @@ $var menu: #grup2
 <div class="caption"><h2>鼠笼管理 - 笼架 $shelf['shelf_id']</h2></div>
 
 <div class="article_box">
-  <span>笼架号：$shelf['shelf_id'] ；</span>
-  <span>规格：$shelf['row'] 行 * $shelf['col'] 列；</span>
-  <span>到期时间：<span style="color:#FF2300;">$shelf['expired_d']</span></span>
+    <span>笼架号：$shelf['shelf_id'] ；</span>
+    <span>规格：$shelf['row'] 行 * $shelf['col'] 列；</span>
+    <span>到期时间：<span style="color:#FF2300;">$shelf['expired_d']</span></span>
+    <span style="float: right"><a class="abtn" href="/grp_admin/shelf_appoint?shelf_id=$shelf['_id']">预分配用户</a>
+    $for x in shelf.get('appoint',[]):
+        $x,
+    </span>
 </div>
 
 <table class="props_tb">

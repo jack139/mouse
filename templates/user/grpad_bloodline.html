@@ -14,35 +14,35 @@ $var menu: #grup3
 
 <table class="props_tb">
 <thead>
-  <tr class="even">
-    <th width="30%">品系编号</th>
-    <th>品系说明</th>
-    <th>状态</th>
-    <th>责任人</th>
-    <th width="15%">备注</th>
-    <th width="15%">实验说明</th>
-  </tr>
+    <tr class="even">
+        <th width="30%">品系编号</th>
+        <th>品系说明</th>
+        <th>状态</th>
+        <th>责任人</th>
+        <th width="15%">备注</th>
+        <th width="15%">实验说明</th>
+    </tr>
 </thead>
 <tbody>
 
 $for u in skus:
-  <tr><td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']">$u['blood_code']</a></td>
-  <td>$u.get('name','n/a')</td>
-  <td>
-    $if u.has_key('status'):
-      $STATUS[u['status']]
-    $else:
-      n/a
-  </td>
-  <td>$u.get('owner_user','')</td>
-  <td>$u.get('note','')</td>
-  <td></td></tr>
+    <tr>
+        <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']">$u['blood_code']</a></td>
+        <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=name">$u.get('name','n/a')</a></td>
+        <td>
+            $if u.has_key('status'):
+                <a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=status">$STATUS[u['status']]</a>
+        </td>
+        <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=owner_user">$u.get('owner_user','')</a></td>
+        <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=note">$u.get('note','')</a></td>
+        <td></td>
+    </tr>
 </tbody>
 </table>
 
 <br/>
 <div class="article_box">
-    页码：
-    $for x in pages:
-        <a href="/grp_admin/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        页码：
+        $for x in pages:
+                <a href="/grp_admin/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

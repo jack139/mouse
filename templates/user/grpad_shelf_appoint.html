@@ -1,0 +1,46 @@
+$def with (name, str1, sku, users)
+
+$var title: 鼠笼管理
+$var css: 
+$var name: $'|'.join(str1) $name
+$var js: 
+$var load: 
+$var menu: #grup3
+
+<div class="caption"><h2>设置预分配用户，笼架：$sku['shelf_id']</h2></div>
+
+<form name="new_sku" id="new_sku" method="post" action="/grp_admin/shelf_appoint">
+<input type="hidden" name="shelf_id" value="$sku['_id']"/>
+<input type="hidden" name="shelf_id_id" value="$sku['shelf_id']"/>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="15%">项目</th>
+        <th>内容</th>
+        <th width="35%">说明</th>
+    </tr>
+</thead>
+<tbody>
+
+
+<tr><td>预分配的用户（可多选）</td><td>
+        <span><select id="user_list" name="user_list" multiple="multiple" size="10" style="width:159px">
+        $for k in users:
+            <option value="$k['uname']"
+            $if k['uname'] in sku.get('appoint',[]):
+                selected="selected"
+            >$k['uname'] ($k['full_name'])</option>
+        </select></span>
+    </td><td>预分配的用户在向鼠笼添加小鼠后即拥有鼠笼所有权</td></tr>
+
+
+</tbody></table>
+
+<p><input type="submit" name="submit" id="submit" value="保存"/>
+<input type="button" name="cancel" value="返回" onclick="history.go(-1);" /><p>
+</form>
+
+
+<br/>
+

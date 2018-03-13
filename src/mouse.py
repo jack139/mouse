@@ -658,6 +658,19 @@ class AdminShelfEdit:
         else:
             shelf_id = user_data['shelf_id']
             message = '修改'
+            r2=db.shelf.find_one({'shelf_id':shelf_id})
+            if r2 is None:
+                return render.info('此笼架不存在')
+
+            #检查 课题组是否有修改
+            if r2.get('group_id')!=user_data['group_id']:
+                # 只有当原课题组笼架都没有分配到实验员时，才可以修改课题组属性
+                r3 = db.house.find({
+                    'shelf_id' : shelf_id,
+                    'uname'    : { '$ne' : ''},
+                })
+                if r3.count()>0:
+                    return render.info('不能修改课题组！只有所有当笼架均未分配到实验员时，才可以修改课题组。')
 
         try:
             update_set={
