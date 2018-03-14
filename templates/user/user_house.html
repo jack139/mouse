@@ -11,8 +11,12 @@ $var menu: #user1
 <div class="caption"><h2>鼠笼管理 - 笼架 $shelf['shelf_id']</h2></div>
 
 <div class="article_box">
-  <span>笼架号：$shelf['shelf_id'] ；</span>
-  <span>规格：$shelf['row'] 行 * $shelf['col'] 列</span>
+    <span>笼架号：$shelf['shelf_id'] ；</span>
+    <span>规格：$shelf['row'] 行 * $shelf['col'] 列</span>
+    <span style="float: right">预分配用户：
+    $for x in shelf.get('appoint',[]):
+        $x,
+    </span>  
 </div>
 
 <table class="props_tb">

@@ -1,11 +1,21 @@
 $def with (name, str1, sku, users)
 
 $var title: 鼠笼管理
-$var css: 
+$var css: /static/css/jquery.datetimepicker.css
 $var name: $'|'.join(str1) $name
-$var js: 
-$var load: 
+$var js: /static/js/jquery.datetimepicker.js
+$var load: date_init();
 $var menu: #grup3
+
+<script type="text/javascript">
+/*初始化时间控件*/
+function date_init(){
+    $$('#appoint_expired_d').datetimepicker({
+        format     : 'Ymd', 
+        timepicker : false,
+    });
+}
+</script>
 
 <div class="caption"><h2>设置预分配用户，笼架：$sku['shelf_id']</h2></div>
 
@@ -33,6 +43,10 @@ $var menu: #grup3
             >$k['uname'] ($k['full_name'])</option>
         </select></span>
     </td><td>预分配的用户在向鼠笼添加小鼠后即拥有鼠笼所有权</td></tr>
+
+<tr><td>到期时间</td><td>
+    <input type="text"  value="$:sku.get('appoint_expired_d','')" id="appoint_expired_d" name="appoint_expired_d" readonly="readonly">
+    </td><td>格式：yyyymmdd</td></tr>
 
 
 </tbody></table>

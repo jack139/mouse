@@ -53,7 +53,8 @@ $(function(){
         });
 
         if (val.length>0){
-            var target_house_id=$('select[name=target_house_id]').val();
+            //var target_house_id=$('select[name=target_house_id]').val();
+            var target_house_id=$('input[type=radio][name=target_house_id]:checked').val();
 
             if (target_house_id==""){
                 alertify.warning('请选择要移动到哪个鼠笼!'); 

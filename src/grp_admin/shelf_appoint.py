@@ -46,11 +46,20 @@ class handler:
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(shelf_id='',user_list=[], shelf_id_id='')
+        user_data=web.input(shelf_id='',user_list=[], shelf_id_id='',appoint_expired_d='')
 
+        r2 = db.shelf.find_one({'_id':ObjectId(user_data['shelf_id'])})
+        if r2 is None:
+            return render.info('笼架不存在！')  
+
+        if user_data['appoint_expired_d']>r2['expired_d']:
+            return render.info('预分配的到期时间不能超过笼架到期时间！')  
 
         db.shelf.update_one({'_id':ObjectId(user_data['shelf_id'])}, {
-            '$set'  : {'appoint' : user_data['user_list']},
+            '$set'  : {
+                'appoint'           : user_data['user_list'],
+                'appoint_expired_d' : user_data['appoint_expired_d'],
+            },
             '$push' : {
                 'history' : (helper.time_str(), helper.get_session_uname(), '修改预分配实验员'), 
             }  # 纪录操作历史

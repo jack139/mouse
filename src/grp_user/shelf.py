@@ -35,7 +35,10 @@ class handler:
         r2 = db.house.distinct("shelf_id", {'uname':helper.get_session_uname()})
 
         # 分页获取数据
-        db_sku = db.shelf.find({'shelf_id' : {'$in':r2}},
+        db_sku = db.shelf.find({ '$or' : [
+                {'shelf_id' : {'$in':r2}},
+                {'appoint'  : helper.get_session_uname()},
+            ]},
             sort=[('shelf_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE

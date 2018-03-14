@@ -21,6 +21,7 @@ class handler:
             return json.dumps({'ret':-1,'msg':'无访问权限'})
 
         param = web.input(target_house_id='', mice='')
+        print param
 
         if param.target_house_id=='' and param.mice=='':
             return json.dumps({'ret':-1, 'msg':'参数错误'})
@@ -32,7 +33,10 @@ class handler:
         })
         if db_obj==None:
             # 不存在的鼠笼
-            return json.dumps({'ret':-2, 'msg':'鼠笼参数错误！'})
+            return json.dumps({'ret':-2, 'msg':'只能移动自己的鼠笼！'})
+
+        if db_obj['expired_d']<helper.time_str(format=2):
+            return json.dumps({'ret':-4, 'msg':'不能移动到已过期的鼠笼！'})
 
         mice=json.loads(param.mice)
 

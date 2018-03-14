@@ -1,9 +1,9 @@
-$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house, now_day,return_last)
+$def with (name, str1, sku, uid_list, type_list, mice, mouse_status, house, now_day, return_last, shelfs)
 
 $var title: 鼠笼管理
 $var css: 
 $var name: $'|'.join(str1) $name
-$var js: /static/js/user_house_info.js
+$var js: /static/js/user_house_info.js?v=1.2
 $var load: 
 $var menu: #user1
 
@@ -77,14 +77,57 @@ $if sku.get('type', '') in ['test', 'inuse']:
 
 </tbody></table>
 
+<script type="text/javascript">
+    function hide_all(){
+        $for i in shelfs:
+            $$("#$i['_id']").hide();        
+    }
+
+    function show_some(content){
+        hide_all();
+        if (content!='HIDE'){
+            $$("#"+content).show();
+        }
+    }
+</script>
+
 <p>
     $if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
+        <div>
             <input type="button" id="move" value="移动到"/>
-            <select id='target_house_id' name='target_house_id'>
-                <option value='' selected="selected">--请选择--</option>
-                $for i in house:
-                    <option value="$i">$i</option>
+            <select id="shelf_select" onchange="show_some($$('#shelf_select option:selected').val());">
+                <option value='HIDE'>--请选择笼架--</option>
+                $for i in shelfs:
+                    <option value="$i['_id']">$i['shelf_id']</option>
             </select>
+        </div>
+        <div>
+            $for ss in shelfs:
+                <div id="$ss['_id']" style="display:none;">
+                <table class="props_tb">
+                <thead>
+                    <tr class="even">
+                        <th><span>　</span></th>
+                        $for c in xrange(1, ss['col']+1):
+                            <th>第 $c 列</th>
+                    </tr>
+                </thead>
+                <tbody>
+                $for r in xrange(1,ss['row']+1):
+                    <tr>
+                        <td><span>第 $r 行</span></td>
+                        $for c in xrange(1,ss['col']+1):
+                            <td>
+                                $if ('%s-%s-%s'%(ss['shelf_id'],r,c) in house) or (name in ss.get('appoint',[])):
+                                    <input type="radio" name="target_house_id" value="$('%s-%s-%s'%(ss['shelf_id'],r,c))"/>
+                                $r-$c
+                            </td>
+                    </tr>   
+
+                </tbody>
+                </table>
+                </div>
+        </div>
         </p>
         <p>
             <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
@@ -112,4 +155,3 @@ $if sku.get('type', '') in ['test', 'inuse']:
 </div>
 
 <br/>
-

@@ -64,9 +64,23 @@ class handler:
             if i['house_id']!=user_data['house_id']:
                 house.append(i['house_id'])
 
+
+        # 当前实验员可用的笼架
+        r2 = db.house.distinct("shelf_id", {'uname':helper.get_session_uname()})
+
+        # 分页获取数据
+        r3 = db.shelf.find({ '$or' : [
+                {'shelf_id' : {'$in':r2}},
+                {'appoint'  : helper.get_session_uname()},
+            ]},
+            sort=[('shelf_id', 1)]
+        )
+
+        shelfs = [x for x in r3]
+
         now_day = helper.time_str(format=2)
 
         return render.user_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, now_day, user_data['return_last'])
+            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, now_day, user_data['return_last'], shelfs)
 
 
