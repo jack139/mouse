@@ -68,7 +68,7 @@ class handler:
         # 当前实验员可用的笼架
         r2 = db.house.distinct("shelf_id", {'uname':helper.get_session_uname()})
 
-        # 分页获取数据
+        # 获取笼架数据
         r3 = db.shelf.find({ '$or' : [
                 {'shelf_id' : {'$in':r2}},
                 {'appoint'  : helper.get_session_uname()},

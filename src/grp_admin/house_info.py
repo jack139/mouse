@@ -52,14 +52,23 @@ class handler:
         house = []
         db_sku = db.house.find({
             'group_id'    : helper.get_session_group_list()[0], # 只显示当前实验组的鼠笼
-            # 要增加条件，现在过期的鼠笼
+            'uname'       : {'$ne' : ''}, # 排除掉无主的鼠笼
         }).sort([('house_id',1)])
         for i in db_sku:
             # 需要检查鼠笼类型的限制
             if i['house_id']!=user_data['house_id']:
                 house.append(i['house_id'])
 
+        group_list = helper.get_session_group_list()
+
+        # 分页获取数据
+        r2 = db.shelf.find({'group_id' : '' if len(group_list)==0 else group_list[0]},
+            sort=[('shelf_id', 1)],
+        )
+
+        shelfs = [x for x in r2]
+
         return render.grpad_house_info(helper.get_session_uname(), helper.get_privilege_name(), 
-            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, user_data['return_last'])
+            house_data, db_user, helper.HOUSE_TYPE, mice, helper.MOUSE_STATUS, house, user_data['return_last'], shelfs)
 
 

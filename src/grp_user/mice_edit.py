@@ -95,16 +95,6 @@ class handler:
                 if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
                     return render.info('品系编码中基因型格式错误！')  
 
-        # 检查鼠笼是否超出最大数量
-        r4=db.mouse.find({
-            'house_id' : user_data['house_id'],
-            '_id'      : {'$ne'  : ObjectId(user_data['mouse_id'])},
-            'status'   : {'$nin' : ['killed', 'dead']},
-        })
-
-        if r4.count()+1>helper.MAX_MOUSE_NUM:
-            return render.info('目标鼠笼容纳不下！')  
-
         try:
             update_set={
                 'tag'        : user_data['tag'].strip(),
@@ -129,6 +119,16 @@ class handler:
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
             db.mouse.insert_one(update_set)
         else:
+            # 检查鼠笼是否超出最大数量
+            r4=db.mouse.find({
+                'house_id' : user_data['house_id'],
+                '_id'      : {'$ne'  : ObjectId(user_data['mouse_id'])},
+                'status'   : {'$nin' : ['killed', 'dead']},
+            })
+
+            if r4.count()+1>helper.MAX_MOUSE_NUM:
+                return render.info('目标鼠笼容纳不下！')  
+
             db.mouse.update_one({'_id':ObjectId(user_data['mouse_id'])}, {
                 '$set'  : update_set,
                 '$push' : {

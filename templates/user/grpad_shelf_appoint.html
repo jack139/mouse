@@ -1,4 +1,4 @@
-$def with (name, str1, sku, users)
+$def with (name, str1, sku, users, type_list)
 
 $var title: 鼠笼管理
 $var css: /static/css/jquery.datetimepicker.css
@@ -43,6 +43,14 @@ function date_init(){
             >$k['uname'] ($k['full_name'])</option>
         </select></span>
     </td><td>预分配的用户在向鼠笼添加小鼠后即拥有鼠笼所有权</td></tr>
+
+<tr><td>可用类型</td><td>
+    $for x in type_list.keys():
+        <input type="checkbox" name="type" value="$x"
+        $if x in sku.get('appoint_type_list', []):
+            checked="checked"
+        /> $type_list[x]
+    </td><td></td></tr>
 
 <tr><td>到期时间</td><td>
     <input type="text"  value="$:sku.get('appoint_expired_d','')" id="appoint_expired_d" name="appoint_expired_d" readonly="readonly">

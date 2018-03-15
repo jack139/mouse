@@ -39,13 +39,20 @@ $for r in xrange(1,shelf['row']+1):
                             class='breed'
                         $elif houses[(r-1)*shelf['col']+(c-1)].get('type')=='inuse':
                             class='inuse'
+                    $else:
+                        class='not_use'
                 >
                     <div><a href="/query/house_info?house_id=$houses[(r-1)*shelf['col']+(c-1)]['house_id']">$r-$c</a></div>
-                    <div>$houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
+                    $if houses[(r-1)*shelf['col']+(c-1)]['uname']!='':
+                        <div>使用人 $houses[(r-1)*shelf['col']+(c-1)]['uname']</div>
+                        <div>品系: $houses[(r-1)*shelf['col']+(c-1)]['mice_blood']</div>
+                        <div>数量: $houses[(r-1)*shelf['col']+(c-1)]['mice_num']</div>
                     <div
                         $if houses[(r-1)*shelf['col']+(c-1)]['expired_d']<now_day:
-                            style="color:#FF2300;"
-                    >$houses[(r-1)*shelf['col']+(c-1)]['expired_d'] 到期</div>
+                            style="color:#FF2300;">已到期
+                        $else:
+                            >$houses[(r-1)*shelf['col']+(c-1)]['expired_d'] 到期
+                    </div>
                 </td>
             $else:
                 <td>$r-$c</td>
@@ -67,7 +74,7 @@ $for r in xrange(1,shelf['row']+1):
         <th class='breed' style="width: 80px;">繁殖</th>
         <th class='test' style="width: 80px;">实验</th>
         <th class='inuse' style="width: 80px;">在使用</th>
-        <th style="width: 80px;">停用</th>
+        <th class='not_use' style="width: 80px;">停用</th>
     </tr>
 </thead>
 </table>

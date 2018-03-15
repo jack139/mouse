@@ -22,11 +22,7 @@ $var menu: #qury1
     $for i in uname_list:
       <option value="$i">$i</option>
   </select>
-  鼠笼：<select id='v_house'>
-    <option value=''>--请选择--</option>
-    $for i in house_list:
-      <option value="$i">$i</option>
-  </select>
+  鼠笼：<input type="text" id='v_house' value="" size="15"/>
   <input type="button" id="search" value="检索" />
 </div>
 

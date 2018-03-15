@@ -39,14 +39,14 @@ class handler:
         }).sort([('_id',1)])
 
         return render.grpad_shelf_appoint(helper.get_session_uname(), helper.get_privilege_name(), 
-            db_obj, [x for x in db_user])
+            db_obj, [x for x in db_user], helper.HOUSE_TYPE)
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(shelf_id='',user_list=[], shelf_id_id='',appoint_expired_d='')
+        user_data=web.input(shelf_id='',user_list=[], shelf_id_id='',appoint_expired_d='',type=[])
 
         r2 = db.shelf.find_one({'_id':ObjectId(user_data['shelf_id'])})
         if r2 is None:
@@ -59,6 +59,7 @@ class handler:
             '$set'  : {
                 'appoint'           : user_data['user_list'],
                 'appoint_expired_d' : user_data['appoint_expired_d'],
+                'appoint_type_list' : user_data['type'],
             },
             '$push' : {
                 'history' : (helper.time_str(), helper.get_session_uname(), '修改预分配实验员'), 

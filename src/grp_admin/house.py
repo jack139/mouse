@@ -33,6 +33,15 @@ class handler:
         houses = [{}]*(db_shelf['col'] * db_shelf['row']) # house_id 均从1开始计算
         db_sku = db.house.find({'shelf_id' : user_data['shelf_id']})
         for i in db_sku:
+            r2 = db.mouse.find({'house_id':i['house_id']}, sort=[('_id', 1)])
+            mice_blood = []
+            for x in r2:
+                mice_blood.append(x.get('blood_code','').split(',')[0]) # 只是用品系名
+            mice_blood = list(set(mice_blood))
+
+            i['mice_blood'] = ','.join(mice_blood) # 笼内小鼠品系
+            i['mice_num'] = r2.count() # 小鼠数量
+
             _,_,_,r,c = i['house_id'].split('-') # 获取鼠笼位置
             houses[(int(r)-1)*db_shelf['col']+(int(c)-1)] = i
         
