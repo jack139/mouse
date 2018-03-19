@@ -20,7 +20,7 @@ class handler:
             raise web.seeother('/')
 
         render = helper.create_render()
-        user_data=web.input(page='0')
+        user_data=web.input(page='0', v_shelf='')
 
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  
@@ -33,8 +33,17 @@ class handler:
 
         group_list = helper.get_session_group_list()
 
+        v_shelf = user_data.v_shelf.strip()
+
         # 分页获取数据
-        db_sku = db.shelf.find({'group_id' : '' if len(group_list)==0 else group_list[0]},
+        conditions = {
+            'group_id' : '' if len(group_list)==0 else group_list[0]
+        }
+
+        if v_shelf!='':
+            conditions['shelf_id'] = v_shelf
+
+        db_sku = db.shelf.find(conditions,
             sort=[('shelf_id', 1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE

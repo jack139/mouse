@@ -61,4 +61,9 @@ class handler:
             'date_t' : helper.time_str(),
         })
 
+        # 更新用户的评分
+        r2 = db.user.find_one({'uname' : user_data['uname']})
+        credit_score = r2.get('credit_score', 100) - int(user_data['credit'])
+        db.user.update_one({'uname' : user_data['uname']}, {'$set' : {'credit_score' : credit_score}})
+
         return render.info('成功保存！','/grp_admin/user')

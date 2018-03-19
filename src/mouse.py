@@ -77,6 +77,16 @@ class Login:
             else:
                 return render.portal(session.uname, get_privilege_name())
 
+
+            # 检查是否需要刷新用户评分
+            r2 = db.user.find_one({'uname':'settings'})
+            last_d = r2.get('last_credit_init', 0)
+            if int(time.time())-last_d>3600*24*90:
+                # 所有用户信用分清零
+                db.user.update_many({}, {'$set' : {'credit_score' : 100}})
+                db.user.update_one({'uname':'settings'} , {'$set' : {'last_credit_init':int(time.time())}})
+
+
             # 提醒改密码
             db_user=db.user.find_one({'uname':session.uname},{'pwd_update':1})
             if int(time.time()) - db_user.get('pwd_update', 0) > 3600*24*30:
@@ -584,7 +594,7 @@ class AdminShelf:
             raise web.seeother('/')
 
         render = create_render()
-        user_data=web.input(page='0')
+        user_data=web.input(page='0', v_shelf='')
 
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  
@@ -595,8 +605,16 @@ class AdminShelf:
         for i in r3:
             group_name[i['group_id']]=i['name']
 
+        v_shelf = user_data.v_shelf.strip()
+
         # 分页获取数据
-        db_sku = db.shelf.find(
+        conditions = {
+        }
+
+        if v_shelf!='':
+            conditions['shelf_id'] = v_shelf
+
+        db_sku = db.shelf.find(conditions,
             sort=[('shelf_id', -1)],
             limit=PAGE_SIZE,
             skip=int(user_data['page'])*PAGE_SIZE

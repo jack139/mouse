@@ -31,7 +31,8 @@ class handler:
             for u in db_user:
                 if u['uname']=='settings':
                     continue
-                users.append([u['uname'],u['_id'],int(u['privilege']),u['full_name'],u['login'],u['user_type']])
+                users.append([u['uname'],u['_id'],int(u['privilege']),
+                    u['full_name'],u['login'],u['user_type'],u.get('credit_score',100)])
         
         return render.grpad_user(helper.get_session_uname(), helper.get_privilege_name(), users)
 

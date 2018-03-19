@@ -95,6 +95,7 @@ class handler:
             if r2:
                 return render.info('用户名已存在！请修改后重新添加。')
             update_set['time']=int(time.time())
+            update_set['credit_score']=100 # 初始化评分
             db.user.insert(update_set)
         else:
             # 修改

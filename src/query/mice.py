@@ -30,7 +30,7 @@ class handler:
         render = helper.create_render(globals={ 'str': str })
         user_data=web.input(page='0', v_tag='', v_blood='', v_uname='', v_house='')
 
-        print user_data
+        #print user_data
 
         if not user_data['page'].isdigit():
             return render.info('参数错误！')  

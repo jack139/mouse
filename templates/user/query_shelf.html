@@ -12,6 +12,21 @@ $var menu: #qury3
 
 <div class="article_box">可用笼架列表</div>
 
+<div class="article_box">
+  笼架编号：<input type="text" id="v_shelf" value="" />
+  <input type="button" id="search" value="搜索笼架" />
+</div>
+
+<script type="text/javascript">
+$$(function(){
+    $$('#search').click(function(){
+        var v_shelf = encodeURIComponent($$("#v_shelf").val());
+
+        location="/query/shelf?v_shelf="+v_shelf;
+    });
+});
+</script>
+
 <table class="props_tb">
 <thead>
   <tr class="even">
@@ -40,3 +55,4 @@ $for u in skus:
     $for x in pages:
         <a href="/query/shelf?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>
+

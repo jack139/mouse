@@ -15,9 +15,9 @@ $var menu: #grup1
 <thead>
         <tr class="even">
             <th width="20%">用户名</th>
+            <th>信用评分</th>
             <th>全名</th>
             <th>类型</th>
-            <th>权限</th>
             <th>状态</th>
         </tr>
 </thead>
@@ -28,13 +28,13 @@ $for u in users:
     $if u[5]=='grp_user':
         <td>
             <a href="/grp_admin/user_edit?uid=$u[1]">$u[0]</a>
-            <a class="abtn" href="/grp_admin/credit_edit?uid=$u[1]">信用评价</a>
         </td>
+        <td>$u[6] <a class="abtn" href="/grp_admin/credit_edit?uid=$u[1]">评价</a></td>
     $else:
         <td><span>$u[0]</span></td>
+        <td></td>
     <td>$u[3]</td>
     <td>$('实验员' if u[5]=='grp_user' else '指导老师')</td>
-    <td>$u[2]</td>
     <td>$('在使用' if u[4]==1 else '停用')</td>
     </tr>
 
