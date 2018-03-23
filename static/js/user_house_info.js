@@ -140,19 +140,16 @@ $(function(){
 
 $(function(){
     $('#newborn').click(function(){
-        
         var house_id = $("#house_id").val();
 
-        alertify.prompt2('请输入',
+        alertify.prompt2('新生小鼠信息',
             function(evt, value, value2){ 
-                alertify.success(value2);
-
                 $.ajax({
                     type: "POST",
                     url: "/grp_user/newborn",
                     async: true,
                     timeout: 15000,
-                    data: {house_id:house_id, num:value},
+                    data: {house_id:house_id, num:value, birth:value2},
                     dataType: "json",
                     complete: function(xhr, textStatus)
                     {
@@ -271,6 +268,7 @@ alertify.dialog('prompt2', function () {
                 break;
             case 'value':
                 input.value = newValue;
+                input2.value = newValue;
                 break;
             case 'type':
                 input.type = 'text';

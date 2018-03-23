@@ -20,13 +20,18 @@ class handler:
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             return json.dumps({'ret':-1,'msg':'无访问权限'})
 
-        param = web.input(house_id='', num='')
+        param = web.input(house_id='', num='', birth='')
 
         if param.house_id=='' or param.num=='':
             return json.dumps({'ret':-1, 'msg':'参数错误'})
 
         if not param.num.isdigit():
-            return json.dumps({'ret':-3, 'msg':'num参数错误'})
+            return json.dumps({'ret':-3, 'msg':'小鼠数量输入错误'})
+
+        try:
+            birth_d_tick=int(time.mktime(time.strptime(param.birth, "%Y%m%d")))
+        except ValueError:
+            return json.dumps({'ret':-8, 'msg':'出生日期输入错误'})
 
         # 检查house_id
         db_obj=db.house.find_one({
@@ -59,8 +64,9 @@ class handler:
 
 
         # 假设添加日期为出生日期， 应该需要可以输入
-        birth_d = helper.time_str(format=2) # 格式 yyyymmdd
-        divide_d = helper.time_str(time.time()+3600*24*helper.DIVIDE_DAYS, format=2) # 格式 yyyymmdd,, 8天分笼
+        #birth_d = helper.time_str(format=2) # 格式 yyyymmdd
+        birth_d = param.birth # 格式 yyyymmdd
+        divide_d = helper.time_str(birth_d_tick+3600*24*helper.DIVIDE_DAYS, format=2) # 格式 yyyymmdd,, 8天分笼
 
         for i in xrange(int(param.num)):
             update_set={
