@@ -116,6 +116,12 @@ class Login:
 
                     # 公告
                     r5 = db.groups.find_one({'group_id':group_id})
+
+                    r6 = db.credit.find({'group_id':group_id},
+                        sort=[('_id', -1)],
+                        limit=20
+                    )
+
                 elif user_priv == 'user': # 实验员：检索本人的
                     group_list = helper.get_session_group_list()
                     group_id = '' if len(group_list)==0 else group_list[0]
@@ -136,12 +142,17 @@ class Login:
                     # 公告
                     r5 = db.groups.find_one({'group_id':group_id})
 
+                    r6 = db.credit.find({'group_id':group_id},
+                        sort=[('_id', -1)],
+                        limit=20
+                    )
+
                 else:
-                    r2 = r3 = []
+                    r2 = r3 = r6 = []
                     r5 = {}
 
                 return render.portal(session.uname, get_privilege_name(), 
-                    [i for i in r2], [j for j in r3], today_d, user_priv, r5.get('news','无公告'))
+                    [i for i in r2], [j for j in r3], today_d, user_priv, r5.get('news','无公告'), r6)
 
         else:
             render = create_render()

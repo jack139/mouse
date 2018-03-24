@@ -1,4 +1,4 @@
-$def with (name, str1, expired=[], divided=[], today_d='', priv='', news='')
+$def with (name, str1, expired=[], divided=[], today_d='', priv='', news='', credit=[])
 
 $var title: 首页
 $var css:
@@ -59,3 +59,12 @@ $var menu: #home
 </dl>
 
 
+<div class="article_box">
+<h3>最近20条信用评价记录</h3>
+<div>
+    <textarea rows="8" cols="100" readonly="readonly">
+        $for i in credit:
+            $i['date_t'] - $i['uname'] 扣$i['credit']分，“$i['comment']”
+    </textarea>
+</div> 
+</div>
