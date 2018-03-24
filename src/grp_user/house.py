@@ -36,7 +36,10 @@ class handler:
             'uname'    : helper.get_session_uname(), # 只显示当前用户管理的鼠笼
         })
         for i in db_sku:
-            r2 = db.mouse.find({'house_id':i['house_id']}, sort=[('_id', 1)])
+            r2 = db.mouse.find({
+                'house_id' : i['house_id'],
+                'status'   : {'$nin' : ['killed', 'dead']}
+            }, sort=[('_id', 1)])
             mice_blood = []
             for x in r2:
                 mice_blood.append(x.get('blood_code','').split(',')[0]) # 只是用品系名

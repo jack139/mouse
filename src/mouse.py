@@ -93,7 +93,7 @@ class Login:
                 db.user.update_one({'uname':session.uname},{'$set' :{'pwd_update':int(time.time())}}) # 只提示一次， 2017-12-11
                 raise web.seeother('/settings_user?set_pwd=1')
             else:
-                # 待办事项
+                # 待办事项／公告
                 today_d = helper.time_str(format=2)
                 days_before = helper.time_str(time.time()+3600*24*5, format=2) # 提前5天提醒
 
@@ -113,7 +113,13 @@ class Login:
                         'divide2_d' : { '$exists' : False },
                         'divide_d'  : { '$lt' : days_before },
                     }, sort=[('divide_d', 1)])
+
+                    # 公告
+                    r5 = db.groups.find_one({'group_id':group_id})
                 elif user_priv == 'user': # 实验员：检索本人的
+                    group_list = helper.get_session_group_list()
+                    group_id = '' if len(group_list)==0 else group_list[0]
+
                     # 过期的
                     r2 = db.house.find({
                         'uname'  : session.uname,
@@ -126,11 +132,16 @@ class Login:
                         'divide2_d'   : { '$exists' : False },
                         'divide_d'    : { '$lt' : days_before },
                     }, sort=[('divide_d', 1)])
+
+                    # 公告
+                    r5 = db.groups.find_one({'group_id':group_id})
+
                 else:
                     r2 = r3 = []
+                    r5 = {}
 
                 return render.portal(session.uname, get_privilege_name(), 
-                    [i for i in r2], [j for j in r3], today_d, user_priv)
+                    [i for i in r2], [j for j in r3], today_d, user_priv, r5.get('news','无公告'))
 
         else:
             render = create_render()

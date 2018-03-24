@@ -15,8 +15,8 @@ $else:
 /*初始化时间控件*/
 function date_init(){
     $$('#birth_d').datetimepicker({format: 'Ymd', timepicker:false});
-
     $$('#divide_d').datetimepicker({format: 'Ymd', timepicker:false});
+    $$('#divide2_d').datetimepicker({format: 'Ymd', timepicker:false});
 }
 </script>
 
@@ -76,7 +76,7 @@ $else:
 </td><td></td></tr>
 
 <tr><td>实际分笼日期</td><td>
-    $:sku.get('divide2_d','')
+    <input type="text"  value="$:sku.get('divide2_d','')" id="divide2_d" name="divide2_d" readonly="readonly">
 </td><td>移动小鼠时自动生成</td></tr>
 
 <tr><td>鼠笼位置</td><td>

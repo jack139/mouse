@@ -1,0 +1,22 @@
+$def with (name, str1, news)
+
+$var title: 课题组公告
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #grup4
+
+<div class="caption"><h2>课题组公告</h2></div>
+
+<form name="settings" method="post" action="/grp_admin/news_edit">
+
+<div class="article_box">
+    <div>公告内容</div>
+    <div><textarea rows="8" cols="120" name="news">$news</textarea></div>
+</div>
+
+<p><input type="submit" name="button" id="button" value="保存" />
+<p>
+
+</form>

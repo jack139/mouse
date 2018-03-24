@@ -9,6 +9,10 @@ $var menu: #user1
 
 <div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
+$if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
+    <p>
+        <input type="button" id="edit" value="修改鼠笼信息" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
+    </p>
 
 <input type="hidden" id="house_id" name="house_id" value="$sku['house_id']"/>
 
@@ -48,15 +52,6 @@ $if sku.get('type', '') in ['test', 'inuse']:
         $(sku.get('test_end_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
 
-
-<tr><td>小鼠列表</td><td>
-    $for i in mice:
-        <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
-        $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
-        <a class="abtn" href="/grp_user/mice_info?mouse_id=$i['_id']">查看</a>
-        <br/>
-    </td><td>耳标 -- 性别 -- 品系</td></tr>
-
 <tr><td>小鼠数量</td><td>
     $len(mice)
     </td><td></td></tr>
@@ -91,8 +86,9 @@ $if sku.get('type', '') in ['test', 'inuse']:
     }
 </script>
 
-<p>
-    $if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
+
+$if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
+    <p>
         <div>
             <input type="button" id="move" value="移动到"/>
             <select id="shelf_select" onchange="show_some($$('#shelf_select option:selected').val());">
@@ -100,6 +96,14 @@ $if sku.get('type', '') in ['test', 'inuse']:
                 $for i in shelfs:
                     <option value="$i['_id']">$i['shelf_id']</option>
             </select>
+
+            $if sku.get('type', '')=='inuse':
+                <input type="button" id="abandon" value="淘汰"/>
+            $if sku.get('type', '')=='test':
+                <input type="button" id="finish" value="结束"/>
+            $if sku.get('type', '')=='breed':
+                <input type="button" id="newborn" value="新生小鼠"/>
+                <input type="button" id="abandon" value="淘汰"/>
         </div>
         <div>
             $for ss in shelfs:
@@ -128,23 +132,43 @@ $if sku.get('type', '') in ['test', 'inuse']:
                 </table>
                 </div>
         </div>
-        </p>
-        <p>
-            <input type="button" id="edit" value="编辑" onclick="location='/grp_user/house_edit?house_id=$sku['house_id']'"/>
-            $if sku.get('type', '')=='inuse':
-                <input type="button" id="abandon" value="淘汰"/>
-            $if sku.get('type', '')=='test':
-                <input type="button" id="finish" value="结束"/>
-            $if sku.get('type', '')=='breed':
-                <input type="button" id="newborn" value="新生小鼠"/>
-                <input type="button" id="abandon" value="淘汰"/>
 
+    </p>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="5%">小鼠列表</th>
+        <th>系统编号</th>
+        <th>耳标</th>
+        <th>性别</th>
+        <th>品系／基因型</th>
+        <th>出生日期</th>
+        <th>计划分笼日期</th>
+        <th>实际分笼日期</th>
+    </tr>
+</thead>
+<tbody>
+    $for i in mice:
+        <tr>
+            <td><input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/></td>
+            <td><a href="/grp_user/mice_edit?mouse_id=$i['_id']&from_house=1">...$(str(i['_id'])[-6:])</a></td>
+            <td>$i.get('tag','')</td>
+            <td>$i['sex']</td>
+            <td>$i['blood_code']</td>
+            <td>$i['birth_d']</td>
+            <td>$i['divide_d']</td>
+            <td>$i.get('divide2_d', 'n/a')</td>
+        </tr>
+</tbody>
+</table>
+
+<p>
     $if return_last=='y':
         <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
     $else:    
         <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
-<p>
-
+</p>
 
 <div class="article_box">
   <div>操作日志：</div>

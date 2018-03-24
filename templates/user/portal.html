@@ -1,4 +1,4 @@
-$def with (name, str1, expired=[], divided=[], today_d='', priv='')
+$def with (name, str1, expired=[], divided=[], today_d='', priv='', news='')
 
 $var title: 首页
 $var css:
@@ -12,7 +12,15 @@ $var menu: #home
 <div class="mod_desc">
 <p>欢迎使用管理平台！</p>
 </div>
+
+<div class="article_box">
+<h3>课题组公告</h3>
+<div>
+    <textarea rows="5" cols="100" readonly="readonly">$news</textarea>
+</div> 
+</div>
     
+
 <dl class="feature">
 	<dt>过期鼠笼</dt>
 	$for i in expired:
@@ -50,7 +58,4 @@ $var menu: #home
 			</dd>
 </dl>
 
-<!--div class="article_box">
-<div>???</div> 
-</div-->
 

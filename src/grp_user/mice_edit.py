@@ -65,7 +65,7 @@ class handler:
         if not helper.logged(helper.PRIV_USER, 'GROUP_USER'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(mouse_id='',tag='',mother_tag='',birth_d='',divide_d='',
+        user_data=web.input(mouse_id='',tag='',mother_tag='',birth_d='',divide_d='',divide2_d='',
             sex='',blood_code='',gene_code='',house_id='',father_tag='',from_house='')
 
         #if user_data.mother_tag.strip()=='':
@@ -110,6 +110,9 @@ class handler:
                 'status'     : 'live', # 正常
                 'last_tick'  : int(time.time()),  # 更新时间戳
             }
+
+            if len(user_data['divide2_d'])>0:
+                update_set['divide2_d'] = user_data['divide2_d']
         except ValueError:
             return render.info('请在相应字段输入数字！')
 
@@ -136,7 +139,7 @@ class handler:
                 }  # 纪录操作历史
             })
 
-        if user_data['from_house']=='1' and user_data['mouse_id']!='n/a':
-            return render.info('成功保存！', '/grp_user/mice_info?mouse_id=%s'%user_data['mouse_id'])
+        if user_data['from_house']=='1':
+            return render.info('成功保存！', '/grp_user/house_info?house_id=%s'%user_data['house_id'])
         else:
             return render.info('成功保存！', '/grp_user/mice')
