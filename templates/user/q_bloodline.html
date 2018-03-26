@@ -13,34 +13,38 @@ $var menu: #qury2
 
 <table class="props_tb">
 <thead>
-  <tr class="even">
-    <th width="30%">品系编号</th>
-    <th>品系名</th>
-    <th>状态</th>
-    <th>实验组</th>
-    <th width="15%">备注</th>
-  </tr>
+    <tr class="even">
+        <th width="30%">品系编号</th>
+        <th>品系名</th>
+        <th>状态</th>
+        <th>实验组</th>
+        <th>实验备注</th>
+    </tr>
 </thead>
 <tbody>
 
 $for u in skus:
-  <tr><td>$u['blood_code']</td>
-  <td>$u.get('name','n/a')</td>
-  <td>
-    $if u.has_key('status'):
-      $STATUS[u['status']]
-    $else:
-      n/a
-  </td>
-  <td>$u.get('group_id','n/a')</td>
-  <td>$u.get('note','')</td></tr>
+    <tr><td>$u['blood_code']</td>
+    <td>$u.get('name','n/a')</td>
+    <td>
+        $if u.has_key('status'):
+            $STATUS[u['status']]
+        $else:
+            n/a
+    </td>
+    <td>$u.get('group_id','n/a')</td>
+    <td><a class="abtn" href="/query/bloodline_comment?blood_id=$u['blood_id']">查看</a>&nbsp;&nbsp;
+        $if ('GROUP_USER' in str1) and (name in u['user_list']):
+            <a class="abtn" href="/grp_user/bloodline_comment?blood_id=$u['blood_id']">添加备注</a></td>
+
+    </tr>
 
 </tbody>
 </table>
 
 <br/>
 <div class="article_box">
-    页码：
-    $for x in pages:
-        <a href="/query/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
+        页码：
+        $for x in pages:
+                <a href="/query/bloodline?page=$x">$(x+1)</a>&nbsp;&nbsp;
 </div>

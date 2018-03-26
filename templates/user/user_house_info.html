@@ -121,9 +121,12 @@ $if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
                     <tr>
                         <td><span>第 $r 行</span></td>
                         $for c in xrange(1,ss['col']+1):
-                            <td>
+                            <td
                                 $if ('%s-%s-%s'%(ss['shelf_id'],r,c) in house) or (name in ss.get('appoint',[])):
+                                    class='test' >
                                     <input type="radio" name="target_house_id" value="$('%s-%s-%s'%(ss['shelf_id'],r,c))"/>
+                                $else:
+                                    >
                                 $r-$c
                             </td>
                     </tr>   
@@ -167,7 +170,7 @@ $if int(sku.get('status','0'))==1 and sku.get('expired_d','')>now_day:
     $if return_last=='y':
         <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
     $else:    
-        <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku['shelf_id']'" />
+        <input type="button" name="cancel" value="返回" onclick="location='/grp_user/house?shelf_id=$sku.get('shelf_id','')'" />
 </p>
 
 <div class="article_box">

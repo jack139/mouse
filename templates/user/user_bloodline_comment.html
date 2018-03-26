@@ -1,0 +1,25 @@
+$def with (name, str1, blood_id, user_comment)
+
+$var title: 品系实验备注
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #qury2
+
+<div class="caption"><h2>品系实验备注</h2></div>
+
+<form name="settings" method="post" action="/grp_user/bloodline_comment">
+<input type="hidden" name="blood_id" value="$blood_id" />
+
+<div class="article_box">
+    <div>备注内容</div>
+    <div><textarea rows="20" cols="120" name="user_comment">$user_comment</textarea></div>
+</div>
+
+<p>
+	<input type="submit" name="button" id="button" value="保存" />
+	<input type="button" name="cancel" value="返回" onclick="location='/query/bloodline';" />
+<p>
+
+</form>

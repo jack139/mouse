@@ -20,7 +20,7 @@ $var menu: #grup3
         <th>状态</th>
         <th>责任人</th>
         <th width="15%">备注</th>
-        <th width="15%">实验说明</th>
+        <th width="15%">实验员备注</th>
     </tr>
 </thead>
 <tbody>
@@ -35,7 +35,7 @@ $for u in skus:
         </td>
         <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=owner_user">$u.get('owner_user','')</a></td>
         <td><a href="/grp_admin/bloodline_edit?blood_id=$u['_id']&field=note">$u.get('note','')</a></td>
-        <td></td>
+        <td><a class="abtn" href="/query/bloodline_comment?blood_id=$u['_id']">查看</a></td>
     </tr>
 </tbody>
 </table>

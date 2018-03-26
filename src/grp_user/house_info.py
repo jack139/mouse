@@ -32,18 +32,13 @@ class handler:
             'group_list' : '' if len(group_list)==0 else group_list[0],
         }).sort([('_id',1)])
 
-        house_data = { 
-            'house_id' : user_data['house_id'], 
-            'status':0
-        }
 
-        db_obj=db.house.find_one({
+        house_data=db.house.find_one({
             'house_id': user_data.house_id,
             'uname'   : helper.get_session_uname(),
         })
-        if db_obj!=None:
-            # 已存在的鼠笼
-            house_data = db_obj
+        if house_data is None:
+            return render.info('不能管理别人的鼠笼！')  
 
         # 此笼的小鼠信息
         db_mice = db.mouse.find({

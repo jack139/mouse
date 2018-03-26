@@ -79,6 +79,8 @@ class handler:
 
         # 检查鼠笼过期时间不能超过笼架过期时间
         r2 = db.shelf.find_one({'shelf_id':shelf_id})
+        if r2['group_id']!=group_id:
+            return render.info('鼠笼所在笼架不属于本课题组！')
         if r2['expired_d']<user_data['expired_d']:
             return render.info('鼠笼过期时间不能超过所在笼架过期时间！')
 

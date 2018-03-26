@@ -13,7 +13,11 @@ groups 课题组
     status : 状态： 1 正常 0 停用
     note : 备注
     last_tick: 最后修改时间
-}
+
+    appoint : 预分配的课题组用户列表
+    appoint_expired_d : 预分配的鼠笼过期时间
+    appoint_type_list : 预分配的鼠笼可用类型列表
+} 
 
 shelf 笼架管理
 {

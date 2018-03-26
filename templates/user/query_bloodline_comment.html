@@ -1,0 +1,29 @@
+$def with (name, str1, bloodline, user_comment)
+
+$var title: 品系实验备注
+$var css:
+$var js: 
+$var name: $'|'.join(str1) $name
+$var load: 
+$var menu: #qury2
+
+<div class="caption"><h2>品系实验备注</h2></div>
+
+<div class="article_box">
+<h3>品系名/基因型：$bloodline['blood_code']</h3>
+</div>
+
+$for i in user_comment.keys():
+    <div class="article_box">
+        <h3>实验员：$i</h3>
+        <div>小鼠数量：$user_comment[i]['mouse_num']，鼠笼位置：
+        $for x in user_comment[i]['house_list']:
+            <a href="/query/house_info?house_id=$x">$x</a>, 
+        </div>
+        <div><textarea rows="8" cols="100" name="user_comment" readonly="readonly">$user_comment[i]['comment']</textarea></div>
+    </div>
+
+<p>
+    <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />
+<p>
+

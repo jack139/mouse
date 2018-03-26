@@ -50,6 +50,8 @@ class handler:
                 'status'     : x.get('status', 'n/a'),
                 'group_id'   : group_name[x.get('group_id','n/a')],
                 'note'       : x.get('note',''),
+                'blood_id'   : str(x['_id']),
+                'user_list'  : x.get('user_list', []),
             })
 
         num = db_sku.count()

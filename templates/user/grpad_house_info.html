@@ -9,6 +9,9 @@ $var menu: #grup2
 
 <div class="caption"><h2>鼠笼信息 - 鼠笼 $sku['house_id']</h2></div>
 
+<p>
+    <input type="button" id="edit" value="设置" onclick="location='/grp_admin/house_edit?house_id=$sku['house_id']'"/>
+</p>
 
 <input type="hidden" id="house_id" name="house_id" value="$sku['house_id']"/>
 
@@ -47,14 +50,6 @@ $if sku.get('type', '') in ['test', 'inuse']:
     <tr><td>实验实际结束日期</td><td>
         $(sku.get('test_end_d','n/a'))
         </td><td>格式：yyyymmdd</td></tr>
-
-
-<tr><td>小鼠列表</td><td>
-    $for i in mice:
-        <input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/>
-        $i.get('tag','无耳标') -- $i['sex'] -- $i['blood_code']
-        <br/>
-    </td><td>耳标 -- 性别 -- 品系</td></tr>
 
 <tr><td>小鼠数量</td><td>
     $len(mice)
@@ -112,9 +107,12 @@ $if sku.get('type', '') in ['test', 'inuse']:
                 <tr>
                     <td><span>第 $r 行</span></td>
                     $for c in xrange(1,ss['col']+1):
-                        <td>
+                        <td
                             $if '%s-%s-%s'%(ss['shelf_id'],r,c) in house:
+                                class='test' >
                                 <input type="radio" name="target_house_id" value="$('%s-%s-%s'%(ss['shelf_id'],r,c))"/>
+                            $else:
+                                >
                             $r-$c
                         </td>
                 </tr>   
@@ -124,8 +122,36 @@ $if sku.get('type', '') in ['test', 'inuse']:
             </div>
     </div>
 </p>
+
+<table class="props_tb">
+<thead>
+    <tr class="even">
+        <th width="5%">小鼠列表</th>
+        <th>系统编号</th>
+        <th>耳标</th>
+        <th>性别</th>
+        <th>品系／基因型</th>
+        <th>出生日期</th>
+        <th>计划分笼日期</th>
+        <th>实际分笼日期</th>
+    </tr>
+</thead>
+<tbody>
+    $for i in mice:
+        <tr>
+            <td><input type="checkbox" id="move_mouse" name="move_mouse" value="$i['_id']"/></td>
+            <td><a href="/query/mice_info?mouse_id=$i['_id']">...$(str(i['_id'])[-6:])</a></td>
+            <td>$i.get('tag','')</td>
+            <td>$i['sex']</td>
+            <td>$i['blood_code']</td>
+            <td>$i['birth_d']</td>
+            <td>$i['divide_d']</td>
+            <td>$i.get('divide2_d', 'n/a')</td>
+        </tr>
+</tbody>
+</table>
+
 <p>
-    <input type="button" id="edit" value="设置" onclick="location='/grp_admin/house_edit?house_id=$sku['house_id']'"/>
 
     $if return_last=='y':
         <input type="button" name="cancel" value="返回" onclick="history.go(-1);" />

@@ -76,6 +76,11 @@ class handler:
 
         group_id = helper.get_session_group_list()[0]
 
+        # 检查笼架所有权
+        r6 = db.house.find_one({'house_id':user_data.house_id, 'uname':helper.get_session_uname()})
+        if r6 is None:
+            return render.info('鼠笼可能不是您的！')  
+
         # 同一实验组内，耳标不能重复
         if len(user_data['tag'].strip())>0:
             r2 = db.mouse.find_one({'group_id' : group_id, 'tag' : user_data['tag'].strip(), })
@@ -122,6 +127,11 @@ class handler:
             update_set['history'] =  [(helper.time_str(), helper.get_session_uname(), '新建')]
             db.mouse.insert_one(update_set)
         else:
+            # 检查小鼠所有权
+            r7 = db.mouse.find_one({'_id':ObjectId(user_data['mouse_id'])})
+            if r7['owner_uname']!=helper.get_session_uname():
+                return render.info('小鼠不属于您！')
+
             # 检查鼠笼是否超出最大数量
             r4=db.mouse.find({
                 'house_id' : user_data['house_id'],

@@ -19,7 +19,7 @@ class handler:
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
 
-        render = helper.create_render()
+        render = helper.create_render(globals={ 'str': str })
         user_data = web.input(house_id='',return_last='')
 
         if user_data['house_id']=='':
