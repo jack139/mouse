@@ -79,12 +79,12 @@ class Login:
 
 
             # 检查是否需要刷新用户评分
-            r2 = db.user.find_one({'uname':'settings'})
-            last_d = r2.get('last_credit_init', 0)
-            if int(time.time())-last_d>3600*24*90:
-                # 所有用户信用分清零
-                db.user.update_many({}, {'$set' : {'credit_score' : 100}})
-                db.user.update_one({'uname':'settings'} , {'$set' : {'last_credit_init':int(time.time())}})
+            #r2 = db.user.find_one({'uname':'settings'})
+            #last_d = r2.get('last_credit_init', 0)
+            #if int(time.time())-last_d>3600*24*90:
+            #    # 所有用户信用分清零
+            #    db.user.update_many({}, {'$set' : {'credit_score' : 100}})
+            #    db.user.update_one({'uname':'settings'} , {'$set' : {'last_credit_init':int(time.time())}})
 
 
             # 提醒改密码

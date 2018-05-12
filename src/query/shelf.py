@@ -41,7 +41,8 @@ class handler:
         }
 
         if v_shelf!='':
-            conditions['shelf_id'] = v_shelf
+            #conditions['shelf_id'] = v_shelf
+            conditions['shelf_id'] = { '$regex' : u'%s.*'%v_shelf, '$options' : 'i' }
 
         db_sku = db.shelf.find(conditions,
             sort=[('shelf_id', 1)],
