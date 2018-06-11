@@ -1,10 +1,10 @@
-$def with (name, str1, sku, users, field)
+$def with (name, str1, sku, users, field, image_list)
 
 $var title: 品系管理
 $var css: 
 $var name: $'|'.join(str1) $name
-$var js: 
-$var load: 
+$var js: /static/js/resumable.js /static/js/upload_pic.js?v=1.3
+$var load: doFirst_pic();
 $var menu: #grup3
 
 $if sku['blood_code']=='':
@@ -14,6 +14,7 @@ $else:
 
 <form name="new_sku" id="new_sku" method="post" action="/grp_admin/bloodline_edit">
 <input type="hidden" name="blood_id" value="$sku['_id']"/>
+<input type="hidden" name="image" id="form_image" value=""/>
 
 <table class="props_tb">
 <thead>
@@ -38,7 +39,7 @@ $else:
 
 
 $if field in ('', 'name'):
-    <tr><td>品系说明</td><td>
+    <tr><td>品系名</td><td>
         <input type="text" name="name" id="name" value="$sku.get('name', '')"/>
         </td><td></td></tr>
 $else:
@@ -73,9 +74,22 @@ $else:
         <input type="hidden" name="user_list" value="$x" />
 
 $if field in ('', 'note'):
-    <tr><td>备注</td><td>
+    <tr><td>品系说明</td><td>
         <textarea rows="3" name="note">$sku.get('note','')</textarea>
         </td><td></td></tr>
+    <tr><td>说明附件</td><td>
+        <a class="abtn" href="javascript:void(0);" id="picBrowseButton">上传文件</a>
+        <ul id="image-list">
+            $if sku.has_key('image') and len(sku['image'])>0:
+                $for i in image_list:
+                    $if len(i)>0:
+                      <li id="$(i[0].replace('.','_'))">
+                        <a href="/static/upload/$(i[0][:2])/$i[0]" target="_blank" />$i[1]</a>
+                        <button onclick="remove_image('$(i[0].replace('.','_'))');return false;">删除</button>
+                      </li>
+        </ul>
+        </td><td>当单个文件不超过10MB</td></tr>
+
 $else:
     <input type="hidden" name="note" value="$sku.get('note', '')" />
 

@@ -14,11 +14,14 @@ $var menu: #qury2
 <table class="props_tb">
 <thead>
     <tr class="even">
-        <th width="30%">品系编号</th>
+        <th width="25%">品系编码</th>
         <th>品系名</th>
         <th>状态</th>
         <th>实验组</th>
-        <th>实验备注</th>
+        <th>责任人</th>
+        <th>品系说明</th>
+        <th>附件文件</th>
+        <th>实验员备注</th>
     </tr>
 </thead>
 <tbody>
@@ -33,6 +36,12 @@ $for u in skus:
             n/a
     </td>
     <td>$u.get('group_id','n/a')</td>
+    <td>$u.get('owner_user','')</td>
+    <td>$u.get('note','')</td>
+    <td>
+        $for i in u.get('image_list',[]):
+            <a href="/static/upload/$(i[0][:2])/$i[0]" target="_blank" />$i[1]</a><br/>
+    </td>
     <td><a class="abtn" href="/query/bloodline_comment?blood_id=$u['blood_id']">查看</a>&nbsp;&nbsp;
         $if ('GROUP_USER' in str1) and (name in u['user_list']):
             <a class="abtn" href="/grp_user/bloodline_comment?blood_id=$u['blood_id']">添加备注</a></td>

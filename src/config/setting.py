@@ -23,7 +23,7 @@ cli = {
 # MongoClient('10.168.11.151', replicaset='rs0', readPreference='secondaryPreferred') # 使用secondary 读
 # MongoClient('mongodb://10.168.11.151:27017,10.252.95.145:27017,10.252.171.8:27017/?replicaSet=rs0')
 
-db_web = cli['web']['herb_db']
+db_web = cli['web']['mouse_db']
 db_web.authenticate('ipcam','ipcam')
 
 db_primary = db_web
@@ -32,23 +32,21 @@ thread_num = 1
 auth_user = ['test','gt']
 cs_admin = ['cs0']
 
-tmp_path = '/usr/local/nginx/html/fair/static/tmp'
+tmp_path = '/usr/share/nginx/html/mouse-test/static/tmp'
 logs_path = '/usr/local/nginx/logs'
-image_store_path = '/usr/local/nginx/html/pretty/static/image/product'
-media_store_path = '/usr/local/nginx/html/pretty/static/image/media_upload'
-transcode_store_path = '/usr/local/nginx/html/pretty/static/image/transcoded_files'
+image_store_path = '/usr/share/nginx/html/mouse-test/static/upload'
 
-app_host='pretty.f8cam.com'
-wx_host='pretty.f8cam.com'
+app_host=''
+wx_host=''
 image_host='pretty.f8cam.com/static'
-notify_host='notify-pretty.f8cam.com'
-app_pool=['pretty.f8cam.com']
+notify_host=''
+app_pool=['']
 
 WX_store = {
     '000' : { # 测试
-        'wx_appid' : 'wxbbf4e9f80fd0dd60',
-        'wx_appsecret' : 'a21841796b00eeb515695ceb64ad202b',
-        'mch_id' : '1408035102',
+        'wx_appid' : '',
+        'wx_appsecret' : '',
+        'mch_id' : '',
     },
 
 }

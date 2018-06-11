@@ -44,6 +44,12 @@ class handler:
 
         bloodline = []
         for x in db_sku:
+            image_list = []
+            for xx in x.get('image', []):
+                r3 = db.base_image.find_one({'image':xx})
+                if r3:
+                    image_list.append((xx, r3['file']))
+
             bloodline.append({
                 'blood_code' : x['blood_code'],
                 'name'       : x.get('name', ''),
@@ -52,6 +58,8 @@ class handler:
                 'note'       : x.get('note',''),
                 'blood_id'   : str(x['_id']),
                 'user_list'  : x.get('user_list', []),
+                'owner_user' : x.get('owner_user', ''),
+                'image_list' : image_list,
             })
 
         num = db_sku.count()

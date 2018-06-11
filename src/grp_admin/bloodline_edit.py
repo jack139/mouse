@@ -41,15 +41,21 @@ class handler:
             'group_list' : '' if len(group_list)==0 else group_list[0],
         }).sort([('_id',1)])
 
+        image_list = []
+        for x in blood_data.get('image', []):
+            r2 = db.base_image.find_one({'image':x})
+            if r2:
+                image_list.append((x, r2['file']))
+
         return render.grpad_bloodline_edit(helper.get_session_uname(), helper.get_privilege_name(), 
-            blood_data, [x for x in db_user], user_data['field'])
+            blood_data, [x for x in db_user], user_data['field'], image_list)
 
 
     def POST(self):
         if not helper.logged(helper.PRIV_GRP_ADMIN, 'GROUP_ADMIN'):
             raise web.seeother('/')
         render = helper.create_render()
-        user_data=web.input(blood_id='',blood_code='',name='',user_list=[],owner_user='')
+        user_data=web.input(blood_id='',blood_code='',name='',user_list=[],owner_user='',image='')
 
         #print user_data
 
@@ -84,6 +90,7 @@ class handler:
                 'owner_user'  : user_data['owner_user'],
                 'group_id'    : group_id,
                 'last_tick'   : int(time.time()),  # 更新时间戳
+                'image'       : user_data['image'].split(','),  # 上次文件
             }
         except ValueError:
             return render.info('请在相应字段输入数字！')
