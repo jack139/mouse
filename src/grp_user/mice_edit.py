@@ -135,8 +135,8 @@ class handler:
             # 检查鼠笼是否超出最大数量
             r4=db.mouse.find({
                 'house_id' : user_data['house_id'],
-                '_id'      : {'$ne'  : ObjectId(user_data['mouse_id'])},
                 'status'   : {'$nin' : ['killed', 'dead']},
+                '_id'      : {'$ne'  : ObjectId(user_data['mouse_id'])},
             })
 
             if r4.count()+1>helper.MAX_MOUSE_NUM:

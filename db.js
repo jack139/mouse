@@ -104,4 +104,33 @@ db.sessions.createIndex({attime:1},{ background: true })
 db.user.createIndex({privilege:1},{ background: true })
 db.user.createIndex({uname:1},{ background: true })
 db.user.createIndex({login:1, privilege:1},{ background: true })
+db.user.createIndex({group_list:1},{ background: true })
 
+db.base_image.createIndex({image:1},{ background: true })
+
+db.house.createIndex({group_id:1,expired_d:1},{ background: true })
+db.house.createIndex({uname:1,expired_d:1},{ background: true })
+db.house.createIndex({shelf_id:1,uname:1},{ background: true })
+db.house.createIndex({house_id:1,group_id:1},{ background: true })
+db.house.createIndex({house_id:1,uname:1},{ background: true })
+db.house.createIndex({group_id:1,uname:1},{ background: true })
+
+db.mouse.createIndex({group_id:1,divide2_d:1,divide_d:1},{ background: true })
+db.mouse.createIndex({owner_uname:1,divide2_d:1,divide_d:1},{ background: true })
+db.mouse.createIndex({house_id:1,status:1},{ background: true })
+db.mouse.createIndex({tag:1},{ background: true })
+db.mouse.createIndex({group_id:1,tag:1},{ background: true })
+db.mouse.createIndex({blood_code:1},{ background: true })
+
+db.groups.createIndex({group_id:1},{ background: true })
+db.groups.createIndex({status:1},{ background: true })
+
+db.credit.createIndex({group_id:1},{ background: true })
+db.credit.createIndex({uname:1},{ background: true })
+
+db.shelf.createIndex({shelf_id:1,appoint:1},{ background: true })
+db.shelf.createIndex({group_id:1},{ background: true })
+
+db.bloodline.createIndex({group_id:1},{ background: true })
+db.bloodline.createIndex({blood_code:1},{ background: true })
+db.bloodline.createIndex({status:1,user_list:1},{ background: true })
