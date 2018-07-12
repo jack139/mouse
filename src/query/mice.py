@@ -58,7 +58,8 @@ class handler:
             # 品系
             r4 = db.mouse.distinct("blood_code", {'group_id': group_id})
             blood_list = r4
-            blood_list.remove('')
+            if '' in blood_list:
+                blood_list.remove('')
         elif user_priv == 'tutor':
             # 实验员
             r2 = db.user.find({

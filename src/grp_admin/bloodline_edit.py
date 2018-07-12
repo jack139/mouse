@@ -64,7 +64,7 @@ class handler:
 
         blood_code = user_data['blood_code'].strip()
 
-        b_list = blood_code.split(',')  # 格式：品系名,基因型1,基因型2,...
+        #b_list = blood_code.split(',')  # 格式：品系名,基因型1,基因型2,...
         #if not b_list[0].replace('_','').isalnum(): # 格式：品系名,基因型1(+/+),基因型2(+/-),...
         #    return render.info('品系编码只能为字母和数字的组合！')  
 
@@ -72,9 +72,9 @@ class handler:
         #    if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
         #        return render.info('品系编码中基因型格式错误！')  
 
-        for x in b_list:
-            if not x.replace('_','').isalnum():
-                return render.info('品系编码只能为字母和数字的组合！')  
+        #for x in b_list:
+        #    if not x.replace('_','').isalnum():
+        #        return render.info('品系编码只能为字母和数字的组合！')  
 
         # 本组用户数据
         group_list = helper.get_session_group_list()

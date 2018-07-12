@@ -97,7 +97,8 @@ class handler:
                 return render.info('品系编码只能为字母和数字的组合！')  
 
             for x in b_list[1:]:
-                if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
+                #if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
+                if re.search(r'^.+\((\+|\-)/(\+|\-)\)', x) is None:
                     return render.info('品系编码中基因型格式错误！')  
 
         try:
