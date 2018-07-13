@@ -93,8 +93,8 @@ class handler:
 
         if len(blood_code)>0:
             b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
-            if not b_list[0].replace('_','').isalnum():
-                return render.info('品系编码只能为字母和数字的组合！')  
+            #if not b_list[0].replace('_','').isalnum():
+            #    return render.info('品系名只能为字母和数字的组合！')  
 
             for x in b_list[1:]:
                 #if re.search(r'^[A-Za-z0-9]+\((\+|\-)/(\+|\-)\)', x) is None:
@@ -109,7 +109,7 @@ class handler:
                 'birth_d'    : user_data['birth_d'],
                 'divide_d'   : user_data['divide_d'],
                 'blood_code' : blood_code,
-                'gene_code'  : user_data['gene_code'].strip(),
+                #'gene_code'  : user_data['gene_code'].strip(),
                 'note'       : user_data['note'],
                 'house_id'   : user_data['house_id'],
                 'sex'        : user_data['sex'],
