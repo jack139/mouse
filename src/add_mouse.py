@@ -1,27 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
+import sys, time, re
 import helper
 
 db = helper.db
 
 
 UNAME = {
-    u'吴剑峰'   : 'wjf',
-    u'陈长安'   : 'cca',
-    u'赵一豪'   : 'zyh',
-    u'何鹏'     : 'hp',
-    u'刘艺菲'   : 'lyf',
-    u'乔慕臻'   : 'qmz',
-    u'王宇泽'   : 'wyz',
-    u'杨道伟'   : 'ydw',
-    u'张荧荧'   : 'zyy',
-    u'梁波'     : 'lb2',
-    u'洪茅'     : 'hm',
-    u'马华彬'   : 'mhb',
-    u'林怀鹏'   : 'lhp',
-    u'张培培'   : 'zpp',
-    u'黄凯'     : 'hk',
+    '吴剑锋'   : 'wjf',
+    '陈长安'   : 'cca',
+    '赵一豪'   : 'zyh',
+    '何鹏'     : 'hp',
+    '刘艺菲'   : 'lyf',
+    '乔慕臻'   : 'qmz',
+    '王宇泽'   : 'wyz',
+    '杨道伟'   : 'ydw',
+    '张荧荧'   : 'zyy',
+    '梁波'     : 'lb2',
+    '洪茅'     : 'hm',
+    '马华彬'   : 'mhb',
+    '林怀鹏'   : 'lhp',
+    '张培培'   : 'zpp',
+    '黄凯'     : 'hk',
 
 }
 
@@ -34,21 +34,38 @@ while True:
     if not b:
         break
 
-    d=b.split(',')
+    b2=b.decode('gbk').encode('utf-8')
+    d=b2.split(',')
     print d
 
     #print d[0].decode('gbk') # csv 使用gbk中文编码
 
     # 生成基本数据
 
-    uname = UNAME[d[1].decode('gbk')]
+    uname = UNAME[d[1]]
     group_id = '00000001'
 
+    print uname
+
     # 笼架id
-    shelf_id = '%s-%s-%s'%(d[20],d[21],[22])
+    shelf_id = '%s-%s-%s'%(d[20],d[21],d[22])
 
     # 鼠笼id
-    house_id = target_house_id = '%s-%s-%s'%(shelf_id,d[23],[24])
+    house_id = target_house_id = '%s-%s-%s'%(shelf_id,d[23],d[24])
+
+    print target_house_id
+
+    r8 = db.shelf.find_one({'shelf_id':shelf_id})
+    if r8 is None:
+        print '笼架不存在'
+        sys.exit(0)
+
+    print shelf_id, r8['row'], r8['col']
+
+    if int(d[23])>r8['row'] or int(d[24])>r8['col']:
+        print '鼠笼坐标超出范围'
+        sys.exit(0)
+
 
     # 小鼠品系信息
     blood_code = d[6]
@@ -121,12 +138,12 @@ while True:
                 'last_tick' : int(time.time()),  # 更新时间戳
             }
 
-            #db.house.update_one({'house_id':target_house_id}, {
-            #    '$set'  : update_set,
-            #    '$push' : {
-            #        'history' : (helper.time_str(), uname, '修改'), 
-            #    }  # 纪录操作历史
-            #}, upsert=True)
+            db.house.update_one({'house_id':target_house_id}, {
+                '$set'  : update_set,
+                '$push' : {
+                    'history' : (helper.time_str(), uname, '修改'), 
+                }  # 纪录操作历史
+            }, upsert=True)
 
             print update_set
 
@@ -155,6 +172,7 @@ while True:
 
     # 检查品系编码格式
     blood_code = blood_code.strip()
+    print blood_code
 
     if len(blood_code)>0:
         b_list = blood_code.split(',')  # 格式：品系名,基因型1(+/+),基因型2(+/-),...
@@ -170,15 +188,15 @@ while True:
     try:
         update_set={
             'tag'        : tag.strip(),
-            'mother_tag' : d['26'].strip(),
-            'father_tag' : d['25'].strip(),
-            'birth_d'    : d['3'],
-            'divide_d'   : d['4'],
+            'mother_tag' : d[26].strip(),
+            'father_tag' : d[25].strip(),
+            'birth_d'    : d[3],
+            'divide_d'   : d[4],
             'blood_code' : blood_code,
             #'gene_code'  : user_data['gene_code'].strip(),
-            'note'       : d['7'],
+            'note'       : d[7],
             'house_id'   : house_id,
-            'sex'        : d['5'].strip(),
+            'sex'        : d[5].strip(),
             'status'     : 'live', # 正常
             'last_tick'  : int(time.time()),  # 更新时间戳
         }
@@ -193,6 +211,9 @@ while True:
     update_set['owner_uname'] = uname
     update_set['group_id'] = group_id
     update_set['history'] =  [(helper.time_str(), uname, '新建')]
-    #db.mouse.insert_one(update_set)
+    db.mouse.insert_one(update_set)
 
     print update_set
+
+    print '-------------------'
+    #break # only once for test
