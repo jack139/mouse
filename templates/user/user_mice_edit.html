@@ -96,8 +96,8 @@ $else:
 
 
 <tr><td>小鼠品系</td><td>
-    <div><input type="text" id="blood_code" name="blood_code" value="$sku.get('blood_code')" size=30/></div>
-    <div>快捷选择：<select id='blood_code_select' onchange="$$('#blood_code').val($$('#blood_code_select option:selected').text());" >
+    <div><input type="text" id="blood_code" name="blood_code" value="$sku.get('blood_code')" size=40/></div>
+    <div>快捷选择：<select id='blood_code_select' onchange="$$('#blood_code').val($$('#blood_code').val()+','+$$('#blood_code_select option:selected').text());" >
         <option value=''>--请选择--</option>
         $for i in blood_list:
             <option value="$i['blood_code']"
