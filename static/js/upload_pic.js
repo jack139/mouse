@@ -11,9 +11,10 @@ function get_params(){
 function doFirst_pic()
 {
     var input = $("#images")[0], formdata = false;
-    var rand_id = Math.random().toString(36).slice(2);
+    //var rand_id = Math.random().toString(36).slice(2);
 
     function showUploadedItem (source) {
+        var rand_id = Math.random().toString(36).slice(2);
         var list = $("#image-list")[0],
             li   = document.createElement("li"),
             img  = document.createElement("a"),
